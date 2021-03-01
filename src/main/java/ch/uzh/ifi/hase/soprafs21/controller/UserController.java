@@ -8,16 +8,21 @@ import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * User Controller
- * This class is responsible for handling all REST request that are related to the user.
- * The controller will receive the request and delegate the execution to the UserService and finally return the result.
+ * User Controller This class is responsible for handling all REST request that
+ * are related to the user. The controller will receive the request and delegate
+ * the execution to the UserService and finally return the result.
  */
 @RestController
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 
@@ -45,12 +50,21 @@ public class UserController {
     @ResponseBody
     public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
         // convert API user to internal representation
-        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
+        List<User> users = userService.getUsers();
+        for (User user : users) {
+            if (userPostDTO.getUsername().equals(user.getUsername())) {
+                logger.info("THROWING ERROR");
+                throw new IllegalArgumentException("Username already taken!");
+            }
+        }
+
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
         // create user
         User createdUser = userService.createUser(userInput);
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
+
 }

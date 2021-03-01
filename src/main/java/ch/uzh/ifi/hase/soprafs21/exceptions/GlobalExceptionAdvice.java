@@ -21,9 +21,9 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(GlobalExceptionAdvice.class);
 
-    @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
+    @ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "This should be application specific";
+        String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
@@ -33,7 +33,8 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage(), ex);
     }
 
-    // Keep this one disable for all testing purposes -> it shows more detail with this one disabled
+    // Keep this one disable for all testing purposes -> it shows more detail with
+    // this one disabled
     @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
     public ResponseStatusException handleException(Exception ex) {
         log.error("Default Exception Handler -> caught:", ex);
