@@ -14,6 +14,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javassist.NotFoundException;
+
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice(annotations = RestController.class)
@@ -31,6 +33,12 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseStatusException handleTransactionSystemException(Exception ex, HttpServletRequest request) {
         log.error("Request: {} raised {}", request.getRequestURL(), ex);
         return new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage(), ex);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseStatusException handleNotFoundException(Exception ex, HttpServletRequest request) {
+        log.error("Request: {} raised {}", request.getRequestURL(), ex);
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
     }
 
     // Keep this one disable for all testing purposes -> it shows more detail with
