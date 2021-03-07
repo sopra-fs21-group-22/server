@@ -3,18 +3,24 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 
 import javax.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
+import java.util.Collection;
+import java.sql.Date;
 
 /**
- * Internal User Representation
- * This class composes the internal representation of the user and defines how the user is stored in the database.
- * Every variable will be mapped into a database field with the @Column annotation
- * - nullable = false -> this cannot be left empty
- * - unique = true -> this value must be unqiue across the database -> composes the primary key
+ * Internal User Representation This class composes the internal representation
+ * of the user and defines how the user is stored in the database. Every
+ * variable will be mapped into a database field with the @Column annotation -
+ * nullable = false -> this cannot be left empty - unique = true -> this value
+ * must be unqiue across the database -> composes the primary key
  */
 @Entity
 @Table(name = "USER")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,13 +29,13 @@ public class User implements Serializable {
     private Long id;
 
     @Column(nullable = false)
+    private Date creationDate;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
     private String username;
-
-    @Column(nullable = false, unique = true)
-    private String token;
 
     @Column(nullable = false)
     private UserStatus status;
@@ -58,19 +64,45 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public UserStatus getStatus() {
         return status;
     }
 
     public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    public void setCreationDate(Date date) {
+        this.creationDate = date;
+    }
+
+    public Date getCreationDate() {
+        return this.creationDate;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
+import java.sql.Date;
+
 public class UserPostDTO {
 
     private String password;

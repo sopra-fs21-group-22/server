@@ -14,8 +14,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javassist.NotFoundException;
-
+import javax.naming.AuthenticationException;
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice(annotations = RestController.class)
@@ -35,10 +35,16 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage(), ex);
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseStatusException handleNotFoundException(Exception ex, HttpServletRequest request) {
         log.error("Request: {} raised {}", request.getRequestURL(), ex);
         return new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseStatusException handleAuthenticationException(Exception ex, HttpServletRequest request) {
+        log.error("Request: {} raised {}", request.getRequestURL(), ex);
+        return new ResponseStatusException(HttpStatus.FORBIDDEN, ex.getMessage(), ex);
     }
 
     // Keep this one disable for all testing purposes -> it shows more detail with
