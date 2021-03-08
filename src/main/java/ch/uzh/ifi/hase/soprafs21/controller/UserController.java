@@ -20,10 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.mapstruct.BeanMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,13 +35,14 @@ import javax.naming.AuthenticationException;
  * the execution to the UserService and finally return the result.
  */
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/auth")
 public class UserController {
 
     @Autowired
     private AuthenticationManager authManager;
 
     @Autowired
+
     private UserService userService;
 
     @Autowired
@@ -56,7 +54,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/auth/authenticate")
+    @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthToken(@RequestBody AuthenticationRequest authReq)
             throws AuthenticationException {
         try {
@@ -66,15 +64,18 @@ public class UserController {
         } catch (BadCredentialsException e) {
             throw new AuthenticationException("Incorrect username or password");
         }
+
         final UserDetails userDetails = userService.loadUserByUsername(authReq.getUsername());
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        final User user = userService.loadUserByUsername(authReq.getUsername());
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
 
     }
 
-    @GetMapping("/auth/users")
+    @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<UserGetDTO> getAllUsers() {
@@ -89,7 +90,7 @@ public class UserController {
         return userGetDTOs;
     }
 
-    @PostMapping("/auth/users")
+    @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public UserGetDTO createUser(@NonNull @RequestBody UserPostDTO userPostDTO) {
@@ -111,7 +112,7 @@ public class UserController {
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
 
-    @GetMapping("/auth/users/{id}")
+    @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public UserGetDTO getUserById(@PathVariable String id) {

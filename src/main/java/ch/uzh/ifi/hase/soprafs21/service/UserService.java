@@ -60,8 +60,6 @@ public class UserService implements UserDetailsService {
 
     public User createUser(User newUser) {
         Date date = new Date(System.currentTimeMillis());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        log.info("current date " + dateFormat.format(date));
         newUser.setCreationDate(date);
         newUser.setStatus(UserStatus.ONLINE);
 
