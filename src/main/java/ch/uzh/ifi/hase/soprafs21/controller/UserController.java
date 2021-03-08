@@ -35,7 +35,7 @@ import javax.naming.AuthenticationException;
  * the execution to the UserService and finally return the result.
  */
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("api/v1/")
 public class UserController {
 
     @Autowired
@@ -127,11 +127,12 @@ public class UserController {
         // return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 
-    // @PutMapping("/users/{id}")
-    // @ResponseStatus(HttpStatus.NO_CONTENT)
-    // public void putUser(long id, long token) {
-    // // TODO
-    // }
+    @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUser(long id) {
+        User user = userService.getUserById(id);
+
+    }
 
     // @PostMapping("/login")
     // @ResponseStatus(HttpStatus.OK)
