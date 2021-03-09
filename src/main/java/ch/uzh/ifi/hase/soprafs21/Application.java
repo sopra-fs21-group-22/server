@@ -29,9 +29,7 @@ public class Application {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // TODO CORS header problems on localhost
-                registry.addMapping("/**").allowedOriginPatterns("http://localhost:3000",
-                        "https://sopra-fs21-rbomme-client.herokuapp.com/").allowedMethods("*");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000");
             }
         };
     }

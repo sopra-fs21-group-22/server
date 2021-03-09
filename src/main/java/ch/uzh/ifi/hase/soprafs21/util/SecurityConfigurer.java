@@ -31,10 +31,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/authenticate").permitAll().anyRequest().authenticated().and()
+        http.csrf().disable().authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+        // .antMatchers(HttpMethod.POST, "/api/v1/authenticate").permitAll().
     }
 
     @Bean
