@@ -117,31 +117,26 @@ public class UserController {
     @ResponseBody
     public UserGetDTO getUserById(@PathVariable String id) {
         User user;
-        long idAsNumber = Long.parseLong(id);
+
         try {
-            user = userService.getUserById(idAsNumber);
+            user = userService.getUserById(id);
             return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
         } catch (Exception e) {
-            throw new UserNotFoundException(idAsNumber);
+            throw new UserNotFoundException(id);
         }
         // return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUser(long id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserPostDTO userPostDTO) {
+        try {
+            User user = userService.getUserById(id);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            throw new UserNotFoundException(id);
+        }
 
     }
-
-    // @PostMapping("/login")
-    // @ResponseStatus(HttpStatus.OK)
-    // public void login(@RequestBody loginData){
-    // try{
-    // User user = DTOMapper.INSTANCE.convertEntityToUserGetDTO(loginData);
-    // String token = UserService.login(user);
-    // }
-
-    // }
 
 }
