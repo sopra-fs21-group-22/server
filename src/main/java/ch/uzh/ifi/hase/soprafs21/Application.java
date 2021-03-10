@@ -29,7 +29,8 @@ public class Application {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedMethods("*");
+                registry.addMapping("/**").allowedOrigins("https://sopra-fs21-rbomme-client.herokuapp.com/register")
+                        .allowedMethods("*");
             }
         };
     }
