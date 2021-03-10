@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
@@ -75,6 +77,13 @@ public class UserService implements UserDetailsService {
 
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+
+    public User updateUser(String id, User newUser) {
+        User currUser = userRepository.findById(Long.parseLong(id)).get();
+        currUser.setUsername(newUser.getUsername());
+        currUser.setBirthday(newUser.getBirthday());
+        return userRepository.save(currUser);
     }
 
     /**

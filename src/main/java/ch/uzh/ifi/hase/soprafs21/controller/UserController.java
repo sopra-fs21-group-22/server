@@ -42,7 +42,6 @@ public class UserController {
     private AuthenticationManager authManager;
 
     @Autowired
-
     private UserService userService;
 
     @Autowired
@@ -96,15 +95,19 @@ public class UserController {
     public UserGetDTO createUser(@NonNull @RequestBody UserPostDTO userPostDTO) {
         // convert API user to internal representation
 
+        if (userPostDTO.getUsername().equals("") || userPostDTO.getPassword().equals("")) {
+            throw new IllegalArgumentException("Username or password can't be blank!");
+        }
+
         List<User> users = userService.getUsers();
         for (User user : users) {
             if (userPostDTO.getUsername().equals(user.getUsername())) {
-                logger.info("THROWING ERROR");
                 throw new IllegalArgumentException("Username already taken!");
             }
         }
 
         User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+
         // create user
         User createdUser = userService.createUser(userInput);
 
@@ -124,17 +127,20 @@ public class UserController {
         } catch (Exception e) {
             throw new UserNotFoundException(id);
         }
-        // return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserPostDTO userPostDTO) {
+    public UserGetDTO updateUser(@PathVariable String id, @RequestBody UserPostDTO userPostDTO) {
         try {
-            User user = userService.getUserById(id);
-            return ResponseEntity.ok(user);
+            User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+            if (user.getUsername().length() < 1 || user.getPassword().length() < 1) {
+                throw new IllegalArgumentException("Username can't be blank!");
+            }
+            return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.updateUser(id, user));
         } catch (Exception e) {
             throw new UserNotFoundException(id);
+
         }
 
     }

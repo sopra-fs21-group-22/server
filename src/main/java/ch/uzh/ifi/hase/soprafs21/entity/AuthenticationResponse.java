@@ -13,6 +13,7 @@ public class AuthenticationResponse {
     private Long id;
     private UserStatus status;
     private Date creationDate;
+    private Date birthday;
 
     public AuthenticationResponse(String jwt, User user) {
         this.jwt = jwt;
@@ -20,6 +21,7 @@ public class AuthenticationResponse {
         this.id = user.getId();
         this.status = user.getStatus();
         this.creationDate = user.getCreationDate();
+        this.birthday = user.getBirthday();
 
     }
 
@@ -41,6 +43,14 @@ public class AuthenticationResponse {
 
     public Date getCreationDate() {
         return this.creationDate;
+    }
+
+    public Date getBirthday() {
+        return this.birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
 }

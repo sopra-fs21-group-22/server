@@ -40,6 +40,9 @@ public class User implements Serializable, UserDetails {
     @Column(nullable = false)
     private UserStatus status;
 
+    @Column()
+    private Date birthday;
+
     public Long getId() {
         return id;
     }
@@ -78,6 +81,14 @@ public class User implements Serializable, UserDetails {
 
     public Date getCreationDate() {
         return this.creationDate;
+    }
+
+    public Date getBirthday() {
+        return this.birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     @Override
