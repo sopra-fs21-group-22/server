@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.util.JwtUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,8 @@ import javax.persistence.EntityNotFoundException;
 @Transactional
 public class UserService implements UserDetailsService {
 
+    private final JwtUtil jwtUtil = new JwtUtil();
+
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
@@ -49,25 +52,42 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserById(String id) {
-        long idAsNumber = Long.parseLong(id);
-        return this.userRepository.getOne(idAsNumber);
+        Long idAsNumber;
+        try {
+            idAsNumber = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new UserNotFoundException(id);
+        }
+        Optional<User> user = this.userRepository.findById(idAsNumber);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UserNotFoundException(id);
+        }
+
     }
 
     public User getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
     }
 
-    // public String login(User user) {
-
-    // }
-
     public User createUser(User newUser) {
+        // check for null
+        if (newUser.getUsername() == null || newUser.getPassword() == null) {
+            throw new IllegalArgumentException("Username/password can't be null!");
+        }
+
+        // check if username blank
+        if (newUser.getUsername().length() < 1 || newUser.getPassword().length() < 1) {
+            throw new IllegalArgumentException("Username/password can't be blank!");
+        }
+
         Date date = new Date(System.currentTimeMillis());
         newUser.setCreationDate(date);
         newUser.setStatus(UserStatus.ONLINE);
 
         if (userExists(newUser)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken!");
+            throw new IllegalArgumentException("Username already taken!");
         }
 
         // saves the given entity but data is only persisted in the database once
@@ -79,11 +99,37 @@ public class UserService implements UserDetailsService {
         return newUser;
     }
 
-    public User updateUser(String id, User newUser) {
-        User currUser = userRepository.findById(Long.parseLong(id)).get();
+    public User updateUser(String userId, User newUser) {
+
+        if (newUser.getUsername() == null) {
+            throw new IllegalArgumentException("Username can't be null!");
+        }
+
+        // check if new username is blank
+        if (newUser.getUsername().length() < 1) {
+            throw new IllegalArgumentException("Username can't be blank!");
+        }
+
+        User currUser = userRepository.findById(Long.parseLong(userId)).get();
+
+        // check if username changed
+        if (!currUser.getUsername().equals(newUser.getUsername())) {
+            // check if new username already taken
+            List<User> users = getUsers();
+            for (User user : users) {
+                if (newUser.getUsername().equals(user.getUsername())) {
+                    throw new IllegalArgumentException("New Username already taken!");
+                }
+            }
+        }
+
         currUser.setUsername(newUser.getUsername());
         currUser.setBirthday(newUser.getBirthday());
-        return userRepository.save(currUser);
+
+        User user = userRepository.save(currUser);
+        userRepository.flush();
+        return user;
+
     }
 
     /**
@@ -103,5 +149,14 @@ public class UserService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
+    }
+
+    public boolean idAndTokenMatch(String id, String token) {
+        User idUser = getUserById(id);
+        String tokenUsername = jwtUtil.extractUsername(token);
+        log.error(String.format("Token Username: %s", tokenUsername));
+        log.error(String.format("Id User: %s", idUser.getUsername()));
+
+        return idUser.getUsername().equals(tokenUsername);
     }
 }

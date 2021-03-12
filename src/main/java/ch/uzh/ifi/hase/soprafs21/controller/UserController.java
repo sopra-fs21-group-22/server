@@ -44,8 +44,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtUtil jwtTokenUtil;
+    private static JwtUtil jwtTokenUtil = new JwtUtil();
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -93,25 +92,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public UserGetDTO createUser(@NonNull @RequestBody UserPostDTO userPostDTO) {
-        // convert API user to internal representation
-
-        if (userPostDTO.getUsername().equals("") || userPostDTO.getPassword().equals("")) {
-            throw new IllegalArgumentException("Username or password can't be blank!");
-        }
-
-        List<User> users = userService.getUsers();
-        for (User user : users) {
-            if (userPostDTO.getUsername().equals(user.getUsername())) {
-                throw new IllegalArgumentException("Username already taken!");
-            }
-        }
-
         User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
-
-        // create user
         User createdUser = userService.createUser(userInput);
-
-        // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
 
@@ -131,18 +113,20 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public UserGetDTO updateUser(@PathVariable String id, @RequestBody UserPostDTO userPostDTO) {
-        try {
-            User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
-            if (user.getUsername().length() < 1 || user.getPassword().length() < 1) {
-                throw new IllegalArgumentException("Username can't be blank!");
-            }
-            return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.updateUser(id, user));
-        } catch (Exception e) {
-            throw new UserNotFoundException(id);
+    public UserGetDTO updateUser(@PathVariable String id, @RequestBody UserPostDTO userPostDTO,
+            @RequestHeader("Authorization") String auth) {
+        // try {
+        User newUser = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
+        // check if user is trying to change another users username
+        if (!userService.idAndTokenMatch(id, auth.substring(7))) {
+            throw new IllegalArgumentException("Token and user do not match!");
         }
 
-    }
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.updateUser(id, newUser));
+        // } catch (Exception e) {
+        // throw new UserNotFoundException(id);
 
+        // }
+    }
 }
