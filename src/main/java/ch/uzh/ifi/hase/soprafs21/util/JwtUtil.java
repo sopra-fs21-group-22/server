@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 
     // TODO This is a temporary key
-    Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -38,8 +38,7 @@ public class JwtUtil {
         try {
             return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
         } catch (JwtException e) {
-            // invalid Token
-            return null;
+            throw new IllegalArgumentException("Token is invalid!");
         }
     }
 
