@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,9 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * UserControllerTest
- * This is a WebMvcTest which allows to test the UserController i.e. GET/POST request without actually sending them over the network.
- * This tests if the UserController works.
+ * UserControllerTest This is a WebMvcTest which allows to test the
+ * UserController i.e. GET/POST request without actually sending them over the
+ * network. This tests if the UserController works.
  */
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -46,22 +47,20 @@ public class UserControllerTest {
     public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
         // given
         User user = new User();
-        // user.setName("Firstname Lastname");
         user.setUsername("firstname@lastname");
         user.setStatus(UserStatus.OFFLINE);
 
         List<User> allUsers = Collections.singletonList(user);
 
-        // this mocks the UserService -> we define above what the userService should return when getUsers() is called
+        // this mocks the UserService -> we define above what the userService should
+        // return when getUsers() is called
         given(userService.getUsers()).willReturn(allUsers);
 
         // when
         MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
 
         // then
-        mockMvc.perform(getRequest).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                // .andExpect(jsonPath("$[0].name", is(user.getName())))
+        mockMvc.perform(getRequest).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].username", is(user.getUsername())))
                 .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
     }
@@ -70,44 +69,89 @@ public class UserControllerTest {
     public void createUser_validInput_userCreated() throws Exception {
         // given
         User user = new User();
-        user.setId(1L);
-        // user.setName("Test User");
         user.setUsername("testUsername");
-        user.setToken("1");
         user.setStatus(UserStatus.ONLINE);
 
         UserPostDTO userPostDTO = new UserPostDTO();
-        // userPostDTO.setName("Test User");
         userPostDTO.setUsername("testUsername");
 
         given(userService.createUser(Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletRequestBuilder postRequest = post("/users").contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         // then
-        mockMvc.perform(postRequest)
-                .andExpect(status().isCreated())
+        mockMvc.perform(postRequest).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-                // .andExpect(jsonPath("$.name", is(user.getName())))
                 .andExpect(jsonPath("$.username", is(user.getUsername())))
                 .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
     }
 
+    @Test
+    public void getUserById_successfully() throws Exception {
+        User user = new User();
+        user.setUsername("username");
+
+        given(userService.getUserById(user.getId().toString())).willReturn(user);
+
+        MockHttpServletRequestBuilder getRequest = get("/users" + user.getId().toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(getRequest).andExpect(status().isOk()).andExpect(jsonPath("$.id", is(user.getId().toString())))
+                .andExpect(jsonPath("$.username", is(user.getUsername())))
+                .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())));
+    }
+
+    // @Test
+    // public void getUsersById_noneexistentId_throws() {
+
+    // }
+
+    // @Test
+    // public void getUserById_unauthorized_throws() {
+
+    // }
+
+    // @Test
+    // public void updateUser_successfully() {
+
+    // }
+
+    // @Test
+    // public void updateUser_otherUserThanSelf_throws() {
+
+    // }
+
+    // @Test
+    // public void updateUser_inexistentUser_throws() {
+
+    // }
+
+    // @Test
+    // public void updateUser_withNullOrBlankValues_throws() {
+
+    // }
+
+    // @Test
+    // public void updateUser_unauthorized_throws() {
+
+    // }
+
     /**
-     * Helper Method to convert userPostDTO into a JSON string such that the input can be processed
-     * Input will look like this: {"name": "Test User", "username": "testUsername"}
+     * Helper Method to convert userPostDTO into a JSON string such that the input
+     * can be processed Input will look like this: {"name": "Test User", "username":
+     * "testUsername"}
+     * 
      * @param object
      * @return string
      */
     private String asJsonString(final Object object) {
         try {
             return new ObjectMapper().writeValueAsString(object);
-        }
-        catch (JsonProcessingException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("The request body could not be created.%s", e.toString()));
+        } catch (JsonProcessingException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("The request body could not be created.%s", e.toString()));
         }
     }
 }

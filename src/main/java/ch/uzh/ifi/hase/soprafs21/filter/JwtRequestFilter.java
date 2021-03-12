@@ -23,8 +23,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private static JwtUtil jwtUtil = new JwtUtil();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

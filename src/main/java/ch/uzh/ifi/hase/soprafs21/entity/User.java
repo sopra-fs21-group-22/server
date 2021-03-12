@@ -47,6 +47,7 @@ public class User implements Serializable, UserDetails {
         return id;
     }
 
+    // TODO remove?
     public void setId(Long id) {
         this.id = id;
     }
