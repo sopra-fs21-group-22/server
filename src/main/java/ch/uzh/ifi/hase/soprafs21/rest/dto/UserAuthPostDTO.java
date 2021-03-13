@@ -1,17 +1,8 @@
-package ch.uzh.ifi.hase.soprafs21.entity;
+package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
-public class AuthenticationRequest {
-
+public class UserAuthPostDTO {
     private String username;
     private String password;
-
-    public AuthenticationRequest() {
-    }
-
-    public AuthenticationRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
     public String getUsername() {
         return username;

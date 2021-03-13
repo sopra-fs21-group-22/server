@@ -1,12 +1,14 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
-import ch.uzh.ifi.hase.soprafs21.entity.AuthenticationRequest;
-import ch.uzh.ifi.hase.soprafs21.entity.AuthenticationResponse;
+import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserAuthGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserAuthPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import ch.uzh.ifi.hase.soprafs21.util.JwtUtil;
@@ -44,7 +46,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    private static JwtUtil jwtTokenUtil = new JwtUtil();
+    @Autowired
+    private JwtUtil jwtTokenUtil;
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -53,24 +56,23 @@ public class UserController {
     }
 
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthToken(@RequestBody AuthenticationRequest authReq)
-            throws AuthenticationException {
+    @ResponseStatus(HttpStatus.OK)
+    public UserAuthGetDTO createAuthToken(@RequestBody UserAuthPostDTO userAuthPostDTO) throws AuthenticationException {
         try {
-            String username = authReq.getUsername();
-            String password = authReq.getPassword();
+            String username = userAuthPostDTO.getUsername();
+            String password = userAuthPostDTO.getPassword();
             authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException e) {
             throw new AuthenticationException("Incorrect username or password");
         }
 
-        final UserDetails userDetails = userService.loadUserByUsername(authReq.getUsername());
-
+        final UserDetails userDetails = userService.loadUserByUsername(userAuthPostDTO.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
+        User user = userService.loadUserByUsername(userAuthPostDTO.getUsername());
+        user.setJwt(jwt);
+        userService.updateUserStatus(user.getId(), UserStatus.ONLINE);
 
-        final User user = userService.loadUserByUsername(authReq.getUsername());
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
-
+        return DTOMapper.INSTANCE.convertEntityToUserAuthGetDTO(user);
     }
 
     @GetMapping("/users")
@@ -100,33 +102,27 @@ public class UserController {
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserById(@PathVariable String id) {
+    public UserGetDTO getUserById(@PathVariable Long id) {
         User user;
 
         try {
             user = userService.getUserById(id);
             return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
         } catch (Exception e) {
-            throw new UserNotFoundException(id);
+            throw new UserNotFoundException(id.toString());
         }
     }
 
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public UserGetDTO updateUser(@PathVariable String id, @RequestBody UserPostDTO userPostDTO,
+    public UserGetDTO updateUser(@PathVariable Long id, @RequestBody UserPutDTO userPutDTO,
             @RequestHeader("Authorization") String auth) {
-        // try {
-        User newUser = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
-
         // check if user is trying to change another users username
         if (!userService.idAndTokenMatch(id, auth.substring(7))) {
             throw new IllegalArgumentException("Token and user do not match!");
         }
 
+        User newUser = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userService.updateUser(id, newUser));
-        // } catch (Exception e) {
-        // throw new UserNotFoundException(id);
-
-        // }
     }
 }

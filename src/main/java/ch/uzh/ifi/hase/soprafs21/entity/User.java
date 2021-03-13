@@ -43,6 +43,8 @@ public class User implements Serializable, UserDetails {
     @Column()
     private Date birthday;
 
+    private String jwt;
+
     public Long getId() {
         return id;
     }
@@ -92,6 +94,14 @@ public class User implements Serializable, UserDetails {
         this.birthday = birthday;
     }
 
+    public String getJwt() {
+        return this.jwt;
+    }
+
+    public void setJwt(String token) {
+        this.jwt = token;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // TODO Auto-generated method stub
@@ -117,4 +127,5 @@ public class User implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

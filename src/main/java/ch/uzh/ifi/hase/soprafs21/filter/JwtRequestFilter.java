@@ -10,20 +10,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import ch.uzh.ifi.hase.soprafs21.util.JwtUtil;
-import io.jsonwebtoken.io.IOException;
 
-@Component
+@Service
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserService userService;
 
-    private static JwtUtil jwtUtil = new JwtUtil();
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

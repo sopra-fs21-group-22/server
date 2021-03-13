@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,33 +37,29 @@ import javax.persistence.EntityNotFoundException;
 @Transactional
 public class UserService implements UserDetailsService {
 
-    private final JwtUtil jwtUtil = new JwtUtil();
+    @Autowired
+    private final JwtUtil jwtUtil;
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(@Qualifier("userRepository") UserRepository userRepository) {
+    public UserService(@Qualifier("userRepository") UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public List<User> getUsers() {
         return this.userRepository.findAll();
     }
 
-    public User getUserById(String id) {
-        Long idAsNumber;
-        try {
-            idAsNumber = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new UserNotFoundException(id);
-        }
-        Optional<User> user = this.userRepository.findById(idAsNumber);
+    public User getUserById(Long id) {
+        Optional<User> user = this.userRepository.findById(id);
         if (user.isPresent()) {
             return user.get();
         } else {
-            throw new UserNotFoundException(id);
+            throw new UserNotFoundException(id.toString());
         }
 
     }
@@ -84,7 +81,7 @@ public class UserService implements UserDetailsService {
 
         Date date = new Date(System.currentTimeMillis());
         newUser.setCreationDate(date);
-        newUser.setStatus(UserStatus.ONLINE);
+        newUser.setStatus(UserStatus.OFFLINE);
 
         if (userExists(newUser)) {
             throw new IllegalArgumentException("Username already taken!");
@@ -99,37 +96,33 @@ public class UserService implements UserDetailsService {
         return newUser;
     }
 
-    public User updateUser(String userId, User newUser) {
+    public User updateUser(Long userId, User newUser) {
+        User currUser = userRepository.findById(userId).get();
 
-        if (newUser.getUsername() == null) {
-            throw new IllegalArgumentException("Username can't be null!");
+        if (newUser.getUsername() != null && newUser.getUsername().length() > 0) {
+            currUser.setUsername(newUser.getUsername());
         }
 
-        // check if new username is blank
-        if (newUser.getUsername().length() < 1) {
-            throw new IllegalArgumentException("Username can't be blank!");
+        if (newUser.getBirthday() != null) {
+            currUser.setBirthday(newUser.getBirthday());
         }
 
-        User currUser = userRepository.findById(Long.parseLong(userId)).get();
+        if (newUser.getStatus() != null) {
+            currUser.setStatus(newUser.getStatus());
+        }
 
-        // check if username changed
-        if (!currUser.getUsername().equals(newUser.getUsername())) {
+        if (newUser.getUsername() != null && !currUser.getUsername().equals(newUser.getUsername())) {
             // check if new username already taken
             List<User> users = getUsers();
             for (User user : users) {
                 if (newUser.getUsername().equals(user.getUsername())) {
-                    throw new IllegalArgumentException("New Username already taken!");
                 }
             }
         }
 
-        currUser.setUsername(newUser.getUsername());
-        currUser.setBirthday(newUser.getBirthday());
-
         User user = userRepository.save(currUser);
         userRepository.flush();
         return user;
-
     }
 
     /**
@@ -151,12 +144,15 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public boolean idAndTokenMatch(String id, String token) {
+    public boolean idAndTokenMatch(Long id, String token) {
         User idUser = getUserById(id);
         String tokenUsername = jwtUtil.extractUsername(token);
-        log.error(String.format("Token Username: %s", tokenUsername));
-        log.error(String.format("Id User: %s", idUser.getUsername()));
 
         return idUser.getUsername().equals(tokenUsername);
+    }
+
+    public void updateUserStatus(Long id, UserStatus status) {
+        User user = getUserById(id);
+        user.setStatus(status);
     }
 }

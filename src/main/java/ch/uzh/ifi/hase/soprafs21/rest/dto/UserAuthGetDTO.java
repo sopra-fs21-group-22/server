@@ -1,52 +1,59 @@
-package ch.uzh.ifi.hase.soprafs21.entity;
+package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import java.sql.Date;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 
-public class AuthenticationResponse {
-
-    private final String jwt;
+public class UserAuthGetDTO {
+    private String jwt;
     private String username;
     private Long id;
     private UserStatus status;
     private Date creationDate;
     private Date birthday;
 
-    public AuthenticationResponse(String jwt, User user) {
-        this.jwt = jwt;
-        this.username = user.getUsername();
-        this.id = user.getId();
-        this.status = user.getStatus();
-        this.creationDate = user.getCreationDate();
-        this.birthday = user.getBirthday();
-
-    }
-
     public String getJwt() {
         return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public UserStatus getStatus() {
         return status;
     }
 
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
     public Date getCreationDate() {
-        return this.creationDate;
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Date getBirthday() {
-        return this.birthday;
+        return birthday;
     }
 
     public void setBirthday(Date birthday) {
