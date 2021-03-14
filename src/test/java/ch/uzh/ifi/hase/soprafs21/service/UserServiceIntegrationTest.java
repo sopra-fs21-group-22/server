@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,7 @@ import java.sql.Date;
  */
 @WebAppConfiguration
 @SpringBootTest
-public class UserServiceIntegrationTest {
+class UserServiceIntegrationTest {
 
     @Qualifier("userRepository")
     @Autowired
@@ -53,7 +54,7 @@ public class UserServiceIntegrationTest {
         assertEquals(testUser.getId(), createdUser.getId());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertEquals(testUser.getPassword(), createdUser.getPassword());
-        assertEquals(UserStatus.ONLINE, createdUser.getStatus());
+        assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
     }
 
     @Test
@@ -64,7 +65,7 @@ public class UserServiceIntegrationTest {
         // testUser.setName("testName");
         testUser.setUsername("testUsername");
         testUser.setPassword("password");
-        User createdUser = userService.createUser(testUser);
+        userService.createUser(testUser);
 
         // attempt to create second user with same username
         User testUser2 = new User();
@@ -125,21 +126,20 @@ public class UserServiceIntegrationTest {
 
     }
 
-    @Transactional
     @Test
     public void getUserById_success() {
         User user = new User();
         user.setUsername("username");
         user.setPassword("password");
         user = userService.createUser(user);
-        User userById = userService.getUserById(user.getId().toString());
+        User userById = userService.getUserById(user.getId());
         assertEquals(user.getUsername(), userById.getUsername());
     }
 
     @Test
     public void getUserById_userNotFound() {
         assertThrows(UserNotFoundException.class, () -> {
-            userService.getUserById("banana");
+            userService.getUserById(Long.valueOf(12));
         });
     }
 
@@ -156,7 +156,7 @@ public class UserServiceIntegrationTest {
         Date newBirthday = new Date(1000 * 60 * 60 * 24 * 365 * 10);
         updateUser.setUsername("Eren");
         updateUser.setBirthday(newBirthday);
-        userService.updateUser(user.getId().toString(), updateUser);
+        userService.updateUser(user.getId(), updateUser);
 
         User updatedUser = userRepository.getOne(user.getId());
         assertEquals(user.getUsername(), updatedUser.getUsername());
@@ -164,7 +164,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void updateUser_blankUsername_throws() {
+    public void updateUser_blankUsername_doesNothing() {
         User user = new User();
         user.setUsername("Flegel");
         user.setPassword("password");
@@ -174,12 +174,15 @@ public class UserServiceIntegrationTest {
         updateUser.setUsername("");
         updateUser.setPassword("password");
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.updateUser(savedUser.getId().toString(), updateUser);
-        });
+        Long id = savedUser.getId();
+
+        userService.updateUser(id, updateUser);
+
+        User updatedUser = userService.getUserById(id);
+        assertEquals("Flegel", updatedUser.getUsername());
+
     }
 
-    @Transactional
     @Test
     public void updateUser_takenUsername_throws() {
         User user = new User();
@@ -195,8 +198,10 @@ public class UserServiceIntegrationTest {
         User updateUser = new User();
         updateUser.setUsername("Levi");
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.updateUser(savedUser.getId().toString(), updateUser);
+        Long id = savedUser.getId();
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            userService.updateUser(id, updateUser);
         });
     }
 
