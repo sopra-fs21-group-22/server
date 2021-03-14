@@ -111,15 +111,6 @@ public class UserService implements UserDetailsService {
             currUser.setStatus(newUser.getStatus());
         }
 
-        if (newUser.getUsername() != null && !currUser.getUsername().equals(newUser.getUsername())) {
-            // check if new username already taken
-            List<User> users = getUsers();
-            for (User user : users) {
-                if (newUser.getUsername().equals(user.getUsername())) {
-                }
-            }
-        }
-
         User user = userRepository.save(currUser);
         userRepository.flush();
         return user;

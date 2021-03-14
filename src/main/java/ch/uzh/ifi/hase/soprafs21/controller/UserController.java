@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -58,13 +59,10 @@ public class UserController {
     @PostMapping(value = "/authenticate")
     @ResponseStatus(HttpStatus.OK)
     public UserAuthGetDTO createAuthToken(@RequestBody UserAuthPostDTO userAuthPostDTO) throws AuthenticationException {
-        try {
-            String username = userAuthPostDTO.getUsername();
-            String password = userAuthPostDTO.getPassword();
-            authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (BadCredentialsException e) {
-            throw new AuthenticationException("Incorrect username or password");
-        }
+
+        String username = userAuthPostDTO.getUsername();
+        String password = userAuthPostDTO.getPassword();
+        authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         final UserDetails userDetails = userService.loadUserByUsername(userAuthPostDTO.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
@@ -104,7 +102,6 @@ public class UserController {
     @ResponseBody
     public UserGetDTO getUserById(@PathVariable Long id) {
         User user;
-
         try {
             user = userService.getUserById(id);
             return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);

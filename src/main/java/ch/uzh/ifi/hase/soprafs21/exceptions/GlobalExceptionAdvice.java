@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,7 +43,8 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler(value = { AuthenticationException.class, BadCredentialsException.class,
+            InternalAuthenticationServiceException.class })
     public ResponseStatusException handleAuthenticationException(Exception ex, HttpServletRequest request) {
         log.error("Request: {} raised {}", request.getRequestURL(), ex);
         return new ResponseStatusException(HttpStatus.FORBIDDEN, ex.getMessage(), ex);

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -15,7 +15,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-@Service
+@Component
 public class JwtUtil {
 
     // TODO This is a temporary key
@@ -54,7 +54,7 @@ public class JwtUtil {
                 .compact();
         // verify key correctness
         assert Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(jws).getBody().getSubject()
-                .equals("Joe");
+                .equals(subject);
         return jws;
     }
 }
