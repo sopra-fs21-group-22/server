@@ -102,12 +102,9 @@ public class UserController {
     @ResponseBody
     public UserGetDTO getUserById(@PathVariable Long id) {
         User user;
-        try {
-            user = userService.getUserById(id);
-            return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
-        } catch (Exception e) {
-            throw new UserNotFoundException(id.toString());
-        }
+        user = userService.getUserById(id);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
     }
 
     @PutMapping("/users/{id}")

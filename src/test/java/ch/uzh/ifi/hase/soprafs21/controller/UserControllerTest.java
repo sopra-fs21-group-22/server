@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
@@ -116,6 +117,24 @@ public class UserControllerTest {
     }
 
     @Test
+    public void createUser_invalidInput_userCreated() throws Exception {
+        // given
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setUsername("");
+        userPostDTO.setPassword("");
+
+        given(userService.createUser(Mockito.any())).willThrow(IllegalArgumentException.class);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post(String.format("%s/users", baseUrl))
+                .contentType(MediaType.APPLICATION_JSON).content(asJsonString(userPostDTO));
+
+        // then
+        mockMvc.perform(postRequest).andExpect(status().isConflict());
+    }
+
+    @Test
     public void getUserById_successfully() throws Exception {
 
         given(userService.loadUserByUsername(Mockito.any())).willReturn(user);
@@ -132,20 +151,36 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())));
     }
 
-    @Test
-    public void getUserById_unauthorized_isForbidden() throws Exception {
-        MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/1", baseUrl))
-                .contentType(MediaType.APPLICATION_JSON);
+    // @Test
+    // public void getUserById_unsuccessfully_userNotExistent() throws Exception {
 
-        mockMvc.perform(getRequest).andExpect(status().isForbidden());
-    }
+    //     given(userRepository.findById(Mockito.any())).willThrow(UserNotFoundException.class);
+    //     given(userService.loadUserByUsername(Mockito.any())).willReturn(user);
+    //     //
+    //     given(userService.getUserById(user.getId())).willThrow(UserNotFoundException.class);
+
+    //     Date creationDate = new Date(System.currentTimeMillis());
+    //     user.setCreationDate(creationDate);
+
+    //     MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/222", baseUrl))
+    //             .contentType(MediaType.APPLICATION_JSON).header("Authorization", getHeader(user));
+
+    //     mockMvc.perform(getRequest).andExpect(status().isNotFound());
+    // }
+
+    // @Test
+    // public void getUserById_unauthorized_isForbidden() throws Exception {
+    //     MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/1", baseUrl))
+    //             .contentType(MediaType.APPLICATION_JSON);
+
+    //     mockMvc.perform(getRequest).andExpect(status().isForbidden());
+    // }
 
     @Test
     public void updateUser_successfully() throws Exception {
 
         UserPutDTO userPutDTO = new UserPutDTO();
         userPutDTO.setStatus(UserStatus.OFFLINE);
-        String jsonDTO = asJsonString(userPutDTO);
 
         given(userService.loadUserByUsername(Mockito.any())).willReturn(user);
         given(userService.getUserById(Mockito.any())).willReturn(user);
@@ -165,7 +200,6 @@ public class UserControllerTest {
 
         UserPutDTO userPutDTO = new UserPutDTO();
         userPutDTO.setStatus(UserStatus.OFFLINE);
-        String jsonDTO = asJsonString(userPutDTO);
 
         given(userService.loadUserByUsername(Mockito.any())).willReturn(user);
         given(userService.getUserById(Mockito.any())).willReturn(user);
