@@ -30,7 +30,7 @@ public class Application {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://sopra-fs21-rbomme-client.herokuapp.com", "http://localhost:3000")
+                        .allowedOrigins("https://sopra-fs21-group-22-client.herokuapp.com", "http://localhost:3000")
                         .allowedMethods("*");
             }
         };
