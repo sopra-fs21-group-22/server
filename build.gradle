@@ -99,10 +99,11 @@ sonarqube {
         property "sonar.projectKey", "sopra-fs21-group-22_server"
         property "sonar.organization", "sopra-fs21-group-22"
         property "sonar.host.url", "https://sonarcloud.io"
+        // These were here by default (added by SoPra team) but don't seem to work
         // property "sonar.projectKey", project.sonarProjectKey
         // property "sonar.organization", project.sonarOrganization
         // property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.login", project.sonarToken
+        // property "sonar.login", project.sonarToken
         property "sonar.coverage.jacoco.xmlReportPaths", ["$buildDir/jacocoReportDir/test/jacocoTestReport.xml"]
         property "sonar.cpd.exclusions", "**/entity/*.java,**/rest/dto/*.java"
     }
