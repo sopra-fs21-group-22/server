@@ -68,6 +68,12 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findByUsername(username);
     }
 
+    /**
+     * checks for fields set in param and creates a user with them
+     * 
+     * @param newUser
+     * @return newly created User
+     */
     public User createUser(User newUser) {
         // check for null
         if (newUser.getUsername() == null || newUser.getPassword() == null) {
@@ -140,6 +146,16 @@ public class UserService implements UserDetailsService {
         String tokenUsername = jwtUtil.extractUsername(token);
 
         return idUser.getUsername().equals(tokenUsername);
+    }
+
+    public void throwIfNotIdAndTokenMatch(Long id, String auth) {
+        if (!this.idAndTokenMatch(id, auth.substring(7))) {
+            throw new IllegalArgumentException("Token and user do not match!");
+        }
+    }
+
+    public Long getIdByToken(String auth) {
+        return loadUserByUsername(jwtUtil.extractUsername(auth.substring(7))).getId();
     }
 
     public void updateUserStatus(Long id, UserStatus status) {

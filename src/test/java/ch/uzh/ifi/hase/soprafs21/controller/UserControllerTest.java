@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutDTO;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
@@ -58,6 +61,12 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private PlayerTableRepository playerTableRepository;
+
+    @MockBean
+    private PlayerRepository PlayerRepository;
 
     @MockBean
     UserRepository userRepository;
@@ -154,26 +163,29 @@ public class UserControllerTest {
     // @Test
     // public void getUserById_unsuccessfully_userNotExistent() throws Exception {
 
-    //     given(userRepository.findById(Mockito.any())).willThrow(UserNotFoundException.class);
-    //     given(userService.loadUserByUsername(Mockito.any())).willReturn(user);
-    //     //
-    //     given(userService.getUserById(user.getId())).willThrow(UserNotFoundException.class);
+    // given(userRepository.findById(Mockito.any())).willThrow(UserNotFoundException.class);
+    // given(userService.loadUserByUsername(Mockito.any())).willReturn(user);
+    // //
+    // given(userService.getUserById(user.getId())).willThrow(UserNotFoundException.class);
 
-    //     Date creationDate = new Date(System.currentTimeMillis());
-    //     user.setCreationDate(creationDate);
+    // Date creationDate = new Date(System.currentTimeMillis());
+    // user.setCreationDate(creationDate);
 
-    //     MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/222", baseUrl))
-    //             .contentType(MediaType.APPLICATION_JSON).header("Authorization", getHeader(user));
+    // MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/222",
+    // baseUrl))
+    // .contentType(MediaType.APPLICATION_JSON).header("Authorization",
+    // getHeader(user));
 
-    //     mockMvc.perform(getRequest).andExpect(status().isNotFound());
+    // mockMvc.perform(getRequest).andExpect(status().isNotFound());
     // }
 
     // @Test
     // public void getUserById_unauthorized_isForbidden() throws Exception {
-    //     MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/1", baseUrl))
-    //             .contentType(MediaType.APPLICATION_JSON);
+    // MockHttpServletRequestBuilder getRequest = get(String.format("%s/users/1",
+    // baseUrl))
+    // .contentType(MediaType.APPLICATION_JSON);
 
-    //     mockMvc.perform(getRequest).andExpect(status().isForbidden());
+    // mockMvc.perform(getRequest).andExpect(status().isForbidden());
     // }
 
     @Test
