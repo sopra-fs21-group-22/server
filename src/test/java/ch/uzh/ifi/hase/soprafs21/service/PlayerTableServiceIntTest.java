@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
@@ -135,6 +136,17 @@ public class PlayerTableServiceIntTest {
         Boolean actual = playerTableRepository.getOne(table.getId()).getGameHasStarted();
         assertEquals(expected, actual);
     }
+
+    // @Test
+    // @Transactional
+    // public void assignRoles(){
+    // PlayerTable table = playerTableService.addPlayer(users.get(0).getId());
+    // for(int i=1; i<users.size(); i++){
+    // playerTableService.addPlayer(users.get(i).getId());
+    // }
+    // playerTableService.startGame(table.getId());
+
+    // }
 
     @Test
     @Transactional

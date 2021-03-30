@@ -5,11 +5,11 @@ import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserAuthGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserAuthPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPutDTO;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -75,6 +75,7 @@ public interface DTOMapper {
     @Mapping(source = "bullets", target = "bullets")
     @Mapping(source = "rangeIncrement", target = "rangeIncrement")
     @Mapping(source = "user", target = "user")
+    @Mapping(source = "gameRole", target = "gameRole")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
 }

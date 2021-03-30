@@ -9,6 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+
+/**
+ * The Player class represents a player The id is the same as the user who
+ * "owns" the player has.
+ */
 @Entity
 public class Player {
 
@@ -26,6 +32,9 @@ public class Player {
 
     @OneToOne
     private User user;
+
+    @Column
+    private GameRole gameRole;
 
     public Long getId() {
         return id;
@@ -65,6 +74,14 @@ public class Player {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public GameRole getGameRole() {
+        return gameRole;
+    }
+
+    public void setGameRole(GameRole gameRole) {
+        this.gameRole = gameRole;
     }
 
 }

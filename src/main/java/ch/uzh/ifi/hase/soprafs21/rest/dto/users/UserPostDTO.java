@@ -1,17 +1,16 @@
-package ch.uzh.ifi.hase.soprafs21.rest.dto;
+package ch.uzh.ifi.hase.soprafs21.rest.dto.users;
 
 import java.sql.Date;
 
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 
-public class UserPutDTO {
+public class UserPostDTO {
+
     private String password;
 
     private String username;
 
     private Date birthday;
-
-    private UserStatus status;
 
     public String getPassword() {
         return password;
@@ -30,18 +29,10 @@ public class UserPutDTO {
     }
 
     public Date getBirthday() {
-        return birthday;
+        return this.birthday;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status = status;
     }
 }

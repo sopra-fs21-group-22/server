@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class PlayerGetDTO {
@@ -9,6 +11,7 @@ public class PlayerGetDTO {
     private Long id;
     private Integer rangeIncrement;
     private User user;
+    private GameRole gameRole;
 
     public Integer getRange() {
         return range;
@@ -48,5 +51,17 @@ public class PlayerGetDTO {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public GameRole getGameRole() {
+        if (gameRole.equals(GameRole.SHERIFF) || bullets.equals(0)) {
+            return gameRole;
+        }
+        return null;
+
+    }
+
+    public void setGameRole(GameRole gameRole) {
+        this.gameRole = gameRole;
     }
 }

@@ -2,11 +2,13 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
@@ -26,6 +28,9 @@ public class PlayerTableService {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    GameRoleService gameRoleService;
 
     /**
      * Creates and adds a <Player> to a preexisting or new <PlayerTable>.
@@ -71,8 +76,22 @@ public class PlayerTableService {
             throw new IllegalArgumentException("Not enough players yet!");
         }
         table.setGameHasStarted(true);
-        // allocate roles
+        assignGameRoles(table);
+
         // give back character cards to choose from
+    }
+
+    private void assignGameRoles(PlayerTable table) {
+        List<Player> players = table.getPlayers();
+        List<GameRole> roles = gameRoleService.getRoles(players.size());
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setGameRole(roles.get(i));
+        }
+        playerTableRepository.save(table);
+    }
+
+    public PlayerTable getPlayerTableById(Long id) {
+        return playerTableRepository.getOne(id);
     }
 
 }

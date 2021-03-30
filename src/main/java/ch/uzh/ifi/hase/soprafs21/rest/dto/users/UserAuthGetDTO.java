@@ -1,23 +1,23 @@
-package ch.uzh.ifi.hase.soprafs21.rest.dto;
+package ch.uzh.ifi.hase.soprafs21.rest.dto.users;
 
 import java.sql.Date;
 
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 
-public class UserGetDTO {
-
-    private Long id;
+public class UserAuthGetDTO {
+    private String jwt;
     private String username;
+    private Long id;
     private UserStatus status;
     private Date creationDate;
     private Date birthday;
 
-    public Long getId() {
-        return id;
+    public String getJwt() {
+        return jwt;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     public String getUsername() {
@@ -26,6 +26,14 @@ public class UserGetDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public UserStatus getStatus() {
@@ -37,18 +45,19 @@ public class UserGetDTO {
     }
 
     public Date getCreationDate() {
-        return this.creationDate;
+        return creationDate;
     }
 
-    public void setCreationDate(Date date) {
-        this.creationDate = date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Date getBirthday() {
-        return this.birthday;
+        return birthday;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
 }

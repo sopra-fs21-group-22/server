@@ -6,8 +6,9 @@ import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs21.service.GameRoleService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import ch.uzh.ifi.hase.soprafs21.util.JwtUtil;
 
@@ -58,6 +59,9 @@ public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    // most of these @MockBean entries are only here to prevent an annoying bug when
+    // running tests
 
     @MockBean
     private UserService userService;

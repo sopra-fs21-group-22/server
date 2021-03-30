@@ -14,9 +14,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePutDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
@@ -28,6 +30,9 @@ public class GameController {
 
     @Autowired
     private PlayerTableService playerTableService;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @Autowired
     private UserService userService;
@@ -51,8 +56,39 @@ public class GameController {
     @GetMapping("/{game_id}/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<PlayerTableGetDTO> getPlayerInformation() {
-        // TODO
-        return null;
+    public PlayerTableGetDTO getPlayerInformation(@RequestHeader String auth, @PathVariable Long game_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
+    }
+
+    @GetMapping("/{game_id}/players/{player_id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public PlayerGetDTO getPlayerInformation(@PathVariable Long game_id, @PathVariable Long player_id,
+            @RequestHeader String auth) {
+        Player player = playerRepository.getOne(player_id);
+        PlayerGetDTO dto = DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(player);
+        if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
+            dto.setGameRole(player.getGameRole());
+        }
+        return dto;
+
+    }
+
+    @PutMapping("/{game_id}/players/{player_id}/start")
+    @ResponseStatus(HttpStatus.OK)
+    public void startGame(@PathVariable Long game_id, @PathVariable Long player_id,
+            @RequestHeader("Authorization") String auth) {
+        // check if user trying to start his own game
+        userService.throwIfNotIdAndTokenMatch(player_id, auth);
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        for (Player player : table.getPlayers()) {
+            if (player.getId().equals(player_id)) {
+                playerTableService.startGame(game_id);
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException("Player is not in game they are trying to start.");
     }
 }
