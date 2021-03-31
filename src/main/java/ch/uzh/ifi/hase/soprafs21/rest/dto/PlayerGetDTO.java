@@ -6,12 +6,12 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class PlayerGetDTO {
-    private Integer range;
-    private Integer bullets;
-    private Long id;
-    private Integer rangeIncrement;
-    private User user;
-    private GameRole gameRole;
+    protected Integer range;
+    protected Integer bullets;
+    protected Long id;
+    protected Integer rangeIncrement;
+    protected User user;
+    protected GameRole gameRole;
 
     public Integer getRange() {
         return range;

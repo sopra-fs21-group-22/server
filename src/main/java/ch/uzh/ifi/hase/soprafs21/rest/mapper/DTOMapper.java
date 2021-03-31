@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthGetDTO;
@@ -77,5 +78,13 @@ public interface DTOMapper {
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "range", target = "range")
+    @Mapping(source = "bullets", target = "bullets")
+    @Mapping(source = "rangeIncrement", target = "rangeIncrement")
+    @Mapping(source = "user", target = "user")
+    @Mapping(source = "gameRole", target = "gameRole")
+    PlayerGetAuthDTO convertEntityToPlayerGetAuthDTO(Player player);
 
 }
