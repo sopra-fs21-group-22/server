@@ -57,7 +57,8 @@ public class GameController {
     @GetMapping("/{game_id}/players")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public PlayerTableGetDTO getPlayerInformation(@RequestHeader String auth, @PathVariable Long game_id) {
+    public PlayerTableGetDTO getPlayerInformation(@RequestHeader("Authorization") String auth,
+            @PathVariable Long game_id) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
     }

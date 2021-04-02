@@ -57,8 +57,7 @@ public class PlayerGetDTO {
         if (gameRole.equals(GameRole.SHERIFF) || bullets.equals(0)) {
             return gameRole;
         }
-        return null;
-
+        return GameRole.HIDDEN;
     }
 
     public void setGameRole(GameRole gameRole) {

@@ -22,19 +22,19 @@ public class Player {
     private Long id;
 
     @Column
-    private Integer range;
+    private Integer range = 1;
 
     @Column
-    private Integer bullets;
+    private Integer bullets = 4;
 
     @Column
-    private Integer rangeIncrement;
+    private Integer rangeIncrement = 0;
 
     @OneToOne
     private User user;
 
     @Column
-    private GameRole gameRole;
+    private GameRole gameRole = GameRole.HIDDEN;
 
     public Long getId() {
         return id;
