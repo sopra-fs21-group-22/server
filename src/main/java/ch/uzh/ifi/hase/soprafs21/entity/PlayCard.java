@@ -8,13 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import java.util.*;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 
 interface PlayCard {
 
 
-    void use(Player usingPlayer, Array<List> targetPlayers);
+    void use(Player usingPlayer, ArrayList<Player> targetPlayers);
 
 }
   
