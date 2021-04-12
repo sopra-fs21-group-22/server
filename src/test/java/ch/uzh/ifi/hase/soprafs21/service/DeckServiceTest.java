@@ -23,15 +23,18 @@ import java.util.*;
 import javax.transaction.Transactional;
 
 public class DeckServiceTest {
-
     
+    //@Autowired
+    //DeckService deckService;
+
     @Transactional
     @Test
     public void deckCreationSuccess() {
 
+        DeckService deckService = new DeckService();
         Deck deck = new Deck();
 
-        DeckService.fill(deck);
+        deckService.fill(deck);
 
         ArrayList<PlayCard> testList = (ArrayList<PlayCard>) deck.getPlayCards();
 

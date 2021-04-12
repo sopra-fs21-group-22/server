@@ -26,7 +26,7 @@ public class DeckService {
     @Autowired
     DeckRepository deckRepository;
 
-    public static void fill(Deck deck){
+    public void fill(Deck deck){
 
         List<PlayCard> playCards = PlayCardService.constructDummyCards();
 
