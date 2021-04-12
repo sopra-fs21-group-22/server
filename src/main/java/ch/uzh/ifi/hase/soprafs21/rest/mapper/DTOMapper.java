@@ -77,6 +77,8 @@ public interface DTOMapper {
     @Mapping(source = "rangeIncrement", target = "rangeIncrement")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
+    @Mapping(source = "ready", target = "ready")
+    @Mapping(source = "tablePosition", target = "tablePosition")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
     @Mapping(source = "id", target = "id")

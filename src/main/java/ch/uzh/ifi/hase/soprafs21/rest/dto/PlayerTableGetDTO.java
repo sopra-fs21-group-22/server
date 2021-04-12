@@ -11,8 +11,8 @@ public class PlayerTableGetDTO {
     private List<Player> players;
     private Long id;
 
-    public Player getPlayerOnTurn() {
-        return playerOnTurn;
+    public PlayerGetDTO getPlayerOnTurn() {
+        return DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(playerOnTurn);
     }
 
     public void setPlayerOnTurn(Player playerOnTurn) {

@@ -12,6 +12,8 @@ public class PlayerGetDTO {
     protected Integer rangeIncrement;
     protected User user;
     protected GameRole gameRole;
+    protected boolean ready;
+    protected int tablePosition;
 
     public Integer getRange() {
         return range;
@@ -45,8 +47,8 @@ public class PlayerGetDTO {
         this.rangeIncrement = rangeIncrement;
     }
 
-    public UserGetDTO getUser() {
-        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    public String getUser() {
+        return user.getUsername();
     }
 
     public void setUser(User user) {
@@ -62,5 +64,21 @@ public class PlayerGetDTO {
 
     public void setGameRole(GameRole gameRole) {
         this.gameRole = gameRole;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public int getTablePosition() {
+        return tablePosition;
+    }
+
+    public void setTablePosition(int tablePosition) {
+        this.tablePosition = tablePosition;
     }
 }

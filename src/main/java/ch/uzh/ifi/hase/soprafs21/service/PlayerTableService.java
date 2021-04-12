@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -70,15 +71,24 @@ public class PlayerTableService {
         return playerTable;
     }
 
-    public void startGame(Long id) {
-        PlayerTable table = playerTableRepository.getOne(id);
-        if (table.getPlayers().size() < 4) {
-            throw new IllegalArgumentException("Not enough players yet!");
-        }
-        table.setGameHasStarted(true);
-        assignGameRoles(table);
+    public PlayerTable getPlayerTableById(Long id) {
+        return playerTableRepository.getOne(id);
+    }
 
-        // give back character cards to choose from
+    private void startGame(PlayerTable table) {
+        table.setGameHasStarted(true);
+
+        this.assignGameRoles(table);
+        this.assignTablePosition(table);
+        // assign first player on turn
+        for (Player player : table.getPlayers()) {
+            if (player.getGameRole().equals(GameRole.SHERIFF)) {
+                table.setPlayerOnTurn(player);
+                break;
+            }
+        }
+
+        playerTableRepository.save(table);
     }
 
     private void assignGameRoles(PlayerTable table) {
@@ -87,11 +97,54 @@ public class PlayerTableService {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setGameRole(roles.get(i));
         }
-        playerTableRepository.save(table);
     }
 
-    public PlayerTable getPlayerTableById(Long id) {
-        return playerTableRepository.getOne(id);
+    private void assignTablePosition(PlayerTable table) {
+        if (!table.getGameHasStarted()) {
+            throw new IllegalArgumentException("Game has not started yet!");
+        }
+
+        List<Player> players = table.getPlayers();
+        List<Integer> tablePositions = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            tablePositions.add(i);
+        }
+        Collections.shuffle(tablePositions);
+
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            player.setTablePosition(tablePositions.get(i));
+        }
+    }
+
+    /**
+     * Sets player's ready status and starts game if all players are ready
+     * 
+     * @param gameId
+     * @param playerId
+     * @param status   Boolean ready or not
+     */
+    public void setPlayerAsReady(Long gameId, Long playerId, Boolean status) {
+        PlayerTable table = getPlayerTableById(gameId);
+        Player player = playerRepository.getOne(playerId);
+        if (table.getPlayers().contains(player)) {
+            throw new IllegalArgumentException("Player is not in the game of the provided id");
+        }
+        if (table.getGameHasStarted()) {
+            throw new IllegalArgumentException("Game has already started!");
+        }
+        player.setReady(status);
+
+        Boolean playersReady = true;
+        for (Player pl : table.getPlayers()) {
+            if (!pl.getReady()) {
+                playersReady = false;
+                break;
+            }
+        }
+        if (playersReady && table.getPlayers().size() >= 4) {
+            startGame(table);
+        }
     }
 
 }

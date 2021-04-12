@@ -36,6 +36,12 @@ public class Player {
     @Column
     private GameRole gameRole = GameRole.HIDDEN;
 
+    @Column
+    private Integer tablePosition;
+
+    @Column
+    private Boolean ready = false;
+
     public Long getId() {
         return id;
     }
@@ -82,6 +88,37 @@ public class Player {
 
     public void setGameRole(GameRole gameRole) {
         this.gameRole = gameRole;
+    }
+
+    public Integer getTablePosition() {
+        return tablePosition;
+    }
+
+    public void setTablePosition(Integer tablePosition) {
+        this.tablePosition = tablePosition;
+    }
+
+    public Boolean getReady() {
+        return ready;
+    }
+
+    public void setReady(Boolean ready) {
+        this.ready = ready;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Player other = (Player) obj;
+
+        return other.getId().equals(this.getId());
     }
 
 }

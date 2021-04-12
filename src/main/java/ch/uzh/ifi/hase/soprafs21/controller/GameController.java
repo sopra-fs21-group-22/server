@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +22,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -75,20 +77,11 @@ public class GameController {
 
     }
 
-    @PutMapping("/{game_id}/players/{player_id}/start")
+    @PutMapping("/{game_id}/players/{player_id}/ready")
     @ResponseStatus(HttpStatus.OK)
-    public void startGame(@PathVariable Long game_id, @PathVariable Long player_id,
-            @RequestHeader("Authorization") String auth) {
-        // check if user trying to start his own game
+    public void markPlayerAsReady(@PathVariable Long game_id, @PathVariable Long player_id,
+            @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        for (Player player : table.getPlayers()) {
-            if (player.getId().equals(player_id)) {
-                playerTableService.startGame(game_id);
-                return;
-            }
-        }
-
-        throw new IllegalArgumentException("Player is not in game they are trying to start.");
+        playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
     }
 }
