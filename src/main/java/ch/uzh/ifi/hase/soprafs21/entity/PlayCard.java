@@ -12,7 +12,7 @@ import java.util.*;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 
-interface PlayCard {
+public interface PlayCard {
 
 
     void use(Player usingPlayer, ArrayList<Player> targetPlayers);

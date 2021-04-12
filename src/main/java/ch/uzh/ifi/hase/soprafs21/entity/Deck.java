@@ -1,30 +1,48 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import javax.annotation.Generated;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.entity.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
+
 
 
 @Entity
 public class Deck {
-    PlayCard CurrentCard = new OrangeCard();
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    public PlayCard drawCard(){
-        return CurrentCard;
-   }
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "deck_id")
+    private List<PlayCard> playCards;
 
-    public PlayCard discardCard(){
-        return CurrentCard;
+    public void fill(){
+        DeckService.addCards(this);
     }
 
-    public void shuffle(){
-        
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<PlayCard> getPlayCards() {
+        return playCards;
+    }
+
+    public void setPlayCards(List<PlayCard> playCards) {
+        this.playCards = playCards;
     }
 }
