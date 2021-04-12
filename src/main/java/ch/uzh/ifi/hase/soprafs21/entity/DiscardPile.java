@@ -14,16 +14,19 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 @Entity
 public class DiscardPile {
 
-    
-   public void getTopCard(){
+   @Id
+   @GeneratedValue
+   Long id;
+
+   public void getTopCard() {
 
    }
 
-   public void addCard(){
+   public void addCard() {
 
    }
 
-   public void empty(){
-       
+   public void empty() {
+
    }
 }

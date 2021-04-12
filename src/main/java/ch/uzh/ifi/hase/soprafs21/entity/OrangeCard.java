@@ -10,13 +10,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.util.*;
 
-
 import ch.uzh.ifi.hase.soprafs21.entity.PlayCard;
 
 @Entity
-public class OrangeCard implements PlayCard {
+public class OrangeCard extends PlayCard {
 
-    public void use(Player usingPlayer, ArrayList<Player> targetPlayers){
-        //placeholder
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    public void use(Player usingPlayer, ArrayList<Player> targetPlayers) {
+        // placeholder
     }
 }
