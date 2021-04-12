@@ -1,7 +1,11 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
@@ -116,47 +122,75 @@ public class PlayerTableServiceIntTest {
         });
     }
 
-    @Test
     @Transactional
-    public void startGameWithLT4Players() {
-        PlayerTable table = playerTableService.addPlayer(users.get(0).getId());
-        assertThrows(IllegalArgumentException.class, () -> {
-            playerTableService.startGame(table.getId());
-        });
-
-        playerTableService.addPlayer(users.get(1).getId());
-        playerTableService.addPlayer(users.get(2).getId());
-        assertThrows(IllegalArgumentException.class, () -> {
-            playerTableService.startGame(table.getId());
-        });
-
-        playerTableService.addPlayer(users.get(3).getId());
-        playerTableService.startGame(table.getId());
-        Boolean expected = true;
-        Boolean actual = playerTableRepository.getOne(table.getId()).getGameHasStarted();
-        assertEquals(expected, actual);
+    @Test
+    public void setPlayerAsReady_gameStarts() {
+        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+        playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(), true);
+        for (int i = 0; i < 3; i++) {
+            User user = users.get(i);
+            table = playerTableService.addPlayer(user.getId());
+            playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
+        }
+        PlayerTable actualTable = playerTableRepository.getOne(table.getId());
+        assertNotNull(actualTable.getPlayerOnTurn());
     }
 
-    // @Test
-    // @Transactional
-    // public void assignRoles(){
-    // PlayerTable table = playerTableService.addPlayer(users.get(0).getId());
-    // for(int i=1; i<users.size(); i++){
-    // playerTableService.addPlayer(users.get(i).getId());
-    // }
-    // playerTableService.startGame(table.getId());
-
-    // }
-
-    @Test
     @Transactional
-    public void joinStartedGame_fails() {
-        PlayerTable table = playerTableService.addPlayer(users.get(0).getId());
-        for (int i = 1; i < 4; i++) {
-            playerTableService.addPlayer(users.get(i).getId());
+    @Test
+    public void setPlayerAsReady_gameStartsNot() {
+        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+        for (int i = 0; i < 3; i++) {
+            User user = users.get(i);
+            table = playerTableService.addPlayer(user.getId());
+            playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
         }
-        playerTableService.startGame(table.getId());
-        PlayerTable newTable = playerTableService.addPlayer(users.get(6).getId());
-        assertEquals(1, newTable.getPlayers().size());
+        assertNull(table.getPlayerOnTurn());
+    }
+
+    @Transactional
+    @Test
+    public void setPlayerAsReady_RolesGetAssignedCorrectly4Players() {
+        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+        playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(), true);
+        for (int i = 0; i < 3; i++) {
+            User user = users.get(i);
+            table = playerTableService.addPlayer(user.getId());
+            playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
+        }
+        ArrayList<GameRole> roles = new ArrayList<>();
+        for (Player player : playerTableRepository.getOne(table.getId()).getPlayers()) {
+            roles.add(player.getGameRole());
+        }
+        List<GameRole> expectedRoles = new ArrayList<>();
+        expectedRoles.add(GameRole.SHERIFF);
+        expectedRoles.add(GameRole.OUTLAW);
+        expectedRoles.add(GameRole.RENEGADE);
+
+        assertTrue(roles.containsAll(expectedRoles));
+        assertTrue(roles.size() == 4);
+    }
+
+    @Transactional
+    @Test
+    public void setPlayerAsReady_tablePositionsGetAssigned() {
+        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+        playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(), true);
+        for (int i = 0; i < 3; i++) {
+            User user = users.get(i);
+            table = playerTableService.addPlayer(user.getId());
+            playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
+        }
+        List<Integer> tablePositions = new ArrayList<>();
+        for (Player player : table.getPlayers()) {
+            tablePositions.add(player.getTablePosition());
+        }
+        List<Integer> expectedPositionsUnordered = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            expectedPositionsUnordered.add(i);
+        }
+
+        assertTrue(tablePositions.containsAll(expectedPositionsUnordered));
+
     }
 }

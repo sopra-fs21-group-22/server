@@ -127,7 +127,7 @@ public class PlayerTableService {
     public void setPlayerAsReady(Long gameId, Long playerId, Boolean status) {
         PlayerTable table = getPlayerTableById(gameId);
         Player player = playerRepository.getOne(playerId);
-        if (table.getPlayers().contains(player)) {
+        if (!table.getPlayers().contains(player)) {
             throw new IllegalArgumentException("Player is not in the game of the provided id");
         }
         if (table.getGameHasStarted()) {
