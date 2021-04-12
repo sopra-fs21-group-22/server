@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ch.uzh.ifi.hase.soprafs21.entity.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.service.DeckService;
+import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
+
 
 
 
@@ -22,12 +26,17 @@ public class Deck {
     @GeneratedValue
     private Long id;
 
+    //@Autowired
+    //private PlayCardService playCardService;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "deck_id")
     private List<PlayCard> playCards;
+    
 
-    public void fill(){
-        DeckService.addCards(this);
+    public List<PlayCard> shuffle(List<PlayCard> playCards){
+        Collections.shuffle(playCards);
+        return playCards;
     }
 
     public Long getId() {

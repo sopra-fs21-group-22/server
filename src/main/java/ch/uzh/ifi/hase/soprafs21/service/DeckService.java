@@ -6,13 +6,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
-import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.OrangeCard;
+import ch.uzh.ifi.hase.soprafs21.entity.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
+
 
 
 
@@ -23,15 +26,9 @@ public class DeckService {
     @Autowired
     DeckRepository deckRepository;
 
-    public static void addCards(Deck deck){
+    public static void fill(Deck deck){
 
-        List<PlayCard> playCards = new ArrayList<PlayCard>();
-
-        // here we add the 80 cards
-        //example:
-        OrangeCard card1 = new OrangeCard();
-        playCards.add(card1);
-        //end of example
+        List<PlayCard> playCards = PlayCardService.constructDummyCards();
 
         deck.setPlayCards(playCards);
     }
