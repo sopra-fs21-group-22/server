@@ -71,6 +71,16 @@ public class PlayerTableService {
         return playerTable;
     }
 
+    public void removePlayer(PlayerTable table, Long playerId) {
+        Player playerToBeRemoved = playerRepository.getOne(playerId);
+        for (Player player : table.getPlayers()) {
+            if (player.getTablePosition() > playerToBeRemoved.getTablePosition()) {
+                player.setTablePosition(player.getTablePosition() - 1);
+            }
+        }
+        playerTableRepository.save(table);
+    }
+
     public PlayerTable getPlayerTableById(Long id) {
         return playerTableRepository.getOne(id);
     }
@@ -127,8 +137,9 @@ public class PlayerTableService {
     public void setPlayerAsReady(Long gameId, Long playerId, Boolean status) {
         PlayerTable table = getPlayerTableById(gameId);
         Player player = playerRepository.getOne(playerId);
-        if (!table.getPlayers().contains(player)) {
-            throw new IllegalArgumentException("Player is not in the game of the provided id");
+        if (!(table.getPlayers().contains(player))) {
+            throw new IllegalArgumentException(String.format("Player %s is not in PlayerTable with id %s.",
+                    player.getUser().getUsername(), table.getId()));
         }
         if (table.getGameHasStarted()) {
             throw new IllegalArgumentException("Game has already started!");
@@ -145,6 +156,30 @@ public class PlayerTableService {
         if (playersReady && table.getPlayers().size() >= 4) {
             startGame(table);
         }
+    }
+
+    public List<Player> getPlayersInRangeOf(PlayerTable table, Long playerId) {
+        Player player = table.getPlayerById(playerId);
+        if (player == null) {
+            throw new IllegalArgumentException("Player is not in this PlayerTable.");
+        }
+        List<Player> reachablePlayers = new ArrayList<>();
+        for (Player targetPlayer : table.getPlayers()) {
+            if (targetPlayer.getId().equals(player.getId())) {
+                continue;
+            }
+            int tryDirection1 = Math
+                    .abs(player.getTablePosition() - (table.getPlayers().size() - targetPlayer.getTablePosition()));
+            int tryDirection2 = Math.abs(player.getTablePosition() - targetPlayer.getTablePosition());
+            int distance = Math.min(tryDirection1, tryDirection2);
+            distance -= player.getDistanceDecreaseToOthers();
+            distance += targetPlayer.getDistanceIncreaseForOthers();
+            distance -= player.getRange();
+            if (distance <= 0) {
+                reachablePlayers.add(targetPlayer);
+            }
+        }
+        return reachablePlayers;
     }
 
 }
