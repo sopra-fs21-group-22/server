@@ -193,4 +193,27 @@ public class PlayerTableServiceIntTest {
         assertTrue(tablePositions.containsAll(expectedPositionsUnordered));
 
     }
+
+    @Test
+    @Transactional
+    public void playersInRange() {
+        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+        playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(), true);
+        for (int i = 0; i < 3; i++) {
+            User user = users.get(i);
+            table = playerTableService.addPlayer(user.getId());
+            playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
+        }
+
+        Player attackingPlayer = table.getPlayers().get(0);
+
+        List<Player> playersInRange = playerTableService.getPlayersInRangeOf(table, attackingPlayer.getId());
+        for (Player playerInRange : playersInRange) {
+            int atcPos = attackingPlayer.getTablePosition();
+            int inRangePos = playerInRange.getTablePosition();
+            int distance = Math.abs(atcPos - inRangePos);
+            // assertEquals(1, distance);
+            assertTrue(distance == 1 || distance == table.getPlayers().size() - 1);
+        }
+    }
 }

@@ -9,11 +9,12 @@ public class PlayerGetDTO {
     protected Integer range;
     protected Integer bullets;
     protected Long id;
-    protected Integer rangeIncrement;
     protected User user;
     protected GameRole gameRole;
     protected boolean ready;
     protected int tablePosition;
+    protected int distanceIncreaseForOthers;
+    protected int distanceDecreaseToOthers;
 
     public Integer getRange() {
         return range;
@@ -37,14 +38,6 @@ public class PlayerGetDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getRangeIncrement() {
-        return rangeIncrement;
-    }
-
-    public void setRangeIncrement(Integer rangeIncrement) {
-        this.rangeIncrement = rangeIncrement;
     }
 
     public String getUser() {
@@ -80,5 +73,21 @@ public class PlayerGetDTO {
 
     public void setTablePosition(int tablePosition) {
         this.tablePosition = tablePosition;
+    }
+
+    public int getDistanceIncreaseForOthers() {
+        return distanceIncreaseForOthers;
+    }
+
+    public void setDistanceIncreaseForOthers(int distanceIncreaseForOthers) {
+        this.distanceIncreaseForOthers = distanceIncreaseForOthers;
+    }
+
+    public int getDistanceDecreaseToOthers() {
+        return distanceDecreaseToOthers;
+    }
+
+    public void setDistanceDecreaseToOthers(int distanceDecreaseToOthers) {
+        this.distanceDecreaseToOthers = distanceDecreaseToOthers;
     }
 }

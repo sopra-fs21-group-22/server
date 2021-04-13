@@ -22,13 +22,16 @@ public class Player {
     private Long id;
 
     @Column
-    private Integer range = 1;
-
-    @Column
     private Integer bullets = 4;
 
     @Column
-    private Integer rangeIncrement = 0;
+    private Integer range = 1;
+
+    @Column
+    private Integer distanceIncreaseForOthers = 0;
+
+    @Column
+    Integer distanceDecreaseToOthers = 0;
 
     @OneToOne
     private User user;
@@ -41,6 +44,10 @@ public class Player {
 
     @Column
     private Boolean ready = false;
+
+    public void takeHit() {
+        this.bullets -= 1;
+    }
 
     public Long getId() {
         return id;
@@ -64,14 +71,6 @@ public class Player {
 
     public void setBullets(Integer bullets) {
         this.bullets = bullets;
-    }
-
-    public Integer getRangeIncrement() {
-        return rangeIncrement;
-    }
-
-    public void setRangeIncrement(Integer rangeIncrement) {
-        this.rangeIncrement = rangeIncrement;
     }
 
     public User getUser() {
@@ -112,13 +111,29 @@ public class Player {
             return false;
         }
 
-        if (obj.getClass() != this.getClass()) {
-            return false;
-        }
+        // this causes a bug for some weird reason
+        // if (obj.getClass() != this.getClass()) {
+        // return false;
+        // }
 
         final Player other = (Player) obj;
 
         return other.getId().equals(this.getId());
     }
 
+    public Integer getDistanceIncreaseForOthers() {
+        return distanceIncreaseForOthers;
+    }
+
+    public void setDistanceIncreaseForOthers(Integer distanceIncreaseForOthers) {
+        this.distanceIncreaseForOthers = distanceIncreaseForOthers;
+    }
+
+    public Integer getDistanceDecreaseToOthers() {
+        return distanceDecreaseToOthers;
+    }
+
+    public void setDistanceDecreaseToOthers(Integer distanceDecreaseToOthers) {
+        this.distanceDecreaseToOthers = distanceDecreaseToOthers;
+    }
 }

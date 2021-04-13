@@ -70,4 +70,13 @@ public class PlayerTable {
         this.gameHasStarted = gameHasStarted;
     }
 
+    public Player getPlayerById(Long id) {
+        for (Player player : players) {
+            if (id.equals(player.getId())) {
+                return player;
+            }
+        }
+        return null;
+    }
+
 }

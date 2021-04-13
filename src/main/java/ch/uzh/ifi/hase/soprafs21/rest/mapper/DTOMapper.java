@@ -74,7 +74,9 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "range", target = "range")
     @Mapping(source = "bullets", target = "bullets")
-    @Mapping(source = "rangeIncrement", target = "rangeIncrement")
+    @Mapping(source = "distanceIncreaseForOthers", target = "distanceIncreaseForOthers")
+    @Mapping(source = "distanceDecreaseToOthers", target = "distanceDecreaseToOthers")
+
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
     @Mapping(source = "ready", target = "ready")
@@ -84,7 +86,7 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "range", target = "range")
     @Mapping(source = "bullets", target = "bullets")
-    @Mapping(source = "rangeIncrement", target = "rangeIncrement")
+    @Mapping(source = "distanceIncreaseForOthers", target = "distanceIncreaseForOthers")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
     PlayerGetAuthDTO convertEntityToPlayerGetAuthDTO(Player player);
