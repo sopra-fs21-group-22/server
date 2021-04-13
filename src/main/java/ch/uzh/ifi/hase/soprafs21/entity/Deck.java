@@ -28,11 +28,6 @@ public class Deck {
     @JoinColumn(name = "deck_id")
     private List<PlayCard> playCards;
 
-    public List<PlayCard> shuffle(List<PlayCard> playCards) {
-        Collections.shuffle(playCards);
-        return playCards;
-    }
-
     public Long getId() {
         return id;
     }
