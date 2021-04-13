@@ -55,16 +55,13 @@ public class DeckService {
     public void shuffle(Deck deck, Deck discardPile){
         List<PlayCard> topCard = discardPile.getPlayCards();
         List<PlayCard> discardCards = discardPile.getPlayCards();
-        List<PlayCard> deckCards = deck.getPlayCards();
 
         topCard = topCard.subList(0, 1);        
         discardPile.setPlayCards(topCard);
 
         discardCards.remove(0);
         discardCards = this.randomizeCards(discardCards);
-    
-        deckCards.addAll(discardCards);
-        deck.setPlayCards(deckCards);
+        deck.setPlayCards(discardCards);
     }
 
     public List<PlayCard> randomizeCards(List<PlayCard> playCards) {
