@@ -212,7 +212,6 @@ public class PlayerTableServiceIntTest {
             int atcPos = attackingPlayer.getTablePosition();
             int inRangePos = playerInRange.getTablePosition();
             int distance = Math.abs(atcPos - inRangePos);
-            // assertEquals(1, distance);
             assertTrue(distance == 1 || distance == table.getPlayers().size() - 1);
         }
     }

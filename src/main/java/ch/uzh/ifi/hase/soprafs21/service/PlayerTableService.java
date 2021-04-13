@@ -168,10 +168,11 @@ public class PlayerTableService {
             if (targetPlayer.getId().equals(player.getId())) {
                 continue;
             }
-            int tryDirection1 = Math
-                    .abs(player.getTablePosition() - (table.getPlayers().size() - targetPlayer.getTablePosition()));
-            int tryDirection2 = Math.abs(player.getTablePosition() - targetPlayer.getTablePosition());
-            int distance = Math.min(tryDirection1, tryDirection2);
+            int distance = Math.abs(player.getTablePosition() - targetPlayer.getTablePosition());
+            if (distance > table.getPlayers().size()) {
+                distance = table.getPlayers().size() - distance;
+            }
+
             distance -= player.getDistanceDecreaseToOthers();
             distance += targetPlayer.getDistanceIncreaseForOthers();
             distance -= player.getRange();
