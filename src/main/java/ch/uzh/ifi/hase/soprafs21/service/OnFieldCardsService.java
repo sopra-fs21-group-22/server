@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs21.entity.*;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.repository.OnFieldCardsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,8 @@ import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 @Transactional
 public class OnFieldCardsService {
 
-    @Autowired
     OnFieldCardsRepository onFieldCardsRepository;
 
-    @Autowired
     DeckRepository deckRepository;
 
     public OnFieldCards createOnFieldCards(){

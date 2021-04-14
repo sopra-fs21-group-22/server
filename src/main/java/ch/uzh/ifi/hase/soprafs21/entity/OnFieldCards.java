@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+
 import javax.persistence.*;
 import java.util.List;
 
