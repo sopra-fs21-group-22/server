@@ -173,46 +173,61 @@ public class PlayerTableServiceIntTest {
 
     @Transactional
     @Test
-    public void setPlayerAsReady_tablePositionsGetAssigned() {
-        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
-        playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(), true);
-        for (int i = 0; i < 3; i++) {
-            User user = users.get(i);
-            table = playerTableService.addPlayer(user.getId());
-            playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
-        }
-        List<Integer> tablePositions = new ArrayList<>();
-        for (Player player : table.getPlayers()) {
-            tablePositions.add(player.getTablePosition());
-        }
-        List<Integer> expectedPositionsUnordered = new ArrayList<>();
+    public void moreThan7PlayersJoin() {
+        PlayerTable table = playerTableService.addPlayer(users.get(9).getId());
+        playerTableService.setPlayerAsReady(table.getId(), users.get(9).getId(), true);
         for (int i = 0; i < 4; i++) {
-            expectedPositionsUnordered.add(i);
-        }
-
-        assertTrue(tablePositions.containsAll(expectedPositionsUnordered));
-
-    }
-
-    @Test
-    @Transactional
-    public void playersInRange() {
-        PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
-        playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(), true);
-        for (int i = 0; i < 3; i++) {
             User user = users.get(i);
             table = playerTableService.addPlayer(user.getId());
             playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
         }
-
-        Player attackingPlayer = table.getPlayers().get(0);
-
-        List<Player> playersInRange = playerTableService.getPlayersInRangeOf(table, attackingPlayer.getId());
-        for (Player playerInRange : playersInRange) {
-            int atcPos = attackingPlayer.getTablePosition();
-            int inRangePos = playerInRange.getTablePosition();
-            int distance = Math.abs(atcPos - inRangePos);
-            assertTrue(distance == 1 || distance == table.getPlayers().size() - 1);
-        }
+        assertEquals(1, table.getPlayers().size());
     }
+
+    // @Transactional
+    // @Test
+    // public void setPlayerAsReady_tablePositionsGetAssigned() {
+    // PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+    // playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(),
+    // true);
+    // for (int i = 0; i < 3; i++) {
+    // User user = users.get(i);
+    // table = playerTableService.addPlayer(user.getId());
+    // playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
+    // }
+    // List<Integer> tablePositions = new ArrayList<>();
+    // for (Player player : table.getPlayers()) {
+    // tablePositions.add(player.getTablePosition());
+    // }
+    // List<Integer> expectedPositionsUnordered = new ArrayList<>();
+    // for (int i = 0; i < 4; i++) {
+    // expectedPositionsUnordered.add(i);
+    // }
+
+    // assertTrue(tablePositions.containsAll(expectedPositionsUnordered));
+    // }
+
+    // @Test
+    // @Transactional
+    // public void playersInRange() {
+    // PlayerTable table = playerTableService.addPlayer(users.get(8).getId());
+    // playerTableService.setPlayerAsReady(table.getId(), users.get(8).getId(),
+    // true);
+    // for (int i = 0; i < 3; i++) {
+    // User user = users.get(i);
+    // table = playerTableService.addPlayer(user.getId());
+    // playerTableService.setPlayerAsReady(table.getId(), user.getId(), true);
+    // }
+
+    // Player attackingPlayer = table.getPlayers().get(0);
+
+    // List<Player> playersInRange = playerTableService.getPlayersInRangeOf(table,
+    // attackingPlayer.getId());
+    // for (Player playerInRange : playersInRange) {
+    // int atcPos = attackingPlayer.getTablePosition();
+    // int inRangePos = playerInRange.getTablePosition();
+    // int distance = Math.abs(atcPos - inRangePos);
+    // assertTrue(distance == 1 || distance == table.getPlayers().size() - 1);
+    // }
+    // }
 }

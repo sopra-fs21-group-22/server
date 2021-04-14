@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs21.entity;
+package ch.uzh.ifi.hase.soprafs21.entity.cards;
 
 import javax.annotation.Generated;
 import javax.persistence.Column;
@@ -16,18 +16,23 @@ import org.hibernate.cfg.NotYetImplementedException;
 import java.util.*;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class PlayCard {
+public abstract class PlayCard {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    void use(Player usingPlayer, ArrayList<Player> targetPlayers) {
-        throw new NotYetImplementedException();
-    }
+    @Column
+    private Suit suit;
+
+    @Column
+    private Rank rank;
 
     public Long getId() {
         return id;
@@ -35,5 +40,26 @@ public class PlayCard {
 
     public void setId(Long id) {
         this.id = id;
-    };
+    }
+
+    public Suit getSuit() {
+        return suit;
+    }
+
+    public void setSuit(Suit suit) {
+        this.suit = suit;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }
