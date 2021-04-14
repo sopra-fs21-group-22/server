@@ -5,8 +5,6 @@ import javax.persistence.*;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 
-import java.util.List;
-
 /**
  * The Player class represents a player The id is the same as the user who
  * "owns" the player has.
@@ -136,7 +134,7 @@ public class Player {
         this.distanceDecreaseToOthers = distanceDecreaseToOthers;
     }
 
-    public List<BlueCard> getOnFieldCards() { return onFieldCards; }
+    public OnFieldCards getOnFieldCards() { return onFieldCards; }
 
-    public void setOnFieldCards(List<BlueCard> onFieldCards) { this.onFieldCards = onFieldCards; }
+    public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
 }

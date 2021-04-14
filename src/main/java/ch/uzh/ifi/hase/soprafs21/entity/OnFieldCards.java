@@ -3,13 +3,14 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import javax.persistence.*;
 import java.util.List;
 
+@Entity
 public class OnFieldCards {
     @Id
     @GeneratedValue
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="onFieldCards_id")
+    @JoinColumn(name = "onFieldCards_id")
     private List<BlueCard> onFieldCards;
 
     public Long getId() {
