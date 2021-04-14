@@ -9,7 +9,7 @@ public class OnFieldCards {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<PlayCard> onFieldCards;
+    private List<BlueCard> onFieldCards;
 
     public Long getId() {
         return id;
@@ -20,15 +20,15 @@ public class OnFieldCards {
     }
 
     public Integer getLength(){
-        List<PlayCard> temp = onFieldCards;
+        List<BlueCard> temp = onFieldCards;
         return temp.size();
     }
 
-    public List<PlayCard> getOnFieldCards() {
+    public List<BlueCard> getOnFieldCards() {
         return onFieldCards;
     }
 
-    public void setOnFieldCards(List<PlayCard> cards) {
+    public void setOnFieldCards(List<BlueCard> cards) {
         for (int i = 0; i < cards.size(); i++) {
             onFieldCards.add(cards.get(0));
         }

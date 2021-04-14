@@ -33,7 +33,7 @@ public class OnFieldCardsService {
         return onFieldCards;
     }
 
-    public void putOnDiscardPile(BlueCard cardToDiscard, OnFieldCards onFieldCards, Deck discardPile){
+    public void discardCard(BlueCard cardToDiscard, OnFieldCards onFieldCards, Deck discardPile){
 
         onFieldCards.removeOnFieldCard(cardToDiscard);
         onFieldCardsRepository.save(onFieldCards);
