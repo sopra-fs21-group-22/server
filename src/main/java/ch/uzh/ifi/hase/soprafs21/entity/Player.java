@@ -11,6 +11,8 @@ import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 
+import java.util.List;
+
 /**
  * The Player class represents a player The id is the same as the user who
  * "owns" the player has.
