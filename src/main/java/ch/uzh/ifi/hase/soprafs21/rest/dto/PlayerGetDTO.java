@@ -1,5 +1,9 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
@@ -17,6 +21,7 @@ public class PlayerGetDTO {
     protected int distanceDecreaseToOthers;
     protected Player leftNeighbor;
     protected Player rightNeighbor;
+    protected List<Player> playersInRange;
 
     public Integer getRange() {
         return range;
@@ -101,7 +106,6 @@ public class PlayerGetDTO {
             return rightNeighbor.getId();
         }
         return null;
-
     }
 
     public void setRightNeighbor(Player rightNeighbor) {

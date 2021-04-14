@@ -82,7 +82,6 @@ public interface DTOMapper {
     @Mapping(source = "ready", target = "ready")
     @Mapping(source = "leftNeighbor", target = "leftNeighbor")
     @Mapping(source = "rightNeighbor", target = "rightNeighbor")
-
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
     @Mapping(source = "id", target = "id")

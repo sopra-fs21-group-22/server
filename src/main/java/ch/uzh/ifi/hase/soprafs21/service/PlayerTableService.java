@@ -110,24 +110,6 @@ public class PlayerTableService {
         }
     }
 
-    // private void assignTablePosition(PlayerTable table) {
-    // if (!table.getGameHasStarted()) {
-    // throw new IllegalArgumentException("Game has not started yet!");
-    // }
-
-    // List<Player> players = table.getPlayers();
-    // List<Integer> tablePositions = new ArrayList<>();
-    // for (int i = 0; i < players.size(); i++) {
-    // tablePositions.add(i);
-    // }
-    // Collections.shuffle(tablePositions);
-
-    // for (int i = 0; i < players.size(); i++) {
-    // Player player = players.get(i);
-    // player.setTablePosition(tablePositions.get(i));
-    // }
-    // }
-
     /**
      * Sets player's ready status and starts game if all players are ready
      * 
@@ -157,38 +139,6 @@ public class PlayerTableService {
         if (playersReady && table.getPlayers().size() >= 4) {
             startGame(table);
         }
-    }
-
-    // public List<Player> getPlayersInRangeOf(PlayerTable table, Long playerId) {
-    // Optional<Player> playerOpt = table.getPlayerById(playerId);
-    // if (!playerOpt.isPresent()) {
-    // throw new IllegalArgumentException("Player is not in this PlayerTable.");
-    // }
-    // Player player = playerOpt.get();
-    // List<Player> reachablePlayers = new ArrayList<>();
-    // for (Player targetPlayer : table.getPlayers()) {
-    // if (targetPlayer.getId().equals(player.getId())) {
-    // continue;
-    // }
-    // int distance = Math.abs(player.getTablePosition() -
-    // targetPlayer.getTablePosition());
-    // if (distance > table.getPlayers().size()) {
-    // distance = table.getPlayers().size() - distance;
-    // }
-
-    // distance -= player.getDistanceDecreaseToOthers();
-    // distance += targetPlayer.getDistanceIncreaseForOthers();
-    // distance -= player.getRange();
-    // if (distance <= 0) {
-    // reachablePlayers.add(targetPlayer);
-    // }
-    // }
-    // return reachablePlayers;
-    // }
-
-    public List<Player> getPlayersInRangeOf(PlayerTable table, Long playerId) {
-        // TODO
-        return null;
     }
 
     private void assignTablePositions(PlayerTable table) {

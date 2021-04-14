@@ -30,6 +30,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
+import ch.uzh.ifi.hase.soprafs21.service.PlayerService;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.SpecificCardService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -135,4 +136,17 @@ public class GameController {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(table.getPlayerById(player_id).get());
     }
+
+    @GetMapping("/{game_id}/players/{player_id}/targets")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PlayerGetDTO> getPlayersInRange(@PathVariable Long player_id, @PathVariable Long game_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        List<Player> players = table.getPlayersInRangeOf(player_id);
+        List<PlayerGetDTO> playerGetDTOs = new ArrayList<>();
+        for (Player player : players) {
+            playerGetDTOs.add(DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(player));
+        }
+        return playerGetDTOs;
+    }
+
 }

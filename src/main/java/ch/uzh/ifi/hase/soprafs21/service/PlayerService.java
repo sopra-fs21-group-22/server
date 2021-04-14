@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import antlr.collections.List;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
@@ -25,6 +26,5 @@ public class PlayerService {
         attacker.setStillPlayableBangsThisRound(attacker.getStillPlayableBangsThisRound() - 1);
         playerRepository.save(target);
         playerRepository.save(attacker);
-
     }
 }
