@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import java.util.ArrayList;
+
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 
 /**
@@ -47,6 +49,9 @@ public class Player {
 
     @Column
     private Boolean ready = false;
+
+    @Column
+    private Integer cardamount;
 
     public void takeHit() {
         this.bullets -= 1;
@@ -114,6 +119,10 @@ public class Player {
 
     public void setReady(Boolean ready) {
         this.ready = ready;
+    }
+
+    public Integer getCardamount() {
+        return hand.getPlayCards().size();
     }
 
     @Override
