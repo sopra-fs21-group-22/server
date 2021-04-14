@@ -41,8 +41,8 @@ public class Player {
     @Column
     private Boolean ready = false;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<BlueCard> onFieldCards;
+    @OneToOne
+    private OnFieldCards onFieldCards;
 
     public void takeHit() {
         this.bullets -= 1;

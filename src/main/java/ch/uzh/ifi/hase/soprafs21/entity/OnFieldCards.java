@@ -9,6 +9,7 @@ public class OnFieldCards {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="onFieldCards_id")
     private List<BlueCard> onFieldCards;
 
     public Long getId() {
