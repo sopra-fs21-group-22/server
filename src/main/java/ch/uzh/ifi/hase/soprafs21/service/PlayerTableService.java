@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,15 +72,15 @@ public class PlayerTableService {
         return playerTable;
     }
 
-    public void removePlayer(PlayerTable table, Long playerId) {
-        Player playerToBeRemoved = playerRepository.getOne(playerId);
-        for (Player player : table.getPlayers()) {
-            if (player.getTablePosition() > playerToBeRemoved.getTablePosition()) {
-                player.setTablePosition(player.getTablePosition() - 1);
-            }
-        }
-        playerTableRepository.save(table);
-    }
+    // public void removePlayer(PlayerTable table, Long playerId) {
+    // Player playerToBeRemoved = playerRepository.getOne(playerId);
+    // for (Player player : table.getPlayers()) {
+    // if (player.getTablePosition() > playerToBeRemoved.getTablePosition()) {
+    // player.setTablePosition(player.getTablePosition() - 1);
+    // }
+    // }
+    // playerTableRepository.save(table);
+    // }
 
     public PlayerTable getPlayerTableById(Long id) {
         return playerTableRepository.getOne(id);
@@ -89,7 +90,7 @@ public class PlayerTableService {
         table.setGameHasStarted(true);
 
         this.assignGameRoles(table);
-        this.assignTablePosition(table);
+        this.assignTablePositions(table);
         // assign first player on turn
         for (Player player : table.getPlayers()) {
             if (player.getGameRole().equals(GameRole.SHERIFF)) {
@@ -109,23 +110,23 @@ public class PlayerTableService {
         }
     }
 
-    private void assignTablePosition(PlayerTable table) {
-        if (!table.getGameHasStarted()) {
-            throw new IllegalArgumentException("Game has not started yet!");
-        }
+    // private void assignTablePosition(PlayerTable table) {
+    // if (!table.getGameHasStarted()) {
+    // throw new IllegalArgumentException("Game has not started yet!");
+    // }
 
-        List<Player> players = table.getPlayers();
-        List<Integer> tablePositions = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            tablePositions.add(i);
-        }
-        Collections.shuffle(tablePositions);
+    // List<Player> players = table.getPlayers();
+    // List<Integer> tablePositions = new ArrayList<>();
+    // for (int i = 0; i < players.size(); i++) {
+    // tablePositions.add(i);
+    // }
+    // Collections.shuffle(tablePositions);
 
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
-            player.setTablePosition(tablePositions.get(i));
-        }
-    }
+    // for (int i = 0; i < players.size(); i++) {
+    // Player player = players.get(i);
+    // player.setTablePosition(tablePositions.get(i));
+    // }
+    // }
 
     /**
      * Sets player's ready status and starts game if all players are ready
@@ -158,29 +159,56 @@ public class PlayerTableService {
         }
     }
 
-    public List<Player> getPlayersInRangeOf(PlayerTable table, Long playerId) {
-        Player player = table.getPlayerById(playerId);
-        if (player == null) {
-            throw new IllegalArgumentException("Player is not in this PlayerTable.");
-        }
-        List<Player> reachablePlayers = new ArrayList<>();
-        for (Player targetPlayer : table.getPlayers()) {
-            if (targetPlayer.getId().equals(player.getId())) {
-                continue;
-            }
-            int distance = Math.abs(player.getTablePosition() - targetPlayer.getTablePosition());
-            if (distance > table.getPlayers().size()) {
-                distance = table.getPlayers().size() - distance;
-            }
+    // public List<Player> getPlayersInRangeOf(PlayerTable table, Long playerId) {
+    // Optional<Player> playerOpt = table.getPlayerById(playerId);
+    // if (!playerOpt.isPresent()) {
+    // throw new IllegalArgumentException("Player is not in this PlayerTable.");
+    // }
+    // Player player = playerOpt.get();
+    // List<Player> reachablePlayers = new ArrayList<>();
+    // for (Player targetPlayer : table.getPlayers()) {
+    // if (targetPlayer.getId().equals(player.getId())) {
+    // continue;
+    // }
+    // int distance = Math.abs(player.getTablePosition() -
+    // targetPlayer.getTablePosition());
+    // if (distance > table.getPlayers().size()) {
+    // distance = table.getPlayers().size() - distance;
+    // }
 
-            distance -= player.getDistanceDecreaseToOthers();
-            distance += targetPlayer.getDistanceIncreaseForOthers();
-            distance -= player.getRange();
-            if (distance <= 0) {
-                reachablePlayers.add(targetPlayer);
-            }
+    // distance -= player.getDistanceDecreaseToOthers();
+    // distance += targetPlayer.getDistanceIncreaseForOthers();
+    // distance -= player.getRange();
+    // if (distance <= 0) {
+    // reachablePlayers.add(targetPlayer);
+    // }
+    // }
+    // return reachablePlayers;
+    // }
+
+    public List<Player> getPlayersInRangeOf(PlayerTable table, Long playerId) {
+        // TODO
+        return null;
+    }
+
+    private void assignTablePositions(PlayerTable table) {
+        List<Player> players = table.getPlayers();
+        Collections.shuffle(players);
+
+        for (int i = 0; i < players.size(); i++) {
+            int nextPlayerIdx = (i + 1) % (players.size());
+            Player currPlayer = players.get(i);
+            Player nextPlayer = players.get(nextPlayerIdx);
+
+            currPlayer.setRightNeighbor(nextPlayer);
+            nextPlayer.setLeftNeighbor(currPlayer);
+            playerRepository.save(currPlayer);
+            playerRepository.save(nextPlayer);
         }
-        return reachablePlayers;
+    }
+
+    public void removePlayer(PlayerTable table, Long playerId) {
+        // TODO
     }
 
 }

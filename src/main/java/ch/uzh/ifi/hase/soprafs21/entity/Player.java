@@ -1,15 +1,15 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -33,20 +33,50 @@ public class Player {
     @Column
     Integer distanceDecreaseToOthers = 0;
 
+    @Column
+    Integer maxAmountOfBangPlayed = 1;
+
+    @Column
+    Integer stillPlayableBangsThisRound = 1;
+
     @OneToOne
     private User user;
 
     @Column
     private GameRole gameRole = GameRole.HIDDEN;
 
-    @Column
-    private Integer tablePosition;
+    @OneToOne
+    private Player leftNeighbor;
+
+    @OneToOne
+    private Player rightNeighbor;
 
     @Column
     private Boolean ready = false;
 
-    public void takeHit() {
-        this.bullets -= 1;
+    public boolean reachesWithWeapon(Player targetPlayer) {
+        Player userRightNeighbor = this.getRightNeighbor();
+        Player userLeftNeighbor = this.getLeftNeighbor();
+        int rightDistance = 1;
+        int leftDistance = 1;
+        for (int i = 0; i < 7; i++) {
+            if (userRightNeighbor.getId().equals(targetPlayer.getId())) {
+                break;
+            }
+            rightDistance++;
+            userRightNeighbor = userRightNeighbor.getRightNeighbor();
+        }
+        for (int i = 0; i < 7; i++) {
+            if (userLeftNeighbor.getId().equals(targetPlayer.getId())) {
+                break;
+            }
+            leftDistance++;
+            userLeftNeighbor = userLeftNeighbor.getLeftNeighbor();
+        }
+        int distance = rightDistance < leftDistance ? rightDistance : leftDistance;
+
+        return distance - this.getRange() + this.getDistanceDecreaseToOthers()
+                + targetPlayer.getDistanceIncreaseForOthers() <= 0;
     }
 
     public Long getId() {
@@ -89,14 +119,6 @@ public class Player {
         this.gameRole = gameRole;
     }
 
-    public Integer getTablePosition() {
-        return tablePosition;
-    }
-
-    public void setTablePosition(Integer tablePosition) {
-        this.tablePosition = tablePosition;
-    }
-
     public Boolean getReady() {
         return ready;
     }
@@ -135,5 +157,37 @@ public class Player {
 
     public void setDistanceDecreaseToOthers(Integer distanceDecreaseToOthers) {
         this.distanceDecreaseToOthers = distanceDecreaseToOthers;
+    }
+
+    public Player getLeftNeighbor() {
+        return leftNeighbor;
+    }
+
+    public void setLeftNeighbor(Player leftNeighbor) {
+        this.leftNeighbor = leftNeighbor;
+    }
+
+    public Player getRightNeighbor() {
+        return rightNeighbor;
+    }
+
+    public void setRightNeighbor(Player rightNeighbor) {
+        this.rightNeighbor = rightNeighbor;
+    }
+
+    public Integer getMaxAmountOfBangPlayed() {
+        return maxAmountOfBangPlayed;
+    }
+
+    public void setMaxAmountOfBangPlayed(Integer maxAmountOfBangPlayed) {
+        this.maxAmountOfBangPlayed = maxAmountOfBangPlayed;
+    }
+
+    public Integer getStillPlayableBangsThisRound() {
+        return stillPlayableBangsThisRound;
+    }
+
+    public void setStillPlayableBangsThisRound(Integer stillPlayableBangsThisRound) {
+        this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
     }
 }

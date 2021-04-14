@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,6 +39,21 @@ public class PlayerTable {
     @Column
     private Boolean gameHasStarted = false;
 
+    public List<Player> getPlayersInRangeOf(Long id) {
+        Optional<Player> playerOpt = getPlayerById(id);
+        if (!playerOpt.isPresent()) {
+            throw new IllegalArgumentException("Player is not in this PlayerTable.");
+        }
+        Player rootPlayer = playerOpt.get();
+        List<Player> playersInRange = new ArrayList<>();
+        for (Player player : players) {
+            if (rootPlayer.reachesWithWeapon(player)) {
+                playersInRange.add(player);
+            }
+        }
+        return playersInRange;
+    }
+
     public Long getId() {
         return id;
     }
@@ -70,13 +86,12 @@ public class PlayerTable {
         this.gameHasStarted = gameHasStarted;
     }
 
-    public Player getPlayerById(Long id) {
+    public Optional<Player> getPlayerById(Long id) {
         for (Player player : players) {
             if (id.equals(player.getId())) {
-                return player;
+                return Optional.of(player);
             }
         }
-        return null;
+        return Optional.empty();
     }
-
 }

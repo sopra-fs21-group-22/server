@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
@@ -12,9 +13,10 @@ public class PlayerGetDTO {
     protected User user;
     protected GameRole gameRole;
     protected boolean ready;
-    protected int tablePosition;
     protected int distanceIncreaseForOthers;
     protected int distanceDecreaseToOthers;
+    protected Player leftNeighbor;
+    protected Player rightNeighbor;
 
     public Integer getRange() {
         return range;
@@ -67,14 +69,6 @@ public class PlayerGetDTO {
         this.ready = ready;
     }
 
-    public int getTablePosition() {
-        return tablePosition;
-    }
-
-    public void setTablePosition(int tablePosition) {
-        this.tablePosition = tablePosition;
-    }
-
     public int getDistanceIncreaseForOthers() {
         return distanceIncreaseForOthers;
     }
@@ -89,5 +83,28 @@ public class PlayerGetDTO {
 
     public void setDistanceDecreaseToOthers(int distanceDecreaseToOthers) {
         this.distanceDecreaseToOthers = distanceDecreaseToOthers;
+    }
+
+    public Long getLeftNeighbor() {
+        if (this.leftNeighbor != null) {
+            return leftNeighbor.getId();
+        }
+        return null;
+    }
+
+    public void setLeftNeighbor(Player leftNeighbor) {
+        this.leftNeighbor = leftNeighbor;
+    }
+
+    public Long getRightNeighbor() {
+        if (this.rightNeighbor != null) {
+            return rightNeighbor.getId();
+        }
+        return null;
+
+    }
+
+    public void setRightNeighbor(Player rightNeighbor) {
+        this.rightNeighbor = rightNeighbor;
     }
 }

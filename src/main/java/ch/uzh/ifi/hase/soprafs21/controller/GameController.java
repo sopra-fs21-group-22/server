@@ -20,6 +20,9 @@ import org.springframework.http.HttpStatus;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
@@ -28,11 +31,15 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
+import ch.uzh.ifi.hase.soprafs21.service.SpecificCardService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 
 @RestController
 @RequestMapping("api/v1/games/")
 public class GameController {
+
+    @Autowired
+    private SpecificCardService specificCardService;
 
     @Autowired
     private PlayerTableService playerTableService;
@@ -112,10 +119,12 @@ public class GameController {
             }
             targetPlayers.add(targetPlayerOpt.get());
         }
+        // ######################################################
+        // TODO TEMPORARY CODE LINES (since Hand is missing) ###
+        // ######################################################
 
-        // use card
-        // Hand hand = player.getHand()
-        // hand.getCardById(card_id).use(usingPlayer, targetPlayers);
+        PlayCard bang = new Bang();
+        specificCardService.use(bang, usingPlayer, targetPlayers);
     }
 
     @GetMapping("/{game_id}/players/{player_id}/gamerole")
