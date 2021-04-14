@@ -83,6 +83,17 @@ public class GameController {
             @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
+    }
+
+    @GetMapping("/{game_id}/players/{player_id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public PlayerGetDTO getonFieldCardsInformation(@PathVariable Long game_id, @PathVariable Long player_id,
+                                             @RequestHeader String auth) {
+        if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
+            return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(playerRepository.getOne(player_id));
+        }
+        return DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(playerRepository.getOne(player_id));
 
     }
 }
