@@ -35,6 +35,12 @@ public class PlayerTable {
     @JoinColumn(name = "playertable_id")
     private Player playerOnTurn;
 
+    @OneToOne
+    private Deck deck;
+
+    @OneToOne
+    private Deck discardPile;
+
     @Column
     private Boolean gameHasStarted = false;
 
@@ -60,6 +66,22 @@ public class PlayerTable {
 
     public void setPlayerOnTurn(Player playerOnTurn) {
         this.playerOnTurn = playerOnTurn;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public Deck getDiscardPile() {
+        return discardPile;
+    }
+
+    public void setDiscardPile(Deck discardPile) {
+        this.discardPile = discardPile;
     }
 
     public Boolean getGameHasStarted() {

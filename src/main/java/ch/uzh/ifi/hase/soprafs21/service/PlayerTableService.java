@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
@@ -45,8 +47,10 @@ public class PlayerTableService {
         }
 
         Player player = new Player();
+        Hand hand = new Hand();
         User user = userRepository.getOne(id);
         player.setUser(user);
+        player.setHand(hand);
         player.setId(user.getId());
         List<PlayerTable> playerTables = playerTableRepository.findAll();
         // add user to existing playerTable
@@ -64,8 +68,12 @@ public class PlayerTableService {
         // create new playerTable
         PlayerTable playerTable = new PlayerTable();
         List<Player> players = new ArrayList<Player>();
+        Deck deck = new Deck();
+        Deck discardPile = new Deck();
         players.add(player);
         playerTable.setPlayers(players);
+        playerTable.setDeck(deck);
+        playerTable.setDiscardPile(discardPile);
         playerTableRepository.save(playerTable);
         playerTableRepository.flush();
         return playerTable;

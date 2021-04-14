@@ -36,6 +36,9 @@ public class Player {
     @OneToOne
     private User user;
 
+    @OneToOne
+    private Hand hand;
+
     @Column
     private GameRole gameRole = GameRole.HIDDEN;
 
@@ -79,6 +82,14 @@ public class Player {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void setHand(Hand hand){
+        this.hand = hand;
     }
 
     public GameRole getGameRole() {
