@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -84,5 +87,43 @@ public class GameController {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
 
+    }
+
+    @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
+            @RequestBody List<PlayerGetDTO> targetPlayerDTOs, @RequestHeader("Authorization") String auth) {
+        // get player who is using card
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Optional<Player> opt = table.getPlayerById(player_id);
+        if (!opt.isPresent()) {
+            throw new IllegalArgumentException(
+                    String.format("The using player with id %s is not in game with id %s", player_id, game_id));
+        }
+        Player usingPlayer = opt.get();
+
+        // get target players card is played against
+        List<Player> targetPlayers = new ArrayList<>();
+        for (PlayerGetDTO targetPlayerGetDTO : targetPlayerDTOs) {
+            Optional<Player> targetPlayerOpt = table.getPlayerById(targetPlayerGetDTO.getId());
+            if (!targetPlayerOpt.isPresent()) {
+                throw new IllegalArgumentException(
+                        "One or more target players are not in the same game as the using player.");
+            }
+            targetPlayers.add(targetPlayerOpt.get());
+        }
+
+        // use card
+        // Hand hand = player.getHand()
+        // hand.getCardById(card_id).use(usingPlayer, targetPlayers);
+    }
+
+    @GetMapping("/{game_id}/players/{player_id}/gamerole")
+    @ResponseStatus(HttpStatus.OK)
+    public PlayerGetAuthDTO getOwnRole(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
+            @PathVariable Long player_id) {
+        userService.throwIfNotIdAndTokenMatch(player_id, auth);
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(table.getPlayerById(player_id).get());
     }
 }
