@@ -58,8 +58,13 @@ public class Player {
     @OneToOne
     private OnFieldCards onFieldCards;
 
+    public OnFieldCards getOnFieldCards() { return onFieldCards; }
+
+    public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
+
     public void takeHit() {
         this.bullets -= 1;
+    }
 
     public boolean reachesWithWeapon(Player targetPlayer) {
         Player userRightNeighbor = this.getRightNeighbor();
@@ -166,10 +171,6 @@ public class Player {
     public void setDistanceDecreaseToOthers(Integer distanceDecreaseToOthers) {
         this.distanceDecreaseToOthers = distanceDecreaseToOthers;
     }
-
-    public OnFieldCards getOnFieldCards() { return onFieldCards; }
-
-    public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
 
     public Player getLeftNeighbor() {
         return leftNeighbor;
