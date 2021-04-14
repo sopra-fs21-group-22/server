@@ -8,6 +8,7 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
@@ -54,6 +55,17 @@ public class Player {
     @Column
     private Boolean ready = false;
 
+    @OneToOne
+    private OnFieldCards onFieldCards;
+
+    public OnFieldCards getOnFieldCards() { return onFieldCards; }
+
+    public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
+
+    public void takeHit() {
+        this.bullets -= 1;
+    }
+
     public boolean reachesWithWeapon(Player targetPlayer) {
         Player userRightNeighbor = this.getRightNeighbor();
         Player userLeftNeighbor = this.getLeftNeighbor();
@@ -77,6 +89,7 @@ public class Player {
 
         return distance - this.getRange() + this.getDistanceDecreaseToOthers()
                 + targetPlayer.getDistanceIncreaseForOthers() <= 0;
+
     }
 
     public Long getId() {
@@ -190,4 +203,5 @@ public class Player {
     public void setStillPlayableBangsThisRound(Integer stillPlayableBangsThisRound) {
         this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
     }
+
 }

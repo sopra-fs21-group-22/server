@@ -94,7 +94,6 @@ public class GameController {
             @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
-
     }
 
     @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
