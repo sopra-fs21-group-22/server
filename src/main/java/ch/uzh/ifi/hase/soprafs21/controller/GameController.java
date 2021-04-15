@@ -42,9 +42,6 @@ public class GameController {
     private PlayerTableService playerTableService;
 
     @Autowired
-    private DeckService deckService;
-
-    @Autowired
     private PlayerRepository playerRepository;
 
     @Autowired
