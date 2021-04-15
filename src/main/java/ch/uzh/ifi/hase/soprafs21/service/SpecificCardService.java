@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
 
 @Service
 public class SpecificCardService {
@@ -41,7 +40,10 @@ public class SpecificCardService {
                 saloon(user, targets);
                 break;
             case "Stage Coach":
-                stagecoach(table, user);
+                stageCoach(table, user);
+                break;
+            case "Wells Fargo":
+                wellsFargo(table, user);
                 break;
 
         default:
@@ -89,7 +91,11 @@ public class SpecificCardService {
         }
     }
 
-    public void stagecoach(PlayerTable table, Player activePlayer){
+    public void stageCoach(PlayerTable table, Player activePlayer){
         deckService.drawCards(table, activePlayer, 2);
+    }
+
+    public void wellsFargo(PlayerTable table, Player activePlayer){
+        deckService.drawCards(table, activePlayer, 3);
     }
 }

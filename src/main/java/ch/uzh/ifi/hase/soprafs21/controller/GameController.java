@@ -142,6 +142,9 @@ public class GameController {
         PlayCard stagecoach = new StageCoach();
         specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
 
+        PlayCard wellsFargo = new WellsFargo();
+        specificCardService.use(table, wellsFargo, usingPlayer, targetPlayers);
+
 
     }
 
