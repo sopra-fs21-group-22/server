@@ -7,7 +7,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 
-import org.hibernate.mapping.List;
+//import org.hibernate.mapping.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -49,7 +49,7 @@ public class DeckServiceTest {
 
         deckService.fill(deck);
 
-        ArrayList<PlayCard> testList = (ArrayList<PlayCard>) deck.getPlayCards();
+        List<PlayCard> testList = deck.getPlayCards();
 
         for(int i = 0; i < testList.size(); i++) {   
             System.out.print(testList.get(i));
@@ -68,7 +68,7 @@ public class DeckServiceTest {
 
         deckService.fill(discardPile);
 
-        ArrayList<PlayCard> testList = (ArrayList<PlayCard>) discardPile.getPlayCards();
+        List<PlayCard> testList = discardPile.getPlayCards();
 
         for(int i = 0; i < testList.size(); i++) {   
             System.out.print(testList.get(i));
@@ -76,13 +76,13 @@ public class DeckServiceTest {
 
         deckService.shuffle(deck, discardPile);
         
-        ArrayList<PlayCard> testList2 = (ArrayList<PlayCard>) discardPile.getPlayCards();
+        List<PlayCard> testList2 = discardPile.getPlayCards();
 
         for(int i = 0; i < testList2.size(); i++) {   
             System.out.print(testList2.get(i));
         }
 
-        ArrayList<PlayCard> testList3 = (ArrayList<PlayCard>) deck.getPlayCards();
+        List<PlayCard> testList3 = deck.getPlayCards();
 
         for(int i = 0; i < testList3.size(); i++) {   
             System.out.print(testList3.get(i));

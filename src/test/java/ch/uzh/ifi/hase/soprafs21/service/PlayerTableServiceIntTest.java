@@ -25,6 +25,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
@@ -40,6 +41,10 @@ public class PlayerTableServiceIntTest {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    HandRepository handRepository;
+
 
     @Autowired
     UserService userService;

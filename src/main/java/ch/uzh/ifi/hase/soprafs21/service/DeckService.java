@@ -56,12 +56,15 @@ public class DeckService {
         List<PlayCard> topCard = discardPile.getPlayCards();
         List<PlayCard> discardCards = discardPile.getPlayCards();
 
-        topCard = topCard.subList(0, 1);        
-        discardPile.setPlayCards(topCard);
-
+        topCard = topCard.subList(0, 1);      
         discardCards.remove(0);
         discardCards = this.randomizeCards(discardCards);
+        
+        discardPile.setPlayCards(topCard);
+        deckRepository.save(discardPile);
         deck.setPlayCards(discardCards);
+        deckRepository.save(deck);
+
     }
 
     public List<PlayCard> randomizeCards(List<PlayCard> playCards) {
