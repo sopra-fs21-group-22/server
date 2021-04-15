@@ -82,8 +82,6 @@ public class SpecificCardService {
         // the player who played the saloon card gets a life no matter what
         if(activePlayer.getBullets() < activePlayer.getMaxBullets()){
             activePlayer.setBullets(activePlayer.getBullets() + 1);
-        } else {
-            throw new UnsupportedOperationException("You already have the maximum amount of lives.");
         }
     }
 
