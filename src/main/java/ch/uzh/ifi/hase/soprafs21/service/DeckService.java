@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,54 @@ public class DeckService {
         List<PlayCard> playCards = PlayCardService.constructDummyCards();
 
         deck.setPlayCards(playCards);
+
+        deckRepository.save(deck);
+        deckRepository.flush();
+
     }
+
+    public Deck createDeck(){
+        Deck deck = new Deck();
+
+        deckRepository.save(deck);
+        deckRepository.flush();
+
+
+        return deck;
+    }
+
+    public Deck createDiscardPile(){
+        Deck deck = new Deck();
+
+        deckRepository.save(deck);
+        deckRepository.flush();
+
+
+        return deck;
+    }
+
+    public void shuffle(Deck deck, Deck discardPile){
+        List<PlayCard> topCard = discardPile.getPlayCards();
+        List<PlayCard> discardCards = discardPile.getPlayCards();
+
+        topCard = topCard.subList(0, 1);      
+        discardCards.remove(0);
+        discardCards = this.randomizeCards(discardCards);
+        
+        discardPile.setPlayCards(topCard);
+        deckRepository.save(discardPile);
+        deckRepository.flush();
+
+        deck.setPlayCards(discardCards);
+        deckRepository.save(deck);
+        deckRepository.flush();
+
+    }
+
+    public List<PlayCard> randomizeCards(List<PlayCard> playCards) {
+        Collections.shuffle(playCards);
+        return playCards;
+    }
+
 
 }

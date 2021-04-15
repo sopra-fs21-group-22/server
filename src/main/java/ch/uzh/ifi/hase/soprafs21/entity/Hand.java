@@ -13,19 +13,19 @@ import javax.persistence.OneToOne;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
 
 @Entity
-public class Deck {
+public class Hand {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "deck_id")
+    @JoinColumn(name = "hand_id")
     private List<PlayCard> playCards;
 
     public Long getId() {

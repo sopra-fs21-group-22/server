@@ -9,6 +9,8 @@ import javax.persistence.Transient;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import java.util.ArrayList;
+
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
@@ -43,6 +45,9 @@ public class Player {
     @OneToOne
     private User user;
 
+    @OneToOne
+    private Hand hand;
+
     @Column
     private GameRole gameRole = GameRole.HIDDEN;
 
@@ -64,6 +69,9 @@ public class Player {
     public OnFieldCards getOnFieldCards() { return onFieldCards; }
 
     public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
+
+    @Column
+    private Integer cardamount;
 
     public void takeHit() {
         this.bullets -= 1;
@@ -127,6 +135,14 @@ public class Player {
         this.user = user;
     }
 
+    public Hand getHand() {
+        return hand;
+    }
+
+    public void setHand(Hand hand){
+        this.hand = hand;
+    }
+
     public GameRole getGameRole() {
         return gameRole;
     }
@@ -141,6 +157,10 @@ public class Player {
 
     public void setReady(Boolean ready) {
         this.ready = ready;
+    }
+
+    public Integer getCardamount() {
+        return hand.getPlayCards().size();
     }
 
     @Override
