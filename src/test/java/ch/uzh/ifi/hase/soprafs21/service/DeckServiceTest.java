@@ -34,6 +34,12 @@ public class DeckServiceTest {
     @Autowired
     DeckRepository deckRepository;
 
+    @BeforeEach
+    public void beforeEach() {
+        deckRepository.deleteAll();
+        deckRepository.flush();
+    }
+
     @AfterEach
     public void afterEach() {
         deckRepository.deleteAll();
