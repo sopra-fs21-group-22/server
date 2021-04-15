@@ -88,17 +88,7 @@ public class DeckService {
         }  
     }
 
-    public void layCard(PlayerTable table, Player player, PlayCard playCard){
-        Integer cardIndex = null;
-
-        for(int i = 0; i < player.getHand().getPlayCards().size(); i++) {   
-            if (player.getHand().getPlayCards().get(i) == playCard) {
-                cardIndex=i;
-            }
-        }
-        table.getDiscardPile().getPlayCards().add(0, player.getHand().getPlayCards().get(cardIndex));
-        player.getHand().getPlayCards().remove(playCard);
-    }
+    
 
 
 }
