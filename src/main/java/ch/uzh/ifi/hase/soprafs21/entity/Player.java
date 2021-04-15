@@ -54,6 +54,9 @@ public class Player {
 
     @Column
     private Boolean ready = false;
+    
+    @Column
+    private Integer cardamount;
 
     @OneToOne
     private OnFieldCards onFieldCards;
