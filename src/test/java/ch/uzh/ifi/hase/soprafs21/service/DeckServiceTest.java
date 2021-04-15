@@ -23,25 +23,67 @@ import java.util.*;
 
 import javax.transaction.Transactional;
 
+@SpringBootTest
 public class DeckServiceTest {
+    
+    @Autowired
+    DeckService deckService;
 
-    // @Autowired
-    // DeckService deckService;
+    @Autowired
+    DeckRepository deckRepository;
+
+    @AfterEach
+    public void afterEach() {
+        deckRepository.deleteAll();
+        deckRepository.flush();
+    }
 
     @Transactional
     @Test
     public void deckCreationSuccess() {
 
-        DeckService deckService = new DeckService();
+        
         Deck deck = new Deck();
 
         deckService.fill(deck);
 
-        ArrayList<PlayCard> testList = (ArrayList<PlayCard>) deck.getPlayCards();
+        List<PlayCard> testList = deck.getPlayCards();
 
-        for (int i = 0; i < testList.size(); i++) {
+        for(int i = 0; i < testList.size(); i++) {   
             System.out.print(testList.get(i));
+        }  
+
+        
+    }
+    @Transactional
+    @Test
+    public void deckShuffleSuccess() {
+
+        
+        Deck deck = new Deck();
+        Deck discardPile = new Deck();
+
+
+        deckService.fill(discardPile);
+
+        List<PlayCard> testList = discardPile.getPlayCards();
+
+        for(int i = 0; i < testList.size(); i++) {   
+            System.out.print(testList.get(i));
+        }  
+
+        deckService.shuffle(deck, discardPile);
+        
+        List<PlayCard> testList2 = discardPile.getPlayCards();
+
+        for(int i = 0; i < testList2.size(); i++) {   
+            System.out.print(testList2.get(i));
         }
 
+        List<PlayCard> testList3 = deck.getPlayCards();
+
+        for(int i = 0; i < testList3.size(); i++) {   
+            System.out.print(testList3.get(i));
+        }
     }
 }
