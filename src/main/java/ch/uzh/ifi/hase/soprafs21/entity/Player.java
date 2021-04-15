@@ -63,8 +63,8 @@ public class Player {
 
     public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
 
-    @Column
-    private Integer cardamount;
+    /* @Column
+    private Integer cardamount; */
 
     public void takeHit() {
         this.bullets -= 1;
@@ -156,9 +156,9 @@ public class Player {
         this.ready = ready;
     }
 
-    public Integer getCardamount() {
+    /* public Integer getCardamount() {
         return hand.getPlayCards().size();
-    }
+    } */
 
     @Override
     public boolean equals(Object obj) {
