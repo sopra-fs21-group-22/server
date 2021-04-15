@@ -30,6 +30,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerService;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.SpecificCardService;
@@ -44,6 +45,9 @@ public class GameController {
 
     @Autowired
     private PlayerTableService playerTableService;
+
+    @Autowired
+    private DeckService deckService;
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -147,5 +151,16 @@ public class GameController {
         }
         return playerGetDTOs;
     }
+
+
+    //TODO finish the Mapping once card Objects are available
+    /* @GetMapping("/{game_id}/players/{player_id}/cards/deck")
+    @ResponseStatus(HttpStatus.OK)
+    public  DeckGetDTO getCardsFromDeck(@PathVariable Long player_id, @PathVariable Long game_id, @PathVariable Integer n){
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        deckService.drawCards(table, table.getPlayerByPlayerID(player_id), n);
+
+        //return Card Objects.
+    } */
 
 }

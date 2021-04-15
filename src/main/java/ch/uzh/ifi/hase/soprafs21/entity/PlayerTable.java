@@ -116,4 +116,13 @@ public class PlayerTable {
         }
         return Optional.empty();
     }
+
+    public Player getPlayerByPlayerID(Long id) {
+        for (Player player : players) {
+            if (id.equals(player.getId())) {
+                return player;
+            }
+        }
+        return null;
+    }
 }
