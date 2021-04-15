@@ -64,19 +64,14 @@ public class DeckService {
 
 
         topCard = topCard.subList(0, 1);      
-        discardCards.remove(0);
-        discardCards = this.randomizeCards(discardCards);
+        discardCards = discardCards.subList(1,discardCards.size());
+        Collections.shuffle(discardCards);
         
         table.getDiscardPile().setPlayCards(topCard);
         table.getDeck().setPlayCards(discardCards);
         playerTableRepository.save(table);
         playerTableRepository.flush();
 
-    }
-
-    public List<PlayCard> randomizeCards(List<PlayCard> playCards) {
-        Collections.shuffle(playCards);
-        return playCards;
     }
 
     public void drawCards(PlayerTable table, Player player, Integer n) {
