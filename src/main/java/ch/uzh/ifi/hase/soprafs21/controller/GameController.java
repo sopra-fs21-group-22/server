@@ -133,7 +133,8 @@ public class GameController {
             specificCardService.use(table, beer, usingPlayer, targetPlayers);
         }
 
-        // PlayCard saloon = new Saloon();
+        PlayCard saloon = new Saloon();
+        specificCardService.use(table, saloon, usingPlayer, targetPlayers);
 
         PlayCard generalStore = new GeneralStore();
         deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);

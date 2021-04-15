@@ -72,7 +72,14 @@ public class SpecificCardService {
     }
 
     public void saloon(Player activePlayer, List<Player> otherPlayers) {
-
+        if(!otherPlayers.isEmpty()){ // the active player wants to give everyone a life
+            for (Player player: otherPlayers) {
+                if(player.getBullets() < player.getMaxBullets()){
+                    player.setBullets(player.getBullets() + 1);
+                }
+            }
+        }
+        // the player who played the saloon card gets a life no matter what
         if(activePlayer.getBullets() < activePlayer.getMaxBullets()){
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
