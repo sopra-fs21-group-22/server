@@ -16,6 +16,8 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
 
@@ -30,7 +32,10 @@ public class HandService {
     HandRepository handRepository;
 
     @Autowired 
-    DeckRepository deckRepository;
+    PlayerTableRepository playerTableRepository;
+
+    @Autowired 
+    PlayerRepository playerRepository;
 
     public  Hand createHand(){
         Hand hand = new Hand();
@@ -50,6 +55,12 @@ public class HandService {
         }
         table.getDiscardPile().getPlayCards().add(0, player.getHand().getPlayCards().get(cardIndex));
         player.getHand().getPlayCards().remove(playCard);
+
+        playerTableRepository.save(table);
+        playerTableRepository.flush();
+
+        playerRepository.save(player);
+        playerRepository.flush();
     }
 
 }
