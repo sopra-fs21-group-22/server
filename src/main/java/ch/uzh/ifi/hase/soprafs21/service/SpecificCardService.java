@@ -17,7 +17,11 @@ public class SpecificCardService {
     @Autowired
     PlayerService playerService;
 
+    @Autowired
     VisibleCardsService visibleCardsService;
+
+    @Autowired
+    DeckService deckService;
 
     public void use(PlayerTable table, PlayCard card, Player user, List<Player> targets) {
         switch (card.toString()) {
@@ -35,6 +39,10 @@ public class SpecificCardService {
                 break;
             case "Saloon":
                 saloon(user, targets);
+                break;
+            case "Stage Coach":
+                stagecoach(table, user);
+                break;
 
         default:
             throw new IllegalArgumentException(String.format("Card %s does not exist!", card.getClass().toString()));
@@ -79,5 +87,9 @@ public class SpecificCardService {
             Player newPlayer = currPlayer.getRightNeighbor();
             visibleCardsService.pickACard(table, newPlayer, randomCard);
         }
+    }
+
+    public void stagecoach(PlayerTable table, Player activePlayer){
+        deckService.drawCards(table, activePlayer, 2);
     }
 }

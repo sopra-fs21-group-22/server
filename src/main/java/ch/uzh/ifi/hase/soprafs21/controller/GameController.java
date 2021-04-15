@@ -1,8 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Beer;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.GeneralStore;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Saloon;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
 import ch.uzh.ifi.hase.soprafs21.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
@@ -141,6 +138,9 @@ public class GameController {
         PlayCard generalStore = new GeneralStore();
         deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
         specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
+
+        PlayCard stagecoach = new StageCoach();
+        specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
 
 
     }
