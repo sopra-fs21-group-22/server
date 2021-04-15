@@ -82,7 +82,7 @@ public interface DTOMapper {
     @Mapping(source = "ready", target = "ready")
     @Mapping(source = "leftNeighbor", target = "leftNeighbor")
     @Mapping(source = "rightNeighbor", target = "rightNeighbor")
-    @Mapping(source = "cardamount", target = "cardamount")
+    //@Mapping(source = "cardamount", target = "cardamount")
 
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 

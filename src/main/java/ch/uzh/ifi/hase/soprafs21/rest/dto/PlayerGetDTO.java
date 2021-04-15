@@ -22,7 +22,7 @@ public class PlayerGetDTO {
     protected Player leftNeighbor;
     protected Player rightNeighbor;
     protected List<Player> playersInRange;
-    protected Integer cardamount;
+    //protected Integer cardamount;
 
     public Integer getRange() {
         return range;
@@ -113,11 +113,11 @@ public class PlayerGetDTO {
         this.rightNeighbor = rightNeighbor;
     }
 
-    public Integer getCardamount() {
+    /* public Integer getCardamount() {
         return cardamount;
     }
 
     public void setCardamount(Integer cardamount) {
         this.cardamount = cardamount;
-    }
+    } */
 }
