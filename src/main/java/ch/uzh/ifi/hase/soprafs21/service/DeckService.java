@@ -11,6 +11,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
@@ -26,6 +27,10 @@ public class DeckService {
 
     @Autowired
     PlayerTableRepository playerTableRepository;
+
+    @Autowired
+    PlayerRepository playerRepository;
+
 
     public void fill(Deck deck) {
 
@@ -80,25 +85,27 @@ public class DeckService {
                 player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
                 this.shuffle(table);
+
+                playerTableRepository.save(table);
+                playerTableRepository.flush();
+
+                playerRepository.save(player);
+                playerRepository.flush();
             }
             else {
                 player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
+
+                playerTableRepository.save(table);
+                playerTableRepository.flush();
+
+                playerRepository.save(player);
+                playerRepository.flush();
             }
         }  
     }
 
-    public void layCard(PlayerTable table, Player player, PlayCard playCard){
-        Integer cardIndex = null;
-
-        for(int i = 0; i < player.getHand().getPlayCards().size(); i++) {   
-            if (player.getHand().getPlayCards().get(i) == playCard) {
-                cardIndex=i;
-            }
-        }
-        table.getDiscardPile().getPlayCards().add(0, player.getHand().getPlayCards().get(cardIndex));
-        player.getHand().getPlayCards().remove(playCard);
-    }
+    
 
 
 }

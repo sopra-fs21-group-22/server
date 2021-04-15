@@ -12,8 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
 
@@ -28,7 +32,10 @@ public class HandService {
     HandRepository handRepository;
 
     @Autowired 
-    DeckRepository deckRepository;
+    PlayerTableRepository playerTableRepository;
+
+    @Autowired 
+    PlayerRepository playerRepository;
 
     public  Hand createHand(){
         Hand hand = new Hand();
@@ -38,31 +45,22 @@ public class HandService {
         return hand;
     }
 
-    public void putOnDiscardPile(PlayCard playCard, Hand hand, Deck discardPile){
+    public void layCard(PlayerTable table, Player player, PlayCard playCard){
+        Integer cardIndex = null;
 
-        List<PlayCard> handCards = hand.getPlayCards();
-        handCards.remove(playCard);
-        hand.setPlayCards(handCards);
-        handRepository.save(hand);
+        for(int i = 0; i < player.getHand().getPlayCards().size(); i++) {   
+            if (player.getHand().getPlayCards().get(i) == playCard) {
+                cardIndex=i;
+            }
+        }
+        table.getDiscardPile().getPlayCards().add(0, player.getHand().getPlayCards().get(cardIndex));
+        player.getHand().getPlayCards().remove(playCard);
 
-        List<PlayCard> discardPileCards = discardPile.getPlayCards();
-        discardPileCards.add(0, playCard);
-        discardPile.setPlayCards(discardPileCards);
-        deckRepository.save(discardPile);
-    }
+        playerTableRepository.save(table);
+        playerTableRepository.flush();
 
-    public void drawCard(PlayCard playCard, Hand hand, Deck deck){
-        List<PlayCard> deckCards = deck.getPlayCards();
-        deckCards.remove(playCard);
-        deck.setPlayCards(deckCards);
-        deckRepository.save(deck);
-
-
-        List<PlayCard> handCards = hand.getPlayCards();
-        handCards.add(playCard);
-        hand.setPlayCards(handCards);
-        handRepository.save(hand);
-
+        playerRepository.save(player);
+        playerRepository.flush();
     }
 
 }
