@@ -4,15 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-
-import java.util.ArrayList;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
-import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
 /**
  * The Player class represents a player The id is the same as the user who
