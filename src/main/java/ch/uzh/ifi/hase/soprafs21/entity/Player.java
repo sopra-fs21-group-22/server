@@ -25,6 +25,9 @@ public class Player {
     private Long id;
 
     @Column
+    private Integer maxBullets = 4;
+
+    @Column
     private Integer bullets = 4;
 
     @Column
@@ -123,6 +126,10 @@ public class Player {
     public void setBullets(Integer bullets) {
         this.bullets = bullets;
     }
+
+    public Integer getMaxBullets() { return maxBullets; }
+
+    public void setMaxBullets(Integer maxBullets) { this.maxBullets = maxBullets; }
 
     public User getUser() {
         return user;

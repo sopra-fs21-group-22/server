@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs21.service;
 
 import java.util.*;
 
+import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
+import ch.uzh.ifi.hase.soprafs21.repository.VisibleCardsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,6 @@ import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
-import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
 
 @Service
 @Transactional
@@ -30,6 +29,12 @@ public class DeckService {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    VisibleCardsRepository visibleCardsRepository;
+
+    @Autowired
+    VisibleCardsService visibleCardsService;
 
 
     public void fill(Deck deck) {
@@ -103,6 +108,38 @@ public class DeckService {
                 playerRepository.flush();
             }
         }  
+    }
+
+    /**
+     * A card is drawn from the deck, instead of putting it on a players hand it is placed onto
+     * the Visible Cards, for everyone to see.
+     */
+
+    public void addCardToVisibleCards(PlayerTable table, Integer n) {
+        VisibleCards visibleCards = visibleCardsService.createVisibleCards();
+        for(int i = 0; i < n; i++) {
+            if (table.getDeck().getPlayCards().size() < 2){
+                visibleCards.addACard(table.getDeck().getPlayCards().get(0));
+                table.getDeck().getPlayCards().remove(0);
+                this.shuffle(table);
+
+                visibleCardsRepository.save(visibleCards);
+                visibleCardsRepository.flush();
+
+                playerTableRepository.save(table);
+                playerTableRepository.flush();
+            }
+            else {
+                visibleCards.addACard(table.getDeck().getPlayCards().get(0));
+                table.getDeck().getPlayCards().remove(0);
+
+                visibleCardsRepository.save(visibleCards);
+                visibleCardsRepository.flush();
+
+                playerTableRepository.save(table);
+                playerTableRepository.flush();
+            }
+        }
     }
 
     

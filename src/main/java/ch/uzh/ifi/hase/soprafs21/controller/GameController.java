@@ -1,5 +1,9 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Beer;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.GeneralStore;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Saloon;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +26,6 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
@@ -30,7 +33,6 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
-import ch.uzh.ifi.hase.soprafs21.service.PlayerService;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.SpecificCardService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -50,6 +52,9 @@ public class GameController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DeckService deckService;
 
     @PutMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)
@@ -124,7 +129,20 @@ public class GameController {
         // ######################################################
 
         PlayCard bang = new Bang();
-        specificCardService.use(bang, usingPlayer, targetPlayers);
+        specificCardService.use(table, bang, usingPlayer, targetPlayers);
+
+        PlayCard beer = new Beer();
+        if(table.getPlayerOnTurn().getId().equals(usingPlayer.getId()) || usingPlayer.getBullets() == 1 ){
+            specificCardService.use(table, beer, usingPlayer, targetPlayers);
+        }
+
+        // PlayCard saloon = new Saloon();
+
+        PlayCard generalStore = new GeneralStore();
+        deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
+        specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
+
+
     }
 
     @GetMapping("/{game_id}/players/{player_id}/gamerole")

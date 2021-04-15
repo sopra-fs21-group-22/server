@@ -42,6 +42,9 @@ public class PlayerTable {
     @OneToOne(cascade = CascadeType.ALL)
     private Deck discardPile;
 
+    @OneToOne
+    private VisibleCards visibleCards;
+
     @Column
     private Boolean gameHasStarted = false;
 
@@ -116,4 +119,9 @@ public class PlayerTable {
         }
         return Optional.empty();
     }
+
+    public VisibleCards getVisibleCards() { return visibleCards; }
+
+    public void setVisibleCards(VisibleCards visibleCards) { this.visibleCards = visibleCards; }
+
 }
