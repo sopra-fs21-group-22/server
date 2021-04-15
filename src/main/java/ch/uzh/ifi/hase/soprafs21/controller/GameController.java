@@ -148,4 +148,12 @@ public class GameController {
         return playerGetDTOs;
     }
 
+    @PutMapping("/{game_id}/players/{player_id}/turn")
+    @ResponseStatus(HttpStatus.OK)
+    public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Player currPlayer = table.getPlayerOnTurn();
+        userService.throwIfNotIdAndTokenMatch(currPlayer.getId(), auth);
+        playerTableService.nextPlayersTurn(table);
+    }
 }

@@ -161,4 +161,10 @@ public class PlayerTableService {
         // TODO
     }
 
+    public void nextPlayersTurn(PlayerTable table){
+        Player currPlayer = table.getPlayerOnTurn();
+        Player nextPlayer = currPlayer.getRightNeighbor();
+        table.setPlayerOnTurn(nextPlayer);
+    }
+
 }
