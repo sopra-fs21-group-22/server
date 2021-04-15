@@ -44,6 +44,12 @@ public class PlayerTableService {
     @Autowired
     GameRoleService gameRoleService;
 
+    @Autowired
+    HandService handService;
+
+    @Autowired
+    DeckService deckService;
+
     /**
      * Creates and adds a <Player> to a preexisting or new <PlayerTable>.
      * 
@@ -56,7 +62,7 @@ public class PlayerTableService {
         }
 
         Player player = new Player();
-        Hand hand = new Hand();
+        Hand hand = handService.createHand();
         User user = userRepository.getOne(id);
         player.setUser(user);
         player.setHand(hand);
@@ -79,8 +85,8 @@ public class PlayerTableService {
         // create new playerTable
         PlayerTable playerTable = new PlayerTable();
         List<Player> players = new ArrayList<Player>();
-        Deck deck = new Deck();
-        Deck discardPile = new Deck();
+        Deck deck = deckService.createDeck();
+        Deck discardPile = deckService.createDiscardPile();
         players.add(player);
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);

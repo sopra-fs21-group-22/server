@@ -30,7 +30,7 @@ public class HandService {
     @Autowired 
     DeckRepository deckRepository;
 
-    public Hand createHand(){
+    public  Hand createHand(){
         Hand hand = new Hand();
 
         handRepository.save(hand);
