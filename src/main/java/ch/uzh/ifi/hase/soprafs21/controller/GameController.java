@@ -152,15 +152,4 @@ public class GameController {
         return playerGetDTOs;
     }
 
-
-    //TODO finish the Mapping once card Objects are available
-    /* @GetMapping("/{game_id}/players/{player_id}/cards/deck")
-    @ResponseStatus(HttpStatus.OK)
-    public  DeckGetDTO getCardsFromDeck(@PathVariable Long player_id, @PathVariable Long game_id, @PathVariable Integer n){
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        deckService.drawCards(table, table.getPlayerByPlayerID(player_id), n);
-
-        //return Card Objects.
-    } */
-
 }
