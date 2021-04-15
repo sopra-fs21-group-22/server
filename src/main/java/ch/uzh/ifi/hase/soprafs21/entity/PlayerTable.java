@@ -121,5 +121,4 @@ public class PlayerTable {
 
     public void setVisibleCards(VisibleCards visibleCards) { this.visibleCards = visibleCards; }
 
-
 }
