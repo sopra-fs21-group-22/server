@@ -17,7 +17,6 @@ public class SpecificCardService {
     @Autowired
     PlayerService playerService;
 
-    @Autowired
     VisibleCardsService visibleCardsService;
 
     public void use(PlayerTable table, PlayCard card, Player user, List<Player> targets) {

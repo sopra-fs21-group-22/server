@@ -3,7 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Beer;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.GeneralStore;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Saloon;
-import ch.uzh.ifi.hase.soprafs21.service.DeckService;
+import ch.uzh.ifi.hase.soprafs21.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,9 +33,6 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
-import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
-import ch.uzh.ifi.hase.soprafs21.service.SpecificCardService;
-import ch.uzh.ifi.hase.soprafs21.service.UserService;
 
 @RestController
 @RequestMapping("api/v1/games/")
@@ -55,6 +52,9 @@ public class GameController {
 
     @Autowired
     private DeckService deckService;
+
+    @Autowired
+    private VisibleCardsService visibleCardsService;
 
     @PutMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)

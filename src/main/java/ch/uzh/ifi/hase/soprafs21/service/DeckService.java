@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import java.util.*;
 
 import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
-import ch.uzh.ifi.hase.soprafs21.repository.VisibleCardsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +28,6 @@ public class DeckService {
 
     @Autowired
     PlayerRepository playerRepository;
-
-    @Autowired
-    VisibleCardsRepository visibleCardsRepository;
 
     @Autowired
     VisibleCardsService visibleCardsService;
@@ -123,18 +119,12 @@ public class DeckService {
                 table.getDeck().getPlayCards().remove(0);
                 this.shuffle(table);
 
-                visibleCardsRepository.save(visibleCards);
-                visibleCardsRepository.flush();
-
                 playerTableRepository.save(table);
                 playerTableRepository.flush();
             }
             else {
                 visibleCards.addACard(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
-
-                visibleCardsRepository.save(visibleCards);
-                visibleCardsRepository.flush();
 
                 playerTableRepository.save(table);
                 playerTableRepository.flush();
