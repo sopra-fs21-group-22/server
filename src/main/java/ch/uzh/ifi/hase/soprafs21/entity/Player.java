@@ -4,15 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-
-import java.util.ArrayList;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
-import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -23,6 +16,9 @@ public class Player {
 
     @Id
     private Long id;
+
+    @Column
+    private Integer maxBullets = 4;
 
     @Column
     private Integer bullets = 4;
@@ -123,6 +119,10 @@ public class Player {
     public void setBullets(Integer bullets) {
         this.bullets = bullets;
     }
+
+    public Integer getMaxBullets() { return maxBullets; }
+
+    public void setMaxBullets(Integer maxBullets) { this.maxBullets = maxBullets; }
 
     public User getUser() {
         return user;

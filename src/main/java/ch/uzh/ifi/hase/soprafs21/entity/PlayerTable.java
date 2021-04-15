@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,13 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
-import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
-import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
-import ch.uzh.ifi.hase.soprafs21.service.GameRoleService;
 
 @Entity
 public class PlayerTable {
@@ -41,6 +33,9 @@ public class PlayerTable {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Deck discardPile;
+
+    @OneToOne
+    private VisibleCards visibleCards;
 
     @Column
     private Boolean gameHasStarted = false;
@@ -116,7 +111,7 @@ public class PlayerTable {
         }
         return Optional.empty();
     }
-    
+
     public Player getPlayerByPlayerID(Long id) {
         for (Player player : players) {
             if (id.equals(player.getId())) {
@@ -126,4 +121,9 @@ public class PlayerTable {
         return null;
     }
     
+
+    public VisibleCards getVisibleCards() { return visibleCards; }
+
+    public void setVisibleCards(VisibleCards visibleCards) { this.visibleCards = visibleCards; }
+
 }

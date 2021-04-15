@@ -3,8 +3,6 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -186,6 +184,12 @@ public class PlayerTableService {
 
     public void removePlayer(PlayerTable table, Long playerId) {
         // TODO
+    }
+
+    public void nextPlayersTurn(PlayerTable table){
+        Player currPlayer = table.getPlayerOnTurn();
+        Player nextPlayer = currPlayer.getRightNeighbor();
+        table.setPlayerOnTurn(nextPlayer);
     }
 
 }

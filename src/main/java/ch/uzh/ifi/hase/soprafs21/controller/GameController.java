@@ -50,6 +50,12 @@ public class GameController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DeckService deckService;
+
+    @Autowired
+    private VisibleCardsService visibleCardsService;
+
     @PutMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -123,7 +129,26 @@ public class GameController {
         // ######################################################
 
         PlayCard bang = new Bang();
-        specificCardService.use(bang, usingPlayer, targetPlayers);
+        specificCardService.use(table, bang, usingPlayer, targetPlayers);
+
+        PlayCard beer = new Beer();
+        if(table.getPlayerOnTurn().getId().equals(usingPlayer.getId()) || usingPlayer.getBullets() == 1 ){
+            specificCardService.use(table, beer, usingPlayer, targetPlayers);
+        }
+
+        // PlayCard saloon = new Saloon();
+
+        PlayCard generalStore = new GeneralStore();
+        deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
+        specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
+
+        PlayCard stagecoach = new StageCoach();
+        specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
+
+        PlayCard wellsFargo = new WellsFargo();
+        specificCardService.use(table, wellsFargo, usingPlayer, targetPlayers);
+
+
     }
 
     @GetMapping("/{game_id}/players/{player_id}/gamerole")
@@ -147,4 +172,12 @@ public class GameController {
         return playerGetDTOs;
     }
 
+    @PutMapping("/{game_id}/players/{player_id}/turn")
+    @ResponseStatus(HttpStatus.OK)
+    public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Player currPlayer = table.getPlayerOnTurn();
+        userService.throwIfNotIdAndTokenMatch(currPlayer.getId(), auth);
+        playerTableService.nextPlayersTurn(table);
+    }
 }
