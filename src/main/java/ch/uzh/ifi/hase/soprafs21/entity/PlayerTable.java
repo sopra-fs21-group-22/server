@@ -36,10 +36,10 @@ public class PlayerTable {
     @JoinColumn(name = "playertable_id")
     private Player playerOnTurn;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Deck deck;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Deck discardPile;
 
     @Column
