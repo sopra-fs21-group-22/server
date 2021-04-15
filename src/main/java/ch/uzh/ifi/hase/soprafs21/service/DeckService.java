@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
 import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
 
 
