@@ -34,12 +34,16 @@ public class DeckService {
         deck.setPlayCards(playCards);
 
         deckRepository.save(deck);
+        deckRepository.flush();
+
     }
 
     public Deck createDeck(){
         Deck deck = new Deck();
 
         deckRepository.save(deck);
+        deckRepository.flush();
+
 
         return deck;
     }
@@ -48,6 +52,8 @@ public class DeckService {
         Deck deck = new Deck();
 
         deckRepository.save(deck);
+        deckRepository.flush();
+
 
         return deck;
     }
@@ -62,8 +68,11 @@ public class DeckService {
         
         discardPile.setPlayCards(topCard);
         deckRepository.save(discardPile);
+        deckRepository.flush();
+
         deck.setPlayCards(discardCards);
         deckRepository.save(deck);
+        deckRepository.flush();
 
     }
 

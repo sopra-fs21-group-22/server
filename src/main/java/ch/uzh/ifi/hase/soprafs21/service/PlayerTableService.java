@@ -15,6 +15,8 @@ import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
@@ -28,6 +30,12 @@ public class PlayerTableService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    DeckRepository deckRepository;
+
+    @Autowired
+    HandRepository handRepository;
 
     @Autowired
     PlayerRepository playerRepository;
@@ -51,6 +59,8 @@ public class PlayerTableService {
         User user = userRepository.getOne(id);
         player.setUser(user);
         player.setHand(hand);
+        handRepository.save(hand);
+        handRepository.flush();
         player.setId(user.getId());
         List<PlayerTable> playerTables = playerTableRepository.findAll();
         // add user to existing playerTable
@@ -74,6 +84,9 @@ public class PlayerTableService {
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
+        deckRepository.save(deck);
+        deckRepository.save(discardPile);
+        deckRepository.flush();
         playerTableRepository.save(playerTable);
         playerTableRepository.flush();
         return playerTable;
