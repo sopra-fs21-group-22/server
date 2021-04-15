@@ -116,9 +116,14 @@ public class PlayerTable {
         }
         return Optional.empty();
     }
-
-    public VisibleCards getVisibleCards() { return visibleCards; }
-
-    public void setVisibleCards(VisibleCards visibleCards) { this.visibleCards = visibleCards; }
-
+    
+    public Player getPlayerByPlayerID(Long id) {
+        for (Player player : players) {
+            if (id.equals(player.getId())) {
+                return player;
+            }
+        }
+        return null;
+    }
+    
 }
