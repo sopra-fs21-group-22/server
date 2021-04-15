@@ -14,9 +14,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
-import ch.uzh.ifi.hase.soprafs21.entity.OrangeCard;
-import ch.uzh.ifi.hase.soprafs21.entity.BlueCard;
-import ch.uzh.ifi.hase.soprafs21.entity.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.service.PlayCardService;
 
 
