@@ -63,7 +63,7 @@ public class PlayerTableService {
         Hand hand = handService.createHand();
         User user = userRepository.getOne(id);
         player.setUser(user);
-        player.setHand(hand);   
+        player.setHand(hand);
         player.setId(user.getId());
         List<PlayerTable> playerTables = playerTableRepository.findAll();
         // add user to existing playerTable
@@ -113,10 +113,9 @@ public class PlayerTableService {
         this.assignTablePositions(table);
         // assign first player on turn
 
-        for (Integer i=0 ; i< table.getPlayers().size(); i++) {
+        for (Integer i = 0; i < table.getPlayers().size(); i++) {
             if (table.getPlayers().get(i).getGameRole().equals(GameRole.SHERIFF)) {
                 table.setPlayerOnTurn(table.getPlayers().get(i));
-                break;
             }
             deckService.drawCards(table, table.getPlayers().get(i), table.getPlayers().get(i).getBullets());
         }
@@ -183,7 +182,7 @@ public class PlayerTableService {
         // TODO
     }
 
-    public void nextPlayersTurn(PlayerTable table){
+    public void nextPlayersTurn(PlayerTable table) {
         Player currPlayer = table.getPlayerOnTurn();
         Player nextPlayer = currPlayer.getRightNeighbor();
         table.setPlayerOnTurn(nextPlayer);
