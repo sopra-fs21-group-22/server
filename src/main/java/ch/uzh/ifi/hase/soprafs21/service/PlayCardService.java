@@ -32,6 +32,44 @@ public class PlayCardService {
         PlayCard ocard5 = new Bang();
         cardList.add(ocard5);
 
+        PlayCard ocard6 = new Bang();
+        cardList.add(ocard6);
+
+        PlayCard ocard7 = new Bang();
+        cardList.add(ocard7);
+
+        PlayCard ocard8 = new Bang();
+        cardList.add(ocard8);
+
+        PlayCard ocard9 = new Bang();
+        cardList.add(ocard9);
+
+        PlayCard ocard10 = new Bang();
+        cardList.add(ocard10);
+
+        PlayCard card1 = new Bang();
+        cardList.add(card1);
+
+        PlayCard card2 = new Bang();
+        cardList.add(card2);
+
+        PlayCard card3 = new Bang();
+        cardList.add(card3);
+
+        PlayCard card4 = new Bang();
+        cardList.add(card4);
+
+        PlayCard card5 = new Bang();
+        cardList.add(card5);
+
+        PlayCard card6 = new Bang();
+        cardList.add(card6);
+
+        PlayCard card7 = new Bang();
+        cardList.add(card7);
+
+        PlayCard card8 = new Bang();
+        cardList.add(card8);
         // PlayCard bcard1 = new Bang();
         // cardList.add(bcard1);
 

@@ -1,6 +1,9 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +35,12 @@ public class HandService {
 
     public  Hand createHand(){
         Hand hand = new Hand();
+        List<PlayCard> playCards = new ArrayList<PlayCard>();
 
+        hand.setPlayCards(playCards);
         handRepository.save(hand);
+        handRepository.flush();;
+
 
         return hand;
     }

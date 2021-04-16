@@ -46,7 +46,7 @@ public class DeckService {
 
     public Deck createDeck(){
         Deck deck = new Deck();
-
+        this.fill(deck);
         deckRepository.save(deck);
         deckRepository.flush();
 
@@ -56,7 +56,9 @@ public class DeckService {
 
     public Deck createDiscardPile(){
         Deck deck = new Deck();
+        List<PlayCard> playCards = new ArrayList<PlayCard>();
 
+        deck.setPlayCards(playCards);
         deckRepository.save(deck);
         deckRepository.flush();
 
