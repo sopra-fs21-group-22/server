@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
 
 @Service
 @Transactional
@@ -17,67 +20,32 @@ public class PlayCardService {
     public static List<PlayCard> constructDummyCards() {
         List<PlayCard> cardList = new ArrayList<PlayCard>();
 
-        PlayCard ocard1 = new Bang();
-        cardList.add(ocard1);
-
-        PlayCard ocard2 = new Bang();
-        cardList.add(ocard2);
-
-        PlayCard ocard3 = new Bang();
-        cardList.add(ocard3);
-
-        PlayCard ocard4 = new Bang();
-        cardList.add(ocard4);
-
-        PlayCard ocard5 = new Bang();
-        cardList.add(ocard5);
-
-        PlayCard ocard6 = new Bang();
-        cardList.add(ocard6);
-
-        PlayCard ocard7 = new Bang();
-        cardList.add(ocard7);
-
-        PlayCard ocard8 = new Bang();
-        cardList.add(ocard8);
-
-        PlayCard ocard9 = new Bang();
-        cardList.add(ocard9);
-
-        PlayCard ocard10 = new Bang();
-        cardList.add(ocard10);
-
-        PlayCard card1 = new Bang();
-        cardList.add(card1);
-
-        PlayCard card2 = new Bang();
-        cardList.add(card2);
-
-        PlayCard card3 = new Bang();
-        cardList.add(card3);
-
-        PlayCard card4 = new Bang();
-        cardList.add(card4);
-
-        PlayCard card5 = new Bang();
-        cardList.add(card5);
-
-        PlayCard card6 = new Bang();
-        cardList.add(card6);
-
-        PlayCard card7 = new Bang();
-        cardList.add(card7);
-
-        PlayCard card8 = new Bang();
-        cardList.add(card8);
-        // PlayCard bcard1 = new Bang();
-        // cardList.add(bcard1);
-
-        // PlayCard bcard2 = new Bang();
-        // cardList.add(bcard2);
-
-        // PlayCard bcard3 = new Bang();
-        // cardList.add(bcard3);
+        // All Bang Cards
+        cardList.add(new BrownCard(Card.BANG, Rank.FOUR, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.EIGHT, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.QUEEN, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.TWO, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.ACE, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.KING, Suit.HEARTS));
+        cardList.add(new BrownCard(Card.BANG, Rank.NINE, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.QUEEN, Suit.HEARTS));
+        cardList.add(new BrownCard(Card.BANG, Rank.SIX, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.NINE, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.KING, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.FIVE, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.THREE, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.JACK, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.FIVE, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.FOUR, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.EIGHT, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.SEVEN, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.SIX, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.ACE, Suit.SPADES));
+        cardList.add(new BrownCard(Card.BANG, Rank.TEN, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.SEVEN, Suit.CLUBS));
+        cardList.add(new BrownCard(Card.BANG, Rank.TWO, Suit.DIAMONDS));
+        cardList.add(new BrownCard(Card.BANG, Rank.ACE, Suit.HEARTS));
+        cardList.add(new BrownCard(Card.BANG, Rank.THREE, Suit.DIAMONDS));
 
         return cardList;
 
