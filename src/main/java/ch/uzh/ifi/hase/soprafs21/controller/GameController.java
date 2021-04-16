@@ -154,10 +154,10 @@ public class GameController {
 
     }
 
-    @GetMapping("/{game_id}/players/{player_id}/gamerole")
+    @GetMapping("/{game_id}/players/{player_id}/privates")
     @ResponseStatus(HttpStatus.OK)
-    public PlayerGetAuthDTO getOwnRole(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
-            @PathVariable Long player_id) {
+    public PlayerGetAuthDTO getPrivateInformations(@RequestHeader("Authorization") String auth,
+            @PathVariable Long game_id, @PathVariable Long player_id) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(table.getPlayerById(player_id).get());
