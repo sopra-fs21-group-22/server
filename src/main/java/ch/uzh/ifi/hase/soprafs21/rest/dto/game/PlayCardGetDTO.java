@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto.game;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 
@@ -8,14 +9,14 @@ public class PlayCardGetDTO {
     protected Suit suit;
     protected Rank rank;
     protected String color;
-    protected String name;
+    protected Card card;
 
-    public String getName() {
-        return "HIDDEN";
+    public Card getCard() {
+        return Card.HIDDEN;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     public Long getId() {

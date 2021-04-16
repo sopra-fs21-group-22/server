@@ -7,20 +7,26 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
 @Entity
-public abstract class BlueCard extends PlayCard {
+public class BlueCard extends PlayCard {
 
-    @Transient
-    @Autowired
-    PlayerRepository playerRepository;
+    public BlueCard() {
 
-    @GeneratedValue
-    @Id
-    private Long id;
+    }
 
-    public abstract void undo(Player affectedPlayer);
+    public BlueCard(Card card, Rank rank, Suit suit) {
+        super(card, rank, suit);
+    }
+
+    @Override
+    public String getColor() {
+        return "blue";
+    }
 }

@@ -112,14 +112,14 @@ public interface DTOMapper {
     @Mapping(source = "suit", target = "suit")
     @Mapping(source = "rank", target = "rank")
     @Mapping(source = "color", target = "color")
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "card", target = "card")
     PlayCardGetDTO convertEntityToPlayCardGetDTO(PlayCard playCard);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "suit", target = "suit")
     @Mapping(source = "rank", target = "rank")
     @Mapping(source = "color", target = "color")
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "card", target = "card")
     PlayCardAuthGetDTO convertEntityToPlayCardGetAuthDTO(PlayCard playCard);
 
 }

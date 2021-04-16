@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
@@ -59,12 +60,17 @@ public class Player {
     @OneToOne
     private OnFieldCards onFieldCards;
 
-    public OnFieldCards getOnFieldCards() { return onFieldCards; }
+    public OnFieldCards getOnFieldCards() {
+        return onFieldCards;
+    }
 
-    public void setOnFieldCards(OnFieldCards cards) { this.onFieldCards = cards; }
+    public void setOnFieldCards(OnFieldCards cards) {
+        this.onFieldCards = cards;
+    }
 
-    /* @Column
-    private Integer cardamount; */
+    /*
+     * @Column private Integer cardamount;
+     */
 
     public void takeHit() {
         this.bullets -= 1;
@@ -120,9 +126,13 @@ public class Player {
         this.bullets = bullets;
     }
 
-    public Integer getMaxBullets() { return maxBullets; }
+    public Integer getMaxBullets() {
+        return maxBullets;
+    }
 
-    public void setMaxBullets(Integer maxBullets) { this.maxBullets = maxBullets; }
+    public void setMaxBullets(Integer maxBullets) {
+        this.maxBullets = maxBullets;
+    }
 
     public User getUser() {
         return user;
@@ -136,7 +146,7 @@ public class Player {
         return hand;
     }
 
-    public void setHand(Hand hand){
+    public void setHand(Hand hand) {
         this.hand = hand;
     }
 
@@ -156,9 +166,9 @@ public class Player {
         this.ready = ready;
     }
 
-    /* public Integer getCardamount() {
-        return hand.getPlayCards().size();
-    } */
+    /*
+     * public Integer getCardamount() { return hand.getPlayCards().size(); }
+     */
 
     @Override
     public boolean equals(Object obj) {

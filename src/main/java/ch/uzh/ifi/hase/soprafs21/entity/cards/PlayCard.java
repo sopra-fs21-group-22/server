@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 
@@ -16,26 +17,36 @@ public abstract class PlayCard {
 
     @Id
     @GeneratedValue
-    private Long id;
+    protected Long id;
 
     @Column
-    private String name;
+    protected Suit suit;
 
     @Column
-    private Suit suit;
+    protected Rank rank;
 
     @Column
-    private Rank rank;
+    protected String color;
 
     @Column
-    private String color;
+    protected Card card;
 
-    public String getName() {
-        return name;
+    protected PlayCard() {
+
     }
 
-    public void setName(String name) {
-        this.name = name;
+    protected PlayCard(Card card, Rank rank, Suit suit) {
+        this.rank = rank;
+        this.suit = suit;
+        this.card = card;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
     }
 
     public String getColor() {
@@ -72,6 +83,6 @@ public abstract class PlayCard {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName();
+        return this.card.toString();
     }
 }

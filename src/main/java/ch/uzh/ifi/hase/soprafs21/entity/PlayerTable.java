@@ -120,10 +120,13 @@ public class PlayerTable {
         }
         return null;
     }
-    
 
-    public VisibleCards getVisibleCards() { return visibleCards; }
+    public VisibleCards getVisibleCards() {
+        return visibleCards;
+    }
 
-    public void setVisibleCards(VisibleCards visibleCards) { this.visibleCards = visibleCards; }
+    public void setVisibleCards(VisibleCards visibleCards) {
+        this.visibleCards = visibleCards;
+    }
 
 }

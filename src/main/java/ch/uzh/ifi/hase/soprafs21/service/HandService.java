@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,51 +15,54 @@ import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-
-
-
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Service
 @Transactional
 public class HandService {
-    
+
     @Autowired
     HandRepository handRepository;
 
-    @Autowired 
+    @Autowired
     PlayerTableRepository playerTableRepository;
 
-    @Autowired 
+    @Autowired
     PlayerRepository playerRepository;
 
-    public  Hand createHand(){
+    @Autowired
+    SpecificCardService specificCardService;
+
+    public Hand createHand() {
         Hand hand = new Hand();
         List<PlayCard> playCards = new ArrayList<PlayCard>();
 
         hand.setPlayCards(playCards);
         handRepository.save(hand);
-        handRepository.flush();;
-
+        handRepository.flush();
+        ;
 
         return hand;
     }
 
-    public void layCard(PlayerTable table, Player player, PlayCard playCard){
-        Integer cardIndex = null;
+    public void layCard(PlayerTable table, Player user, List<Player> targets, Long cardId) {
+        PlayCard card = user.getHand().getCardById(cardId);
+        specificCardService.use(table, card, user, targets);
+        if (card.getColor().equals("brown")) {
+            table.getDiscardPile().getPlayCards().add(0, card);
 
-        for(int i = 0; i < player.getHand().getPlayCards().size(); i++) {   
-            if (player.getHand().getPlayCards().get(i) == playCard) {
-                cardIndex=i;
+        } else {
+            if (targets.size() != 1) {
+                throw new GameLogicException("Blue cards can only be played on one player!");
             }
+            Player target = targets.get(0);
+            target.getOnFieldCards().addOnFieldCard((BlueCard) card);
         }
-        table.getDiscardPile().getPlayCards().add(0, player.getHand().getPlayCards().get(cardIndex));
-        player.getHand().getPlayCards().remove(playCard);
+        user.getHand().getPlayCards().remove(card);
 
-        playerTableRepository.save(table);
-        playerTableRepository.flush();
-
-        playerRepository.save(player);
-        playerRepository.flush();
+        playerTableRepository.saveAndFlush(table);
+        playerRepository.saveAndFlush(user);
     }
 
 }

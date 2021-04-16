@@ -113,14 +113,15 @@ public class PlayerTableService {
         this.assignTablePositions(table);
         // assign first player on turn
 
-        for (Integer i = 0; i < table.getPlayers().size(); i++) {
+        for (int i = 0; i < table.getPlayers().size(); i++) {
+            table.getPlayers().get(0).setBullets(table.getPlayers().get(0).getBullets() + 4);
             if (table.getPlayers().get(i).getGameRole().equals(GameRole.SHERIFF)) {
                 table.setPlayerOnTurn(table.getPlayers().get(i));
             }
             deckService.drawCards(table, table.getPlayers().get(i), table.getPlayers().get(i).getBullets());
         }
 
-        playerTableRepository.save(table);
+        playerTableRepository.saveAndFlush(table);
     }
 
     private void assignGameRoles(PlayerTable table) {

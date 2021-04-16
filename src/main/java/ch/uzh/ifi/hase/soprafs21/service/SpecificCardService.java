@@ -3,10 +3,10 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Beer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
@@ -23,33 +23,30 @@ public class SpecificCardService {
     DeckService deckService;
 
     public void use(PlayerTable table, PlayCard card, Player user, List<Player> targets) {
-        switch (card.toString()) {
-            case "Bang":
-                bang(user, targets);
-                break;
-            case "Missed":
-                missed();
-                break;
-            case "Beer":
-                beer(user);
-                break;
-            case "General Store":
-                generalStore(table, user, targets);
-                break;
-            case "Saloon":
-                saloon(user, targets);
-                break;
-            case "Stage Coach":
-                stageCoach(table, user);
-                break;
-            case "Wells Fargo":
-                wellsFargo(table, user);
-                break;
+        switch (card.getCard()) {
+        case BANG:
+            bang(user, targets);
+            break;
+        case BEER:
+            beer(user);
+            break;
+        // case "General Store":
+        // generalStore(table, user, targets);
+        // break;
+        case SALOON:
+            saloon(user, targets);
+            break;
+        case STAGECOACH:
+            stageCoach(table, user);
+            break;
+        case WELLSFARGO:
+            wellsFargo(table, user);
+            break;
 
         default:
-            throw new IllegalArgumentException(String.format("Card %s does not exist!", card.getClass().toString()));
-
+            throw new IllegalArgumentException(String.format("Card %s does not exist!", card.toString()));
         }
+
     }
 
     public void bang(Player user, List<Player> targets) {
@@ -61,10 +58,11 @@ public class SpecificCardService {
 
     public void missed() {
         // TODO
+
     }
 
     public void beer(Player activePlayer) {
-        if(activePlayer.getBullets() < activePlayer.getMaxBullets()){
+        if (activePlayer.getBullets() < activePlayer.getMaxBullets()) {
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
             throw new UnsupportedOperationException("You already have the maximum amount of lives.");
@@ -73,29 +71,30 @@ public class SpecificCardService {
 
     public void saloon(Player activePlayer, List<Player> otherPlayers) {
 
-        if(activePlayer.getBullets() < activePlayer.getMaxBullets()){
+        if (activePlayer.getBullets() < activePlayer.getMaxBullets()) {
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
             throw new UnsupportedOperationException("You already have the maximum amount of lives.");
         }
     }
 
-    public void generalStore(PlayerTable table, Player activePlayer, List<Player> otherPlayers) {
-        // TODO: have the players pick the chosen card
-        PlayCard randomCard = new Beer();
-        visibleCardsService.pickACard(table, activePlayer, randomCard);
-        Player currPlayer = activePlayer;
-        for (int i = 0; i < otherPlayers.size(); i++) {
-            Player newPlayer = currPlayer.getRightNeighbor();
-            visibleCardsService.pickACard(table, newPlayer, randomCard);
-        }
-    }
+    // public void generalStore(PlayerTable table, Player activePlayer, List<Player>
+    // otherPlayers) {
+    // // TODO: have the players pick the chosen card
+    // PlayCard randomCard = new Beer();
+    // visibleCardsService.pickACard(table, activePlayer, randomCard);
+    // Player currPlayer = activePlayer;
+    // for (int i = 0; i < otherPlayers.size(); i++) {
+    // Player newPlayer = currPlayer.getRightNeighbor();
+    // visibleCardsService.pickACard(table, newPlayer, randomCard);
+    // }
+    // }
 
-    public void stageCoach(PlayerTable table, Player activePlayer){
+    public void stageCoach(PlayerTable table, Player activePlayer) {
         deckService.drawCards(table, activePlayer, 2);
     }
 
-    public void wellsFargo(PlayerTable table, Player activePlayer){
+    public void wellsFargo(PlayerTable table, Player activePlayer) {
         deckService.drawCards(table, activePlayer, 3);
     }
 }

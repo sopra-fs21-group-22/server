@@ -8,19 +8,17 @@ import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class HandGetDTO {
     protected List<PlayCard> playCards;
+    protected int cardsInHand;
 
     public List<PlayCardGetDTO> getPlayCards() {
-        if (playCards == null) {
-            return new ArrayList<>();
-        }
-        List<PlayCardGetDTO> playCardsDTOs = new ArrayList<>();
-        for (PlayCard card : playCards) {
-            playCardsDTOs.add(DTOMapper.INSTANCE.convertEntityToPlayCardGetDTO(card));
-        }
-        return playCardsDTOs;
+        return null;
     }
 
     public void setPlayCards(List<PlayCard> playCards) {
         this.playCards = playCards;
+    }
+
+    public int getCardsInHand() {
+        return this.playCards.size();
     }
 }

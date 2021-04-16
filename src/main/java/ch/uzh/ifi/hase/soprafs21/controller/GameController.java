@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,9 @@ import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 @RestController
 @RequestMapping("api/v1/games/")
 public class GameController {
+
+    @Autowired
+    private HandService handService;
 
     @Autowired
     private SpecificCardService specificCardService;
@@ -106,11 +110,12 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
             @RequestBody List<PlayerGetDTO> targetPlayerDTOs, @RequestHeader("Authorization") String auth) {
+
         // get player who is using card
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Optional<Player> opt = table.getPlayerById(player_id);
         if (!opt.isPresent()) {
-            throw new IllegalArgumentException(
+            throw new GameLogicException(
                     String.format("The using player with id %s is not in game with id %s", player_id, game_id));
         }
         Player usingPlayer = opt.get();
@@ -120,38 +125,18 @@ public class GameController {
         for (PlayerGetDTO targetPlayerGetDTO : targetPlayerDTOs) {
             Optional<Player> targetPlayerOpt = table.getPlayerById(targetPlayerGetDTO.getId());
             if (!targetPlayerOpt.isPresent()) {
-                throw new IllegalArgumentException(
+                throw new GameLogicException(
                         "One or more target players are not in the same game as the using player.");
             }
             targetPlayers.add(targetPlayerOpt.get());
         }
 
-        if (table.getPlayerOnTurn().getId().equals(player_id)) {
-            throw new IllegalArgumentException("Player is not on turn!");
+        if (!table.getPlayerOnTurn().getId().equals(player_id)) {
+            throw new GameLogicException("Player is not on turn!");
         }
 
-        PlayCard bang = new Bang();
-        specificCardService.use(table, bang, usingPlayer, targetPlayers);
+        handService.layCard(table, usingPlayer, targetPlayers, card_id);
         playerTableRepository.save(table);
-
-        // PlayCard beer = new Beer();
-        // if (table.getPlayerOnTurn().getId().equals(usingPlayer.getId()) ||
-        // usingPlayer.getBullets() == 1) {
-        // specificCardService.use(table, beer, usingPlayer, targetPlayers);
-        // }
-
-        // // PlayCard saloon = new Saloon();
-
-        // PlayCard generalStore = new GeneralStore();
-        // deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
-        // specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
-
-        // PlayCard stagecoach = new StageCoach();
-        // specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
-
-        // PlayCard wellsFargo = new WellsFargo();
-        // specificCardService.use(table, wellsFargo, usingPlayer, targetPlayers);
-
     }
 
     @GetMapping("/{game_id}/players/{player_id}/privates")
