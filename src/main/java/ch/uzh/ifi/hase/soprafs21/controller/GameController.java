@@ -24,6 +24,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
@@ -49,6 +50,9 @@ public class GameController {
 
     @Autowired
     private DeckService deckService;
+
+    @Autowired
+    private PlayerTableRepository playerTableRepository;
 
     @Autowired
     private VisibleCardsService visibleCardsService;
@@ -121,30 +125,32 @@ public class GameController {
             }
             targetPlayers.add(targetPlayerOpt.get());
         }
-        // ######################################################
-        // TODO TEMPORARY CODE LINES (since Hand is missing) ###
-        // ######################################################
+
+        if (table.getPlayerOnTurn().getId().equals(player_id)) {
+            throw new IllegalArgumentException("Player is not on turn!");
+        }
 
         PlayCard bang = new Bang();
         specificCardService.use(table, bang, usingPlayer, targetPlayers);
+        playerTableRepository.save(table);
 
-        PlayCard beer = new Beer();
-        if(table.getPlayerOnTurn().getId().equals(usingPlayer.getId()) || usingPlayer.getBullets() == 1 ){
-            specificCardService.use(table, beer, usingPlayer, targetPlayers);
-        }
+        // PlayCard beer = new Beer();
+        // if (table.getPlayerOnTurn().getId().equals(usingPlayer.getId()) ||
+        // usingPlayer.getBullets() == 1) {
+        // specificCardService.use(table, beer, usingPlayer, targetPlayers);
+        // }
 
-        // PlayCard saloon = new Saloon();
+        // // PlayCard saloon = new Saloon();
 
-        PlayCard generalStore = new GeneralStore();
-        deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
-        specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
+        // PlayCard generalStore = new GeneralStore();
+        // deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
+        // specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
 
-        PlayCard stagecoach = new StageCoach();
-        specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
+        // PlayCard stagecoach = new StageCoach();
+        // specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
 
-        PlayCard wellsFargo = new WellsFargo();
-        specificCardService.use(table, wellsFargo, usingPlayer, targetPlayers);
-
+        // PlayCard wellsFargo = new WellsFargo();
+        // specificCardService.use(table, wellsFargo, usingPlayer, targetPlayers);
 
     }
 
@@ -166,6 +172,7 @@ public class GameController {
         for (Player player : players) {
             playerGetDTOs.add(DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(player));
         }
+
         return playerGetDTOs;
     }
 

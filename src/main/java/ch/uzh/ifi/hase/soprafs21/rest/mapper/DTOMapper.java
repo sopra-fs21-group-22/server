@@ -1,11 +1,19 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetAuthDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.OnFieldCardsGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
@@ -72,28 +80,46 @@ public interface DTOMapper {
     PlayerTableGetDTO convertEntityToPlayerTableGetDTO(PlayerTable playerTable);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "range", target = "range")
-    @Mapping(source = "bullets", target = "bullets")
-    @Mapping(source = "distanceIncreaseForOthers", target = "distanceIncreaseForOthers")
-    @Mapping(source = "distanceDecreaseToOthers", target = "distanceDecreaseToOthers")
-
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
     @Mapping(source = "ready", target = "ready")
     @Mapping(source = "leftNeighbor", target = "leftNeighbor")
     @Mapping(source = "rightNeighbor", target = "rightNeighbor")
-    //@Mapping(source = "cardamount", target = "cardamount")
-
+    @Mapping(source = "hand", target = "hand")
+    @Mapping(source = "onFieldCards", target = "onFieldCards")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "range", target = "range")
-    @Mapping(source = "bullets", target = "bullets")
-    @Mapping(source = "distanceIncreaseForOthers", target = "distanceIncreaseForOthers")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
+    @Mapping(source = "ready", target = "ready")
+    @Mapping(source = "leftNeighbor", target = "leftNeighbor")
+    @Mapping(source = "rightNeighbor", target = "rightNeighbor")
+    @Mapping(source = "hand", target = "hand")
+    @Mapping(source = "onFieldCards", target = "onFieldCards")
     PlayerGetAuthDTO convertEntityToPlayerGetAuthDTO(Player player);
 
+    @Mapping(source = "playCards", target = "playCards")
+    HandGetDTO convertEntityToHandGetDTO(Hand hand);
 
+    @Mapping(source = "playCards", target = "playCards")
+    HandGetAuthDTO convertEntityToHandGetAuthDTO(Hand hand);
+
+    @Mapping(source = "onFieldCards", target = "onFieldCards")
+    OnFieldCardsGetDTO convertEntityToOnFieldCardsGetDTO(OnFieldCards onFieldCards);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "suit", target = "suit")
+    @Mapping(source = "rank", target = "rank")
+    @Mapping(source = "color", target = "color")
+    @Mapping(source = "name", target = "name")
+    PlayCardGetDTO convertEntityToPlayCardGetDTO(PlayCard playCard);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "suit", target = "suit")
+    @Mapping(source = "rank", target = "rank")
+    @Mapping(source = "color", target = "color")
+    @Mapping(source = "name", target = "name")
+    PlayCardAuthGetDTO convertEntityToPlayCardGetAuthDTO(PlayCard playCard);
 
 }
