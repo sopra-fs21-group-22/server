@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Entity
 public class Hand {
@@ -21,6 +22,15 @@ public class Hand {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "hand_id")
     private List<PlayCard> playCards;
+
+    public PlayCard getCardById(Long cardId) {
+        for (PlayCard card : playCards) {
+            if (card.getId().equals(cardId)) {
+                return card;
+            }
+        }
+        throw new GameLogicException(String.format("Player doesn't have a card with id %s in his hand.", cardId));
+    }
 
     public Long getId() {
         return id;
