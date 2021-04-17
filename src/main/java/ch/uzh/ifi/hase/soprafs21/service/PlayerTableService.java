@@ -114,7 +114,6 @@ public class PlayerTableService {
         // assign first player on turn
 
         for (int i = 0; i < table.getPlayers().size(); i++) {
-            table.getPlayers().get(0).setBullets(table.getPlayers().get(0).getBullets() + 4);
             if (table.getPlayers().get(i).getGameRole().equals(GameRole.SHERIFF)) {
                 table.setPlayerOnTurn(table.getPlayers().get(i));
             }

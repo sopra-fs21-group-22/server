@@ -90,12 +90,21 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PlayerGetDTO getPlayerInformation(@PathVariable Long game_id, @PathVariable Long player_id,
-            @RequestHeader String auth) {
+            @RequestHeader("Authorization") String auth) {
         if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
             return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(playerRepository.getOne(player_id));
         }
         return DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(playerRepository.getOne(player_id));
 
+    }
+
+    @GetMapping("/{game_id}/players/{player_id}/privates")
+    @ResponseStatus(HttpStatus.OK)
+    public PlayerGetAuthDTO getPrivateInformations(@RequestHeader("Authorization") String auth,
+            @PathVariable Long game_id, @PathVariable Long player_id) {
+        userService.throwIfNotIdAndTokenMatch(player_id, auth);
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(table.getPlayerById(player_id).get());
     }
 
     @PutMapping("/{game_id}/players/{player_id}/ready")
@@ -137,15 +146,6 @@ public class GameController {
 
         handService.layCard(table, usingPlayer, targetPlayers, card_id);
         playerTableRepository.save(table);
-    }
-
-    @GetMapping("/{game_id}/players/{player_id}/privates")
-    @ResponseStatus(HttpStatus.OK)
-    public PlayerGetAuthDTO getPrivateInformations(@RequestHeader("Authorization") String auth,
-            @PathVariable Long game_id, @PathVariable Long player_id) {
-        userService.throwIfNotIdAndTokenMatch(player_id, auth);
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(table.getPlayerById(player_id).get());
     }
 
     @GetMapping("/{game_id}/players/{player_id}/targets")
