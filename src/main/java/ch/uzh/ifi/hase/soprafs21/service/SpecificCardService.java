@@ -42,6 +42,9 @@ public class SpecificCardService {
         case WELLSFARGO:
             wellsFargo(table, user);
             break;
+        case GATLING:
+            gatling(user, targets);
+            break;
 
         default:
             throw new IllegalArgumentException(String.format("Card %s does not exist!", card.toString()));
@@ -53,6 +56,12 @@ public class SpecificCardService {
         if (targets.size() != 1) {
             throw new IllegalArgumentException("A BANG card can only hit one target!");
         }
+        if (targets.get(0).getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer be attacked.");
+        }
+        if (user.getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer play.");
+        }
         playerService.attackPlayer(user, targets.get(0));
     }
 
@@ -62,6 +71,9 @@ public class SpecificCardService {
     }
 
     public void beer(Player activePlayer) {
+        if (activePlayer.getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer play.");
+        }
         if (activePlayer.getBullets() < activePlayer.getMaxBullets()) {
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
@@ -70,7 +82,9 @@ public class SpecificCardService {
     }
 
     public void saloon(Player activePlayer, List<Player> otherPlayers) {
-
+        if (activePlayer.getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer play.");
+        }
         if (activePlayer.getBullets() < activePlayer.getMaxBullets()) {
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
@@ -91,10 +105,28 @@ public class SpecificCardService {
     // }
 
     public void stageCoach(PlayerTable table, Player activePlayer) {
+        if (activePlayer.getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer play.");
+        }
         deckService.drawCards(table, activePlayer, 2);
     }
 
     public void wellsFargo(PlayerTable table, Player activePlayer) {
+        if (activePlayer.getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer play.");
+        }
         deckService.drawCards(table, activePlayer, 3);
+    }
+
+    public void gatling(Player activePlayer, List<Player> targets){
+        if (activePlayer.getBullets() == 0) {
+            throw new IllegalArgumentException("A dead player may no longer play.");
+        }
+        for (Integer i=0; i<targets.size(); i++) {      
+            if (targets.get(i).getBullets() == 0) {
+                throw new IllegalArgumentException("A dead player may no longer be attacked.");
+            }
+        }  
+            playerService.attackAll(targets);
     }
 }
