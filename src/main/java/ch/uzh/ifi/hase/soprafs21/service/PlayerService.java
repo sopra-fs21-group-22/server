@@ -1,9 +1,12 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
@@ -30,8 +33,19 @@ public class PlayerService {
 
         // TODO check if target can defend
         target.setBullets(target.getBullets() - 1);
+        if (target.getBullets() == 0) {
+            
+        }
         attacker.setStillPlayableBangsThisRound(attacker.getStillPlayableBangsThisRound() - 1);
         playerRepository.save(target);
         playerRepository.save(attacker);
+    }
+
+    public void attackAll(List<Player> targets){
+        //TODO check if anyone can defend themselves (barrels count)
+        for (Integer i=0; i<targets.size(); i++) {
+            targets.get(i).setBullets(targets.get(i).getBullets()-1);
+            playerRepository.save(targets.get(i));
+        }
     }
 }
