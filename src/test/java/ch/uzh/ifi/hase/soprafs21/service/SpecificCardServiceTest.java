@@ -51,7 +51,7 @@ public class SpecificCardServiceTest {
 
     @Transactional
     @Test
-    public void attackAllTest() {
+    public void gatlingTest() {
         List<Player> players = new ArrayList<Player>();
         Player player1 = new Player();
         player1.setId(1L);
@@ -79,6 +79,96 @@ public class SpecificCardServiceTest {
         for (Integer i = 0; i < players.size(); i++) {
             assertEquals(players.get(i).getBullets(), 3);
         }
+    }
+
+    @Transactional
+    @Test
+    public void beerTest() {
+        Player activePlayer = new Player();
+        activePlayer.setId(1L);
+
+        activePlayer.setBullets(0);
+        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.beer(activePlayer);});
+
+        activePlayer.setBullets(4);
+        Assertions.assertThrows( UnsupportedOperationException.class, () -> {specificCardService.beer(activePlayer);});
+
+        activePlayer.setBullets(3);
+        specificCardService.beer(activePlayer);
+        
+        assertEquals(activePlayer.getBullets(), 4);
+    }
+
+    @Transactional
+    @Test
+    public void saloonTest() {
+        List<Player> players = new ArrayList<Player>();
+        Player player1 = new Player();
+        player1.setId(1L);
+        Player player2 = new Player();
+        player2.setId(2L);
+        Player player3 = new Player();
+        player3.setId(3L);
+        Player activePlayer = new Player();
+        activePlayer.setId(4L);
+
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+
+        activePlayer.setBullets(0);
+        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.saloon(activePlayer, players);});
+
+        activePlayer.setBullets(4);
+        Assertions.assertThrows( UnsupportedOperationException.class, () -> {specificCardService.saloon(activePlayer, players);});
+
+        activePlayer.setBullets(3);
+        specificCardService.saloon(activePlayer, players);
+        
+        assertEquals(activePlayer.getBullets(), 4);
+    }
+
+    @Transactional
+    @Test
+    public void bangTest() {
+        List<Player> players = new ArrayList<Player>();
+        Player player1 = new Player();
+        player1.setId(1L);
+        Player player2 = new Player();
+        player2.setId(2L);
+        Player player3 = new Player();
+        player3.setId(3L);
+        Player activePlayer = new Player();
+        activePlayer.setId(4L);
+        
+        playerRepository.save(player1);
+        playerRepository.save(player2);
+        playerRepository.save(player3);
+        playerRepository.save(activePlayer);
+
+        players.add(player1);
+        players.add(player2);
+
+        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.bang(activePlayer, players);});
+
+        players.remove(1);
+
+        activePlayer.setBullets(0);
+        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.bang(activePlayer, players);});
+        activePlayer.setBullets(4);
+
+        players.get(0).setBullets(0);
+        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.bang(activePlayer, players);});
+        players.get(0).setBullets(4);
+
+        activePlayer.setStillPlayableBangsThisRound(1);
+        activePlayer.setRightNeighbor(players.get(0));
+        activePlayer.setLeftNeighbor(player3);
+        player3.setLeftNeighbor(players.get(0));
+
+        specificCardService.bang(activePlayer, players);
+        
+        assertEquals(players.get(0).getBullets(), 3);
     }
 
 }
