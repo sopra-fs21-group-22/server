@@ -193,10 +193,11 @@ public class PlayerTableService {
         // TODO End turn
         // TODO start next turn
         Player currPlayer = table.getPlayerOnTurn();
-        
+
         if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
-        throw new GameLogicException("Too many cards in Hand! Discard until there are not more cards left than lives you have!");
-        // }
+            throw new GameLogicException(
+                    "Too many cards in Hand! Discard until there are not more cards left than lives you have!");
+        }
 
         // skip dead players
         while (currPlayer.getRightNeighbor().getBullets() <= 0) {
