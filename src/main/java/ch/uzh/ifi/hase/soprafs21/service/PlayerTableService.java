@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
@@ -192,11 +193,9 @@ public class PlayerTableService {
         // TODO End turn
         // TODO start next turn
         Player currPlayer = table.getPlayerOnTurn();
-        // TODO uncomment this
-        // if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
-        // throw new GameLogicException(
-        // "Too many cards in Hand! Discard until there are not more cards left than
-        // lives you have!");
+        
+        if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
+        throw new GameLogicException("Too many cards in Hand! Discard until there are not more cards left than lives you have!");
         // }
 
         // skip dead players
