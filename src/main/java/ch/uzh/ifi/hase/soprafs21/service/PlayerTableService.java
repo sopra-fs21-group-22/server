@@ -14,6 +14,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
@@ -70,20 +71,24 @@ public class PlayerTableService {
         for (PlayerTable playerTable : playerTables) {
             List<Player> players = playerTable.getPlayers();
             if (players.size() < 7 && !playerTable.getGameHasStarted()) {
+
                 players.add(player);
                 playerTable.setPlayers(players);
+                player.setTable(playerTable);
+
                 playerTableRepository.save(playerTable);
                 playerTableRepository.flush();
-                return playerTable;
 
+                return playerTable;
             }
         }
         // create new playerTable
         PlayerTable playerTable = new PlayerTable();
-        List<Player> players = new ArrayList<Player>();
+        List<Player> players = new ArrayList<>();
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
         players.add(player);
+        player.setTable(playerTable);
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
@@ -141,7 +146,7 @@ public class PlayerTableService {
     public void setPlayerAsReady(Long gameId, Long playerId, Boolean status) {
         PlayerTable table = getPlayerTableById(gameId);
         Player player = playerRepository.getOne(playerId);
-        if (!(table.getPlayers().contains(player))) {
+        if (!player.getTable().getId().equals(table.getId())) {
             throw new IllegalArgumentException(String.format("Player %s is not in PlayerTable with id %s.",
                     player.getUser().getUsername(), table.getId()));
         }
@@ -183,9 +188,26 @@ public class PlayerTableService {
     }
 
     public void nextPlayersTurn(PlayerTable table) {
+        // TODO check amount of hand cards
+        // TODO End turn
+        // TODO start next turn
         Player currPlayer = table.getPlayerOnTurn();
+        // TODO uncomment this
+        // if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
+        // throw new GameLogicException(
+        // "Too many cards in Hand! Discard until there are not more cards left than
+        // lives you have!");
+        // }
+
+        // skip dead players
+        while (currPlayer.getRightNeighbor().getBullets() <= 0) {
+            currPlayer = currPlayer.getRightNeighbor();
+        }
         Player nextPlayer = currPlayer.getRightNeighbor();
         table.setPlayerOnTurn(nextPlayer);
+        // TODO change to dynamic amount of cards
+
+        deckService.drawCards(table, nextPlayer, 2);
     }
 
 }

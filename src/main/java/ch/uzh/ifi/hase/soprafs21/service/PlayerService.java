@@ -14,6 +14,9 @@ import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 public class PlayerService {
 
     @Autowired
+    DeckService DeckService;
+
+    @Autowired
     PlayerRepository playerRepository;
 
     public void updatePlayerDistance() {

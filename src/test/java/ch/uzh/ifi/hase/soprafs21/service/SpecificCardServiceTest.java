@@ -43,9 +43,6 @@ public class SpecificCardServiceTest {
     PlayerService playerService;
 
     @Autowired
-    SpecificCardService specificCardService;
-
-    @Autowired
     PlayerRepository playerRepository;
 
     @AfterEach

@@ -29,6 +29,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
@@ -39,9 +40,6 @@ public class GameController {
 
     @Autowired
     private HandService handService;
-
-    @Autowired
-    private SpecificCardService specificCardService;
 
     @Autowired
     private PlayerTableService playerTableService;
@@ -106,39 +104,6 @@ public class GameController {
         playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
     }
 
-    @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
-            @RequestBody List<PlayerGetDTO> targetPlayerDTOs, @RequestHeader("Authorization") String auth) {
-
-        // get player who is using card
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Optional<Player> opt = table.getPlayerById(player_id);
-        if (!opt.isPresent()) {
-            throw new GameLogicException(
-                    String.format("The using player with id %s is not in game with id %s", player_id, game_id));
-        }
-        Player usingPlayer = opt.get();
-
-        // get target players card is played against
-        List<Player> targetPlayers = new ArrayList<>();
-        for (PlayerGetDTO targetPlayerGetDTO : targetPlayerDTOs) {
-            Optional<Player> targetPlayerOpt = table.getPlayerById(targetPlayerGetDTO.getId());
-            if (!targetPlayerOpt.isPresent()) {
-                throw new GameLogicException(
-                        "One or more target players are not in the same game as the using player.");
-            }
-            targetPlayers.add(targetPlayerOpt.get());
-        }
-
-        if (!table.getPlayerOnTurn().getId().equals(player_id)) {
-            throw new GameLogicException("Player is not on turn!");
-        }
-
-        handService.layCard(table, usingPlayer, targetPlayers, card_id);
-        playerTableRepository.save(table);
-    }
-
     @GetMapping("/{game_id}/players/{player_id}/targets")
     @ResponseStatus(HttpStatus.OK)
     public List<PlayerGetDTO> getPlayersInRange(@PathVariable Long player_id, @PathVariable Long game_id) {
@@ -154,10 +119,29 @@ public class GameController {
 
     @PutMapping("/{game_id}/players/{player_id}/turn")
     @ResponseStatus(HttpStatus.OK)
-    public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id) {
+    public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
+            @PathVariable Long player_id) {
+        userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player currPlayer = table.getPlayerOnTurn();
-        userService.throwIfNotIdAndTokenMatch(currPlayer.getId(), auth);
+        if (!player_id.equals(table.getPlayerOnTurn().getId())) {
+            throw new GameLogicException("Player is not on turn!");
+        }
         playerTableService.nextPlayersTurn(table);
+    }
+
+    @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void playCard2(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
+            @RequestBody List<Long> targets) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Player usingPlayer = table.getPlayerByPlayerID(player_id);
+        if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
+            throw new GameLogicException("Player is not on turn!");
+        }
+        List<Player> targetPlayers = table.getPlayersById(targets);
+
+        usingPlayer.playCard(card_id, targetPlayers);
+        playerRepository.save(usingPlayer);
+        playerTableRepository.saveAndFlush(table);
     }
 }

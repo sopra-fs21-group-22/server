@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,18 +17,24 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
 @Entity
-public class BlueCard extends PlayCard {
-
-    public BlueCard() {
-
-    }
-
-    public BlueCard(Card card, Rank rank, Suit suit) {
-        super(card, rank, suit);
-    }
+public abstract class BlueCard extends PlayCard {
 
     @Override
     public String getColor() {
         return "blue";
     }
+
+    @Override
+    public void use(Player usingPlayer, List<Player> targets) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public abstract void use(Player usingPlayer, Player targetPlayer);
+
+    public abstract void onTurnStart(Player affectedPlayer);
+
+    public abstract void undo(Player affectedPlayer);
+
+    public abstract void onHit(Player affectedPlayer);
 }

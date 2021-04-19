@@ -32,10 +32,9 @@ public class DeckService {
     @Autowired
     VisibleCardsService visibleCardsService;
 
-
     public void fill(Deck deck) {
 
-        List<PlayCard> playCards = PlayCardService.constructDummyCards();
+        List<PlayCard> playCards = PlayCardService.getPlayCards();
 
         deck.setPlayCards(playCards);
 
@@ -44,17 +43,16 @@ public class DeckService {
 
     }
 
-    public Deck createDeck(){
+    public Deck createDeck() {
         Deck deck = new Deck();
         this.fill(deck);
         deckRepository.save(deck);
         deckRepository.flush();
 
-
         return deck;
     }
 
-    public Deck createDiscardPile(){
+    public Deck createDiscardPile() {
         Deck deck = new Deck();
         List<PlayCard> playCards = new ArrayList<PlayCard>();
 
@@ -62,19 +60,17 @@ public class DeckService {
         deckRepository.save(deck);
         deckRepository.flush();
 
-
         return deck;
     }
 
-    public void shuffle(PlayerTable table){
+    public void shuffle(PlayerTable table) {
         List<PlayCard> discardCards = table.getDiscardPile().getPlayCards();
         List<PlayCard> topCard = table.getDiscardPile().getPlayCards();
 
-
-        topCard = topCard.subList(0, 1);      
-        discardCards = discardCards.subList(1,discardCards.size());
+        topCard = topCard.subList(0, 1);
+        discardCards = discardCards.subList(1, discardCards.size());
         Collections.shuffle(discardCards);
-        
+
         table.getDiscardPile().setPlayCards(topCard);
         table.getDeck().setPlayCards(discardCards);
         playerTableRepository.save(table);
@@ -83,8 +79,8 @@ public class DeckService {
     }
 
     public void drawCards(PlayerTable table, Player player, Integer n) {
-        for(int i = 0; i < n; i++) {   
-            if (table.getDeck().getPlayCards().size() < 2){
+        for (int i = 0; i < n; i++) {
+            if (table.getDeck().getPlayCards().size() < 2) {
                 player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
                 this.shuffle(table);
@@ -94,8 +90,7 @@ public class DeckService {
 
                 playerRepository.save(player);
                 playerRepository.flush();
-            }
-            else {
+            } else {
                 player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
 
@@ -105,26 +100,25 @@ public class DeckService {
                 playerRepository.save(player);
                 playerRepository.flush();
             }
-        }  
+        }
     }
 
     /**
-     * A card is drawn from the deck, instead of putting it on a players hand it is placed onto
-     * the Visible Cards, for everyone to see.
+     * A card is drawn from the deck, instead of putting it on a players hand it is
+     * placed onto the Visible Cards, for everyone to see.
      */
 
     public void addCardToVisibleCards(PlayerTable table, Integer n) {
         VisibleCards visibleCards = visibleCardsService.createVisibleCards();
-        for(int i = 0; i < n; i++) {
-            if (table.getDeck().getPlayCards().size() < 2){
+        for (int i = 0; i < n; i++) {
+            if (table.getDeck().getPlayCards().size() < 2) {
                 visibleCards.addACard(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
                 this.shuffle(table);
 
                 playerTableRepository.save(table);
                 playerTableRepository.flush();
-            }
-            else {
+            } else {
                 visibleCards.addACard(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
 
@@ -133,8 +127,5 @@ public class DeckService {
             }
         }
     }
-
-    
-
 
 }

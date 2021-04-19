@@ -1,12 +1,17 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -54,6 +59,10 @@ public class Player {
     @OneToOne
     private Player rightNeighbor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playertable_id", nullable = false)
+    private PlayerTable table;
+
     @Column
     private Boolean ready = false;
 
@@ -68,12 +77,15 @@ public class Player {
         this.onFieldCards = cards;
     }
 
-    /*
-     * @Column private Integer cardamount;
-     */
-
     public void takeHit() {
         this.bullets -= 1;
+    }
+
+    public void playCard(Long cardId, List<Player> targets) {
+        PlayCard card = hand.getCardById(cardId);
+        card.use(this, targets);
+        hand.removeCard(card);
+
     }
 
     public boolean reachesWithWeapon(Player targetPlayer) {
@@ -100,6 +112,14 @@ public class Player {
         return distance - this.getRange() + this.getDistanceDecreaseToOthers()
                 + targetPlayer.getDistanceIncreaseForOthers() <= 0;
 
+    }
+
+    public PlayerTable getTable() {
+        return table;
+    }
+
+    public void setTable(PlayerTable table) {
+        this.table = table;
     }
 
     public Long getId() {
@@ -166,20 +186,11 @@ public class Player {
         this.ready = ready;
     }
 
-    /*
-     * public Integer getCardamount() { return hand.getPlayCards().size(); }
-     */
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
-
-        // this causes a bug for some weird reason
-        // if (obj.getClass() != this.getClass()) {
-        // return false;
-        // }
 
         final Player other = (Player) obj;
 

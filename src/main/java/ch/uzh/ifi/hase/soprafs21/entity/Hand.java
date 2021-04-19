@@ -47,4 +47,12 @@ public class Hand {
     public void setPlayCards(List<PlayCard> playCards) {
         this.playCards = playCards;
     }
+
+    public void removeCard(PlayCard card) {
+        playCards.remove(card);
+    }
+
+    public void addCards(List<PlayCard> newCards) {
+        this.playCards.addAll(newCards);
+    }
 }

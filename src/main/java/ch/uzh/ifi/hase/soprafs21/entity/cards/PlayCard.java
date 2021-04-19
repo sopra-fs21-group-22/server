@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,10 @@ import javax.persistence.InheritanceType;
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import net.bytebuddy.implementation.bind.annotation.SuperCall;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -31,14 +37,19 @@ public abstract class PlayCard {
     @Column
     protected Card card;
 
-    protected PlayCard() {
-
-    }
-
-    protected PlayCard(Card card, Rank rank, Suit suit) {
-        this.rank = rank;
-        this.suit = suit;
-        this.card = card;
+    public void use(Player usingPlayer, List<Player> targets) {
+        for (Player target : targets) {
+            if (target.getBullets() <= 0) {
+                throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
+            }
+            if (target.getId().equals(usingPlayer.getId())) {
+                throw new GameLogicException(
+                        "Targets can't include the user! If a card is used on the player itself, leave target list empty!");
+            }
+        }
+        if (usingPlayer.getBullets() <= 0) {
+            throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
+        }
     }
 
     public Card getCard() {
