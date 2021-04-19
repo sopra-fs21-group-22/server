@@ -32,7 +32,10 @@ import javax.transaction.Transactional;
 
 @SpringBootTest
 public class PlayerServiceTest {
-    
+
+    @Autowired
+    PlayerTableService playerTableService;
+
     @Autowired
     PlayerService playerService;
 
@@ -60,11 +63,14 @@ public class PlayerServiceTest {
         players.add(player2);
         players.add(player3);
 
+        int[] bullets = { player1.getBullets() - 1, player2.getBullets() - 1, player3.getBullets() - 1 };
 
-        playerService.attackAll(players);
+        for (int i = 1; i < players.size(); i++) {
+            playerService.attackPlayer(player1, players.get(i));
+        }
 
-        for (Integer i = 0; i < players.size(); i++) {
-            assertEquals(players.get(i).getBullets(), 3);
+        for (Integer i = 1; i < players.size(); i++) {
+            assertEquals(bullets[i], players.get(i).getBullets());
         }
     }
 }

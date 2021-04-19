@@ -38,12 +38,4 @@ public class PlayerService {
         playerRepository.save(target);
         playerRepository.save(attacker);
     }
-
-    public void attackAll(List<Player> targets) {
-        // TODO check if anyone can defend themselves (barrels count)
-        for (Integer i = 0; i < targets.size(); i++) {
-            targets.get(i).setBullets(targets.get(i).getBullets() - 1);
-            playerRepository.save(targets.get(i));
-        }
-    }
 }
