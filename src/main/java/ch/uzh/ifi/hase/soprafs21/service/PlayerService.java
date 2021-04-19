@@ -20,31 +20,29 @@ public class PlayerService {
         // TODO
     }
 
-    public void attackPlayer(Player attacker, Player target) {
-        if (attacker.getStillPlayableBangsThisRound() <= 0) {
-            throw new GameLogicException("Can't play more BANG cards this round!");
-        }
+    public void attackPlayerInRange(Player attacker, Player target) {
         if (!attacker.reachesWithWeapon(target)) {
             throw new GameLogicException("Player is out of range!");
         }
+        attackPlayer(attacker, target);
+    }
+
+    public void attackPlayer(Player attacker, Player target) {
         if (attacker.getId().equals(target.getId())) {
             throw new GameLogicException("Player can't attack himself!");
         }
 
         // TODO check if target can defend
+
         target.setBullets(target.getBullets() - 1);
-        if (target.getBullets() == 0) {
-            
-        }
-        attacker.setStillPlayableBangsThisRound(attacker.getStillPlayableBangsThisRound() - 1);
         playerRepository.save(target);
         playerRepository.save(attacker);
     }
 
-    public void attackAll(List<Player> targets){
-        //TODO check if anyone can defend themselves (barrels count)
-        for (Integer i=0; i<targets.size(); i++) {
-            targets.get(i).setBullets(targets.get(i).getBullets()-1);
+    public void attackAll(List<Player> targets) {
+        // TODO check if anyone can defend themselves (barrels count)
+        for (Integer i = 0; i < targets.size(); i++) {
+            targets.get(i).setBullets(targets.get(i).getBullets() - 1);
             playerRepository.save(targets.get(i));
         }
     }

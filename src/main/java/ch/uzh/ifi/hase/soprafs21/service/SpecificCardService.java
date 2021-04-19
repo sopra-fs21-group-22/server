@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Service
 public class SpecificCardService {
@@ -23,6 +24,15 @@ public class SpecificCardService {
     DeckService deckService;
 
     public void use(PlayerTable table, PlayCard card, Player user, List<Player> targets) {
+        for (Player target : targets) {
+            if (target.getBullets() <= 0) {
+                throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
+            }
+        }
+        if (user.getBullets() <= 0) {
+            throw new GameLogicException("Card user is already dead. Corpses can't attack!");
+        }
+
         switch (card.getCard()) {
         case BANG:
             bang(user, targets);
@@ -45,24 +55,23 @@ public class SpecificCardService {
         case GATLING:
             gatling(user, targets);
             break;
-
         default:
-            throw new IllegalArgumentException(String.format("Card %s does not exist!", card.toString()));
+            throw new GameLogicException(String.format("Card %s does not exist!", card.toString()));
         }
 
     }
 
     public void bang(Player user, List<Player> targets) {
         if (targets.size() != 1) {
-            throw new IllegalArgumentException("A BANG card can only hit one target!");
+            throw new GameLogicException("A BANG card can only hit one target!");
         }
-        if (targets.get(0).getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer be attacked.");
+
+        if (user.getStillPlayableBangsThisRound() <= 0) {
+            throw new GameLogicException("Can't play more BANG cards this round!");
         }
-        if (user.getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer play.");
-        }
+
         playerService.attackPlayer(user, targets.get(0));
+        user.setStillPlayableBangsThisRound(user.getStillPlayableBangsThisRound() - 1);
     }
 
     public void missed() {
@@ -71,9 +80,6 @@ public class SpecificCardService {
     }
 
     public void beer(Player activePlayer) {
-        if (activePlayer.getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer play.");
-        }
         if (activePlayer.getBullets() < activePlayer.getMaxBullets()) {
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
@@ -82,9 +88,6 @@ public class SpecificCardService {
     }
 
     public void saloon(Player activePlayer, List<Player> otherPlayers) {
-        if (activePlayer.getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer play.");
-        }
         if (activePlayer.getBullets() < activePlayer.getMaxBullets()) {
             activePlayer.setBullets(activePlayer.getBullets() + 1);
         } else {
@@ -105,28 +108,16 @@ public class SpecificCardService {
     // }
 
     public void stageCoach(PlayerTable table, Player activePlayer) {
-        if (activePlayer.getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer play.");
-        }
         deckService.drawCards(table, activePlayer, 2);
     }
 
     public void wellsFargo(PlayerTable table, Player activePlayer) {
-        if (activePlayer.getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer play.");
-        }
         deckService.drawCards(table, activePlayer, 3);
     }
 
-    public void gatling(Player activePlayer, List<Player> targets){
-        if (activePlayer.getBullets() == 0) {
-            throw new IllegalArgumentException("A dead player may no longer play.");
+    public void gatling(Player activePlayer, List<Player> targets) {
+        for (int i = 0; i < targets.size(); i++) {
+            playerService.attackPlayer(activePlayer, targets.get(i));
         }
-        for (Integer i=0; i<targets.size(); i++) {      
-            if (targets.get(i).getBullets() == 0) {
-                throw new IllegalArgumentException("A dead player may no longer be attacked.");
-            }
-        }  
-            playerService.attackAll(targets);
     }
 }

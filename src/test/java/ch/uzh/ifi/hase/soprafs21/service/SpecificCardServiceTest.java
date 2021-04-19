@@ -13,6 +13,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 
 //import org.hibernate.mapping.List;
@@ -37,7 +38,7 @@ import javax.transaction.Transactional;
 
 @SpringBootTest
 public class SpecificCardServiceTest {
-    
+
     @Autowired
     PlayerService playerService;
 
@@ -57,7 +58,7 @@ public class SpecificCardServiceTest {
     @Test
     public void gatlingTest() {
         PlayerTable table = new PlayerTable();
-        PlayCard playCard = new BrownCard(Card.GATLING, Rank.ACE, Suit.CLUBS );
+        PlayCard playCard = new BrownCard(Card.GATLING, Rank.ACE, Suit.CLUBS);
         List<Player> players = new ArrayList<Player>();
         Player player1 = new Player();
         player1.setId(1L);
@@ -73,15 +74,19 @@ public class SpecificCardServiceTest {
         players.add(player3);
 
         activePlayer.setBullets(0);
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         activePlayer.setBullets(4);
         players.get(1).setBullets(0);
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         players.get(1).setBullets(4);
         specificCardService.use(table, playCard, activePlayer, players);
-        
+
         for (Integer i = 0; i < players.size(); i++) {
             assertEquals(players.get(i).getBullets(), 3);
         }
@@ -91,20 +96,24 @@ public class SpecificCardServiceTest {
     @Test
     public void beerTest() {
         PlayerTable table = new PlayerTable();
-        PlayCard playCard = new BrownCard(Card.BEER, Rank.ACE, Suit.CLUBS );
+        PlayCard playCard = new BrownCard(Card.BEER, Rank.ACE, Suit.CLUBS);
         List<Player> players = new ArrayList<Player>();
         Player activePlayer = new Player();
         activePlayer.setId(1L);
 
         activePlayer.setBullets(0);
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         activePlayer.setBullets(4);
-        Assertions.assertThrows( UnsupportedOperationException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         activePlayer.setBullets(3);
         specificCardService.use(table, playCard, activePlayer, players);
-        
+
         assertEquals(activePlayer.getBullets(), 4);
     }
 
@@ -112,7 +121,7 @@ public class SpecificCardServiceTest {
     @Test
     public void saloonTest() {
         PlayerTable table = new PlayerTable();
-        PlayCard playCard = new BrownCard(Card.SALOON, Rank.ACE, Suit.CLUBS );
+        PlayCard playCard = new BrownCard(Card.SALOON, Rank.ACE, Suit.CLUBS);
         List<Player> players = new ArrayList<Player>();
         Player player1 = new Player();
         player1.setId(1L);
@@ -128,14 +137,18 @@ public class SpecificCardServiceTest {
         players.add(player3);
 
         activePlayer.setBullets(0);
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         activePlayer.setBullets(4);
-        Assertions.assertThrows( UnsupportedOperationException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         activePlayer.setBullets(3);
         specificCardService.use(table, playCard, activePlayer, players);
-        
+
         assertEquals(activePlayer.getBullets(), 4);
     }
 
@@ -143,7 +156,7 @@ public class SpecificCardServiceTest {
     @Test
     public void bangTest() {
         PlayerTable table = new PlayerTable();
-        PlayCard playCard = new BrownCard(Card.BANG, Rank.ACE, Suit.CLUBS );
+        PlayCard playCard = new BrownCard(Card.BANG, Rank.ACE, Suit.CLUBS);
         List<Player> players = new ArrayList<Player>();
         Player player1 = new Player();
         player1.setId(1L);
@@ -153,7 +166,7 @@ public class SpecificCardServiceTest {
         player3.setId(3L);
         Player activePlayer = new Player();
         activePlayer.setId(4L);
-        
+
         playerRepository.save(player1);
         playerRepository.save(player2);
         playerRepository.save(player3);
@@ -162,16 +175,22 @@ public class SpecificCardServiceTest {
         players.add(player1);
         players.add(player2);
 
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
 
         players.remove(1);
 
         activePlayer.setBullets(0);
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
         activePlayer.setBullets(4);
 
         players.get(0).setBullets(0);
-        Assertions.assertThrows( IllegalArgumentException.class, () -> {specificCardService.use(table, playCard, activePlayer, players);});
+        Assertions.assertThrows(GameLogicException.class, () -> {
+            specificCardService.use(table, playCard, activePlayer, players);
+        });
         players.get(0).setBullets(4);
 
         activePlayer.setStillPlayableBangsThisRound(1);
@@ -180,7 +199,7 @@ public class SpecificCardServiceTest {
         player3.setLeftNeighbor(players.get(0));
 
         specificCardService.use(table, playCard, activePlayer, players);
-        
+
         assertEquals(players.get(0).getBullets(), 3);
     }
 
