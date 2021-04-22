@@ -5,30 +5,40 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.OnFieldCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class PlayerGetDTO {
-    protected Integer range;
     protected Integer bullets;
     protected Long id;
     protected User user;
     protected GameRole gameRole;
     protected boolean ready;
-    protected int distanceIncreaseForOthers;
-    protected int distanceDecreaseToOthers;
     protected Player leftNeighbor;
     protected Player rightNeighbor;
-    protected List<Player> playersInRange;
+    protected Hand hand;
+    protected OnFieldCards onFieldCards;
 
-    public Integer getRange() {
-        return range;
+    public HandGetDTO getHand() {
+        return DTOMapper.INSTANCE.convertEntityToHandGetDTO(this.hand);
     }
 
-    public void setRange(Integer range) {
-        this.range = range;
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+    public OnFieldCardsGetDTO getOnFieldCards() {
+        return DTOMapper.INSTANCE.convertEntityToOnFieldCardsGetDTO(onFieldCards);
+    }
+
+    public void setOnFieldCards(OnFieldCards onFieldCards) {
+        this.onFieldCards = onFieldCards;
     }
 
     public Integer getBullets() {
@@ -74,22 +84,6 @@ public class PlayerGetDTO {
         this.ready = ready;
     }
 
-    public int getDistanceIncreaseForOthers() {
-        return distanceIncreaseForOthers;
-    }
-
-    public void setDistanceIncreaseForOthers(int distanceIncreaseForOthers) {
-        this.distanceIncreaseForOthers = distanceIncreaseForOthers;
-    }
-
-    public int getDistanceDecreaseToOthers() {
-        return distanceDecreaseToOthers;
-    }
-
-    public void setDistanceDecreaseToOthers(int distanceDecreaseToOthers) {
-        this.distanceDecreaseToOthers = distanceDecreaseToOthers;
-    }
-
     public Long getLeftNeighbor() {
         if (this.leftNeighbor != null) {
             return leftNeighbor.getId();
@@ -111,4 +105,11 @@ public class PlayerGetDTO {
     public void setRightNeighbor(Player rightNeighbor) {
         this.rightNeighbor = rightNeighbor;
     }
+
+    /*
+     * public Integer getCardamount() { return cardamount; }
+     * 
+     * public void setCardamount(Integer cardamount) { this.cardamount = cardamount;
+     * }
+     */
 }

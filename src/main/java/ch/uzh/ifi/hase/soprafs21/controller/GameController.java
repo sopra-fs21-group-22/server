@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +25,11 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
@@ -36,7 +39,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 public class GameController {
 
     @Autowired
-    private SpecificCardService specificCardService;
+    private HandService handService;
 
     @Autowired
     private PlayerTableService playerTableService;
@@ -49,6 +52,9 @@ public class GameController {
 
     @Autowired
     private DeckService deckService;
+
+    @Autowired
+    private PlayerTableRepository playerTableRepository;
 
     @Autowired
     private VisibleCardsService visibleCardsService;
@@ -82,7 +88,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PlayerGetDTO getPlayerInformation(@PathVariable Long game_id, @PathVariable Long player_id,
-            @RequestHeader String auth) {
+            @RequestHeader("Authorization") String auth) {
         if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
             return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(playerRepository.getOne(player_id));
         }
@@ -133,8 +139,7 @@ public class GameController {
             specificCardService.use(table, beer, usingPlayer, targetPlayers);
         }
 
-        PlayCard saloon = new Saloon();
-        specificCardService.use(table, saloon, usingPlayer, targetPlayers);
+        // PlayCard saloon = new Saloon();
 
         PlayCard generalStore = new GeneralStore();
         deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
@@ -167,15 +172,35 @@ public class GameController {
         for (Player player : players) {
             playerGetDTOs.add(DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(player));
         }
+
         return playerGetDTOs;
     }
 
     @PutMapping("/{game_id}/players/{player_id}/turn")
     @ResponseStatus(HttpStatus.OK)
-    public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id) {
+    public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
+            @PathVariable Long player_id) {
+        userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player currPlayer = table.getPlayerOnTurn();
-        userService.throwIfNotIdAndTokenMatch(currPlayer.getId(), auth);
+        if (!player_id.equals(table.getPlayerOnTurn().getId())) {
+            throw new GameLogicException("Player is not on turn!");
+        }
         playerTableService.nextPlayersTurn(table);
+    }
+
+    @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void playCard2(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
+            @RequestBody List<Long> targets) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Player usingPlayer = table.getPlayerByPlayerID(player_id);
+        if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
+            throw new GameLogicException("Player is not on turn!");
+        }
+        List<Player> targetPlayers = table.getPlayersById(targets);
+
+        usingPlayer.playCard(card_id, targetPlayers);
+        playerRepository.save(usingPlayer);
+        playerTableRepository.saveAndFlush(table);
     }
 }

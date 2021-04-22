@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,8 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import net.bytebuddy.implementation.bind.annotation.SuperCall;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -16,13 +23,50 @@ public abstract class PlayCard {
 
     @Id
     @GeneratedValue
-    private Long id;
+    protected Long id;
 
     @Column
-    private Suit suit;
+    protected Suit suit;
 
     @Column
-    private Rank rank;
+    protected Rank rank;
+
+    @Column
+    protected String color;
+
+    @Column
+    protected Card card;
+
+    public void use(Player usingPlayer, List<Player> targets) {
+        for (Player target : targets) {
+            if (target.getBullets() <= 0) {
+                throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
+            }
+            if (target.getId().equals(usingPlayer.getId())) {
+                throw new GameLogicException(
+                        "Targets can't include the user! If a card is used on the player itself, leave target list empty!");
+            }
+        }
+        if (usingPlayer.getBullets() <= 0) {
+            throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
+        }
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public Long getId() {
         return id;
@@ -50,6 +94,6 @@ public abstract class PlayCard {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName();
+        return this.card.toString();
     }
 }

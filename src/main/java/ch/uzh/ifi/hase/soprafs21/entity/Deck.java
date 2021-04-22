@@ -32,4 +32,16 @@ public class Deck {
     public void setPlayCards(List<PlayCard> playCards) {
         this.playCards = playCards;
     }
+
+    public List<PlayCard> drawCards(int amount) {
+        if (amount > this.playCards.size()) {
+
+        }
+        List<PlayCard> drawnCards = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            drawnCards.add(this.playCards.get(i));
+        }
+        this.playCards.removeAll(drawnCards);
+        return drawnCards;
+    }
 }

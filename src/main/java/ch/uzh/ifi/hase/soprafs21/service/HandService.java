@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,47 +15,32 @@ import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-
-
-
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Service
 @Transactional
 public class HandService {
-    
+
     @Autowired
     HandRepository handRepository;
 
-    @Autowired 
+    @Autowired
     PlayerTableRepository playerTableRepository;
 
-    @Autowired 
+    @Autowired
     PlayerRepository playerRepository;
 
-    public  Hand createHand(){
+    public Hand createHand() {
         Hand hand = new Hand();
+        List<PlayCard> playCards = new ArrayList<PlayCard>();
 
+        hand.setPlayCards(playCards);
         handRepository.save(hand);
+        handRepository.flush();
+        ;
 
         return hand;
-    }
-
-    public void layCard(PlayerTable table, Player player, PlayCard playCard){
-        Integer cardIndex = null;
-
-        for(int i = 0; i < player.getHand().getPlayCards().size(); i++) {   
-            if (player.getHand().getPlayCards().get(i) == playCard) {
-                cardIndex=i;
-            }
-        }
-        table.getDiscardPile().getPlayCards().add(0, player.getHand().getPlayCards().get(cardIndex));
-        player.getHand().getPlayCards().remove(playCard);
-
-        playerTableRepository.save(table);
-        playerTableRepository.flush();
-
-        playerRepository.save(player);
-        playerRepository.flush();
     }
 
 }

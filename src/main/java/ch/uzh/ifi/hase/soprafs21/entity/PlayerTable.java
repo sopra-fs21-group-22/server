@@ -9,23 +9,22 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "playertable")
 public class PlayerTable {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "playertable_id")
+    @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
     private List<Player> players;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "playertable_id")
     private Player playerOnTurn;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -39,6 +38,14 @@ public class PlayerTable {
 
     @Column
     private Boolean gameHasStarted = false;
+
+    public List<Player> getPlayersById(List<Long> playerIds) {
+        List<Player> targetPlayers = new ArrayList<>();
+        for (Long id : playerIds) {
+            targetPlayers.add(getPlayerById(id).get());
+        }
+        return targetPlayers;
+    }
 
     public List<Player> getPlayersInRangeOf(Long id) {
         Optional<Player> playerOpt = getPlayerById(id);
@@ -112,8 +119,21 @@ public class PlayerTable {
         return Optional.empty();
     }
 
-    public VisibleCards getVisibleCards() { return visibleCards; }
+    public Player getPlayerByPlayerID(Long id) {
+        for (Player player : players) {
+            if (id.equals(player.getId())) {
+                return player;
+            }
+        }
+        return null;
+    }
 
-    public void setVisibleCards(VisibleCards visibleCards) { this.visibleCards = visibleCards; }
+    public VisibleCards getVisibleCards() {
+        return visibleCards;
+    }
+
+    public void setVisibleCards(VisibleCards visibleCards) {
+        this.visibleCards = visibleCards;
+    }
 
 }

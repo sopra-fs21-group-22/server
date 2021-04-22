@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
@@ -64,34 +66,33 @@ public class PlayerTableService {
         User user = userRepository.getOne(id);
         player.setUser(user);
         player.setHand(hand);
-        handRepository.save(hand);
-        handRepository.flush();
         player.setId(user.getId());
         List<PlayerTable> playerTables = playerTableRepository.findAll();
         // add user to existing playerTable
         for (PlayerTable playerTable : playerTables) {
             List<Player> players = playerTable.getPlayers();
             if (players.size() < 7 && !playerTable.getGameHasStarted()) {
+
                 players.add(player);
                 playerTable.setPlayers(players);
+                player.setTable(playerTable);
+
                 playerTableRepository.save(playerTable);
                 playerTableRepository.flush();
-                return playerTable;
 
+                return playerTable;
             }
         }
         // create new playerTable
         PlayerTable playerTable = new PlayerTable();
-        List<Player> players = new ArrayList<Player>();
+        List<Player> players = new ArrayList<>();
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
         players.add(player);
+        player.setTable(playerTable);
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
-        deckRepository.save(deck);
-        deckRepository.save(discardPile);
-        deckRepository.flush();
         playerTableRepository.save(playerTable);
         playerTableRepository.flush();
         return playerTable;
@@ -117,14 +118,15 @@ public class PlayerTableService {
         this.assignGameRoles(table);
         this.assignTablePositions(table);
         // assign first player on turn
-        for (Player player : table.getPlayers()) {
-            if (player.getGameRole().equals(GameRole.SHERIFF)) {
-                table.setPlayerOnTurn(player);
-                break;
+
+        for (int i = 0; i < table.getPlayers().size(); i++) {
+            if (table.getPlayers().get(i).getGameRole().equals(GameRole.SHERIFF)) {
+                table.setPlayerOnTurn(table.getPlayers().get(i));
             }
+            deckService.drawCards(table, table.getPlayers().get(i), table.getPlayers().get(i).getBullets());
         }
 
-        playerTableRepository.save(table);
+        playerTableRepository.saveAndFlush(table);
     }
 
     private void assignGameRoles(PlayerTable table) {
@@ -145,7 +147,7 @@ public class PlayerTableService {
     public void setPlayerAsReady(Long gameId, Long playerId, Boolean status) {
         PlayerTable table = getPlayerTableById(gameId);
         Player player = playerRepository.getOne(playerId);
-        if (!(table.getPlayers().contains(player))) {
+        if (!player.getTable().getId().equals(table.getId())) {
             throw new IllegalArgumentException(String.format("Player %s is not in PlayerTable with id %s.",
                     player.getUser().getUsername(), table.getId()));
         }
@@ -186,10 +188,26 @@ public class PlayerTableService {
         // TODO
     }
 
-    public void nextPlayersTurn(PlayerTable table){
+    public void nextPlayersTurn(PlayerTable table) {
+        // TODO check amount of hand cards
+        // TODO End turn
+        // TODO start next turn
         Player currPlayer = table.getPlayerOnTurn();
+
+        if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
+            throw new GameLogicException(
+                    "Too many cards in Hand! Discard until there are not more cards left than lives you have!");
+        }
+
+        // skip dead players
+        while (currPlayer.getRightNeighbor().getBullets() <= 0) {
+            currPlayer = currPlayer.getRightNeighbor();
+        }
         Player nextPlayer = currPlayer.getRightNeighbor();
         table.setPlayerOnTurn(nextPlayer);
+        // TODO change to dynamic amount of cards
+
+        deckService.drawCards(table, nextPlayer, 2);
     }
 
 }
