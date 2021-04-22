@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 import javax.persistence.*;
@@ -26,6 +27,51 @@ public class OnFieldCards {
     public Integer getLength(){
         List<BlueCard> temp = onFieldCards;
         return temp.size();
+    }
+
+    public boolean isInJail(){
+        for (BlueCard card: onFieldCards) {
+            if(card.getCard() == Card.JAIL){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeJailCard(){
+        for (BlueCard card: onFieldCards) {
+            if(card.getCard() == Card.JAIL){
+                removeOnFieldCard(card);
+                // TODO: add card to discard pile
+            }
+        }
+    }
+
+    public boolean hasDynamite(){
+        for (BlueCard card: onFieldCards) {
+            if(card.getCard() == Card.DYNAMITE){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeDynamiteCard(){
+        for (BlueCard card: onFieldCards) {
+            if(card.getCard() == Card.DYNAMITE){
+                removeOnFieldCard(card);
+                // TODO put on stack
+            }
+        }
+    }
+
+    public void moveDynamiteCardToTheLeft(Player currPlayer){
+        for (BlueCard card: onFieldCards) {
+            if(card.getCard() == Card.DYNAMITE){
+                removeOnFieldCard(card);
+                currPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(card);
+            }
+        }
     }
 
     public List<BlueCard> getOnFieldCards() {

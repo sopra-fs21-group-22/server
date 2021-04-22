@@ -128,4 +128,13 @@ public class DeckService {
         }
     }
 
+    public PlayCard getReferenceCard(PlayerTable table){
+        PlayCard referenceCard = table.getDeck().getPlayCards().get(0);
+        table.getDeck().getPlayCards().remove(0);
+
+        // TODO put card on discard pile
+
+        return referenceCard;
+    }
+
 }

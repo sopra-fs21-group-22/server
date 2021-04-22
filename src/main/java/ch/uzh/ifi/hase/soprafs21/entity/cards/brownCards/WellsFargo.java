@@ -9,7 +9,11 @@ import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
+import javax.persistence.Entity;
+
+@Entity
 public class WellsFargo extends BrownCard {
+
     public WellsFargo() {
     }
 

@@ -3,6 +3,9 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +15,6 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.BrownCard;
 
 @Service
 @Transactional
@@ -54,7 +55,30 @@ public class PlayCardService {
         cardList.add(new Bang(Rank.ACE, Suit.HEARTS));
         cardList.add(new Bang(Rank.THREE, Suit.DIAMONDS));
 
-        return cardList;
+        cardList.add(new Beer(Rank.SEVEN, Suit.HEARTS));
+        cardList.add(new Beer(Rank.SIX, Suit.HEARTS));
+        cardList.add(new Beer(Rank.TEN, Suit.HEARTS));
+        cardList.add(new Beer(Rank.NINE, Suit.HEARTS));
+        cardList.add(new Beer(Rank.EIGHT, Suit.HEARTS));
+        cardList.add(new Beer(Rank.JACK, Suit.HEARTS));
 
+        cardList.add(new Saloon(Rank.FIVE, Suit.HEARTS));
+
+        cardList.add(new Gatling(Rank.TEN, Suit.HEARTS));
+        // cardList.add(new Indians(Rank.ACE, Suit.DIAMONDS));
+        // cardList.add(new Indians(Rank.KING, Suit.DIAMONDS));
+        cardList.add(new WellsFargo(Rank.THREE, Suit.HEARTS));
+        cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
+        cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
+        cardList.add(new GeneralStore(Rank.NINE, Suit.CLUBS));
+        cardList.add(new GeneralStore(Rank.QUEEN, Suit.SPADES));
+
+        cardList.add(new Jail(Rank.JACK, Suit.SPADES));
+        cardList.add(new Jail(Rank.TEN, Suit.SPADES));
+        cardList.add(new Jail(Rank.FOUR, Suit.HEARTS));
+
+        cardList.add(new Dynamite(Rank.TWO, Suit.HEARTS));
+
+        return cardList;
     }
 }
