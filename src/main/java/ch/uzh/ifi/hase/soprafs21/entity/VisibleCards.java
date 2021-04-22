@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 import javax.persistence.*;
 import java.util.List;
@@ -47,6 +48,15 @@ public class VisibleCards {
         List<PlayCard> currVisibleCards = getVisibleCards();
         currVisibleCards.add(cardToAdd);
         setVisibleCards(currVisibleCards);
+    }
+
+    public PlayCard getCardByID(Long cardId){
+        for (PlayCard card : visibleCards) {
+            if (card.getId().equals(cardId)) {
+                return card;
+            }
+        }
+        throw new GameLogicException(String.format("Player doesn't have a card with id %s in his hand.", cardId));
     }
 
 }

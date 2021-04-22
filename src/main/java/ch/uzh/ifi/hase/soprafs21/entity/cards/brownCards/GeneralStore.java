@@ -7,8 +7,12 @@ import javax.persistence.Entity;
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
+import ch.uzh.ifi.hase.soprafs21.controller.GameController;
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
 @Entity
 public class GeneralStore extends BrownCard {
@@ -24,7 +28,22 @@ public class GeneralStore extends BrownCard {
     @Override
     public void use(Player usingPlayer, List<Player> targets) {
         super.use(usingPlayer, targets);
+        int number_of_players = targets.size() + 1;
         PlayerTable table = usingPlayer.getTable();
-        // draw cards from deck
+        Deck currDeck = table.getDeck();
+
+        // draw cards from deck and add them to visible cards
+        List<PlayCard> drawnCards = currDeck.drawCards(number_of_players);
+        VisibleCards currVisibleCards = table.getVisibleCards();
+        currVisibleCards.setVisibleCards(drawnCards);
+
+        /*
+        Now each player chooses a card --> happens in the frontend, once every player has chosen a card,
+        we get a list of players and their chosen cards which are then added to their hand and removed
+        from the visible cards. This all happens in the game controller.
+        The frontend has to make a get visible cards request once a General Store is played, and collect
+        all cards picked by each player in one List and then make a post mapping which then handles the logic.
+         */
     }
+
 }

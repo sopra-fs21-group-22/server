@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -245,4 +246,9 @@ public class Player {
         this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
     }
 
+    public void pickACard(PlayCard card){
+        List<PlayCard> cards = new ArrayList<>();
+        cards.add(card);
+        hand.addCards(cards);
+    }
 }

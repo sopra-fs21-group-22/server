@@ -1,7 +1,9 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +81,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PlayerTableGetDTO getPlayerInformation(@RequestHeader("Authorization") String auth,
-            @PathVariable Long game_id) {
+                                                  @PathVariable Long game_id) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
     }
@@ -88,7 +90,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PlayerGetDTO getPlayerInformation(@PathVariable Long game_id, @PathVariable Long player_id,
-            @RequestHeader("Authorization") String auth) {
+                                             @RequestHeader("Authorization") String auth) {
         if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
             return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(playerRepository.getOne(player_id));
         }
@@ -99,68 +101,9 @@ public class GameController {
     @PutMapping("/{game_id}/players/{player_id}/ready")
     @ResponseStatus(HttpStatus.OK)
     public void markPlayerAsReady(@PathVariable Long game_id, @PathVariable Long player_id,
-            @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
+                                  @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
-    }
-
-    @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
-            @RequestBody List<PlayerGetDTO> targetPlayerDTOs, @RequestHeader("Authorization") String auth) {
-        // get player who is using card
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Optional<Player> opt = table.getPlayerById(player_id);
-        if (!opt.isPresent()) {
-            throw new IllegalArgumentException(
-                    String.format("The using player with id %s is not in game with id %s", player_id, game_id));
-        }
-        Player usingPlayer = opt.get();
-
-        // get target players card is played against
-        List<Player> targetPlayers = new ArrayList<>();
-        for (PlayerGetDTO targetPlayerGetDTO : targetPlayerDTOs) {
-            Optional<Player> targetPlayerOpt = table.getPlayerById(targetPlayerGetDTO.getId());
-            if (!targetPlayerOpt.isPresent()) {
-                throw new IllegalArgumentException(
-                        "One or more target players are not in the same game as the using player.");
-            }
-            targetPlayers.add(targetPlayerOpt.get());
-        }
-        // ######################################################
-        // TODO TEMPORARY CODE LINES (since Hand is missing) ###
-        // ######################################################
-
-        PlayCard bang = new Bang();
-        specificCardService.use(table, bang, usingPlayer, targetPlayers);
-
-        PlayCard beer = new Beer();
-        if(table.getPlayerOnTurn().getId().equals(usingPlayer.getId()) || usingPlayer.getBullets() == 1 ){
-            specificCardService.use(table, beer, usingPlayer, targetPlayers);
-        }
-
-        // PlayCard saloon = new Saloon();
-
-        PlayCard generalStore = new GeneralStore();
-        deckService.addCardToVisibleCards(table, targetPlayers.size() + 1);
-        specificCardService.use(table, generalStore, usingPlayer, targetPlayers);
-
-        PlayCard stagecoach = new StageCoach();
-        specificCardService.use(table, stagecoach, usingPlayer, targetPlayers);
-
-        PlayCard wellsFargo = new WellsFargo();
-        specificCardService.use(table, wellsFargo, usingPlayer, targetPlayers);
-
-
-    }
-
-    @GetMapping("/{game_id}/players/{player_id}/gamerole")
-    @ResponseStatus(HttpStatus.OK)
-    public PlayerGetAuthDTO getOwnRole(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
-            @PathVariable Long player_id) {
-        userService.throwIfNotIdAndTokenMatch(player_id, auth);
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(table.getPlayerById(player_id).get());
     }
 
     @GetMapping("/{game_id}/players/{player_id}/targets")
@@ -179,7 +122,7 @@ public class GameController {
     @PutMapping("/{game_id}/players/{player_id}/turn")
     @ResponseStatus(HttpStatus.OK)
     public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
-            @PathVariable Long player_id) {
+                               @PathVariable Long player_id) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         if (!player_id.equals(table.getPlayerOnTurn().getId())) {
@@ -191,7 +134,7 @@ public class GameController {
     @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
     @ResponseStatus(HttpStatus.OK)
     public void playCard2(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
-            @RequestBody List<Long> targets) {
+                          @RequestBody List<Long> targets) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player usingPlayer = table.getPlayerByPlayerID(player_id);
         if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
@@ -201,6 +144,34 @@ public class GameController {
 
         usingPlayer.playCard(card_id, targetPlayers);
         playerRepository.save(usingPlayer);
+        playerTableRepository.saveAndFlush(table);
+    }
+
+    @GetMapping("/{game_id}/visiblecards")
+    @ResponseStatus(HttpStatus.OK)
+    public VisibleCardsGetDTO getVisibleCards(@PathVariable Long game_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        VisibleCards visibleCards = table.getVisibleCards();
+
+        return DTOMapper.INSTANCE.convertEntityToVisibleCardsGetDTO(visibleCards);
+    }
+
+    @PostMapping("/{game_id}/visiblecards")
+    @ResponseStatus(HttpStatus.OK)
+    public void pickACard(@PathVariable Long game_id,  @RequestBody List<Long> playersAndCards) {
+        // playersAndCards = [player_id, card_id, player_id, card_id, etc.]
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        int number_of_players = table.getPlayers().size();
+        VisibleCards visibleCards = table.getVisibleCards();
+
+
+        // for each player: tell the visible cards which card to remove and the player which card to add to his*her hand card
+        for (int i = 0; i < number_of_players; i = i + 2) {
+            Player currPlayer = table.getPlayerByPlayerID(playersAndCards.get(i));
+            PlayCard card = visibleCards.getCardByID(playersAndCards.get(i+1));
+            currPlayer.pickACard(card);
+            visibleCards.removeACard(card);
+        }
         playerTableRepository.saveAndFlush(table);
     }
 }

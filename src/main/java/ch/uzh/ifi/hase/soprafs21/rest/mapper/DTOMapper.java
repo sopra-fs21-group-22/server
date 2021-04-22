@@ -1,19 +1,11 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
-import ch.uzh.ifi.hase.soprafs21.entity.Hand;
-import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
-import ch.uzh.ifi.hase.soprafs21.entity.Player;
-import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetAuthDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.OnFieldCardsGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.*;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
@@ -104,6 +96,9 @@ public interface DTOMapper {
 
     @Mapping(source = "playCards", target = "playCards")
     HandGetAuthDTO convertEntityToHandGetAuthDTO(Hand hand);
+
+    @Mapping(source = "visibleCards", target = "visibleCards")
+    VisibleCardsGetDTO convertEntityToVisibleCardsGetDTO(VisibleCards visibleCards);
 
     @Mapping(source = "onFieldCards", target = "onFieldCards")
     OnFieldCardsGetDTO convertEntityToOnFieldCardsGetDTO(OnFieldCards onFieldCards);
