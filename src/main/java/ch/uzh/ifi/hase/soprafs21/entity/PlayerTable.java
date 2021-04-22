@@ -36,6 +36,9 @@ public class PlayerTable {
     @OneToOne
     private VisibleCards visibleCards;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private CharacterPile characterPile;
+
     @Column
     private Boolean gameHasStarted = false;
 
@@ -100,6 +103,14 @@ public class PlayerTable {
 
     public void setDiscardPile(Deck discardPile) {
         this.discardPile = discardPile;
+    }
+
+    public CharacterPile getCharacterPile() {
+        return characterPile;
+    }
+
+    public void setCharacterPile(CharacterPile characterPile) {
+        this.characterPile = characterPile;
     }
 
     public Boolean getGameHasStarted() {

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
 /**
@@ -50,6 +51,9 @@ public class Player {
 
     @OneToOne
     private Hand hand;
+
+    @OneToOne
+    private CharacterCard characterCard;
 
     @Column
     private GameRole gameRole = GameRole.HIDDEN;
@@ -169,6 +173,14 @@ public class Player {
 
     public void setHand(Hand hand) {
         this.hand = hand;
+    }
+
+    public CharacterCard getCharacterCard() {
+        return characterCard;
+    }
+
+    public void setCharacterCard(CharacterCard characterCard) {
+        this.characterCard = characterCard;
     }
 
     public GameRole getGameRole() {
