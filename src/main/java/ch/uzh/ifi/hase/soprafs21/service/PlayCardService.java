@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Remington;
@@ -24,12 +25,14 @@ public class PlayCardService {
     public static List<PlayCard> getPlayCards() {
         List<PlayCard> cardList = new ArrayList<>();
 
-        // All Schofield Cards
+        // Weapon cards
         cardList.add(new Schofield(Rank.QUEEN, Suit.CLUBS));
         cardList.add(new Schofield(Rank.KING, Suit.SPADES));
         cardList.add(new Schofield(Rank.JACK, Suit.CLUBS));
 
         cardList.add(new Remington(Rank.KING, Suit.CLUBS));
+
+        cardList.add(new Carabine(Rank.ACE, Suit.CLUBS));
 
         // All Bang Cards
         cardList.add(new Bang(Rank.FOUR, Suit.DIAMONDS));
