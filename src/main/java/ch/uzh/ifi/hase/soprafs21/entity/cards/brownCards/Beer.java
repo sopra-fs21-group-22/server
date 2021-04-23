@@ -23,8 +23,7 @@ public class Beer extends BrownCard {
     }
 
     @Override
-    public void use(Player usingPlayer, List<Player> targets) {
-        super.use(usingPlayer, targets);
+    protected void useOnce(Player usingPlayer, List<Player> targets) {
         if (usingPlayer.getBullets().equals(usingPlayer.getMaxBullets())) {
             throw new GameLogicException("Player is already at max health!");
         }

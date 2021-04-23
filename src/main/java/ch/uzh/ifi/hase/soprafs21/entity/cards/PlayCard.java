@@ -37,6 +37,12 @@ public abstract class PlayCard {
     @Column
     protected Card card;
 
+    /**
+     * Meant to be run only once when the card is used by the user
+     * 
+     * @param usingPlayer
+     * @param targets
+     */
     public void use(Player usingPlayer, List<Player> targets) {
         for (Player target : targets) {
             if (target.getBullets() <= 0) {
@@ -44,7 +50,7 @@ public abstract class PlayCard {
             }
             if (target.getId().equals(usingPlayer.getId())) {
                 throw new GameLogicException(
-                        "Targets can't include the user! If a card is used on the player itself, leave target list empty!");
+                        "Targets can't include the user! If a brown card is used on the player itself, leave target list empty!");
             }
         }
         if (usingPlayer.getBullets() <= 0) {

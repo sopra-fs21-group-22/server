@@ -5,14 +5,37 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Entity
-public class BrownCard extends PlayCard {
+public abstract class BrownCard extends PlayCard {
 
     @Override
     public String getColor() {
         return "brown";
     }
+
+    // adding checks applying to brown cards
+    @Override
+    public final void use(Player usingPlayer, List<Player> targets) {
+        super.use(usingPlayer, targets);
+        for (Player target : targets) {
+            if (target.getBullets() <= 0) {
+                throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
+            }
+            if (target.getId().equals(usingPlayer.getId())) {
+                throw new GameLogicException(
+                        "Targets can't include the user! If a brown card is used on the player itself, leave target list empty!");
+            }
+        }
+        if (usingPlayer.getBullets() <= 0) {
+            throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
+        }
+        useOnce(usingPlayer, targets);
+    }
+
+    protected abstract void useOnce(Player usingPlayer, List<Player> targets);
 
 }

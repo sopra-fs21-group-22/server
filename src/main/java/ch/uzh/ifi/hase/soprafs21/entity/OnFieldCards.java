@@ -4,6 +4,8 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +16,7 @@ public class OnFieldCards {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "onFieldCards_id")
-    private List<BlueCard> onFieldCards;
+    private List<BlueCard> cards = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -24,50 +26,50 @@ public class OnFieldCards {
         this.id = id;
     }
 
-    public Integer getLength(){
-        List<BlueCard> temp = onFieldCards;
+    public Integer getLength() {
+        List<BlueCard> temp = cards;
         return temp.size();
     }
 
-    public boolean isInJail(){
-        for (BlueCard card: onFieldCards) {
-            if(card.getCard() == Card.JAIL){
+    public boolean isInJail() {
+        for (BlueCard card : cards) {
+            if (card.getCard() == Card.JAIL) {
                 return true;
             }
         }
         return false;
     }
 
-    public void removeJailCard(){
-        for (BlueCard card: onFieldCards) {
-            if(card.getCard() == Card.JAIL){
+    public void removeJailCard() {
+        for (BlueCard card : cards) {
+            if (card.getCard() == Card.JAIL) {
                 removeOnFieldCard(card);
                 // TODO: add card to discard pile
             }
         }
     }
 
-    public boolean hasDynamite(){
-        for (BlueCard card: onFieldCards) {
-            if(card.getCard() == Card.DYNAMITE){
+    public boolean hasDynamite() {
+        for (BlueCard card : cards) {
+            if (card.getCard() == Card.DYNAMITE) {
                 return true;
             }
         }
         return false;
     }
 
-    public void removeDynamiteCard(){
-        for (BlueCard card: onFieldCards) {
-            if(card.getCard() == Card.DYNAMITE){
+    public void removeDynamiteCard() {
+        for (BlueCard card : cards) {
+            if (card.getCard() == Card.DYNAMITE) {
                 removeOnFieldCard(card);
                 // TODO put on stack
             }
         }
     }
 
-    public void moveDynamiteCardToTheLeft(Player currPlayer){
-        for (BlueCard card: onFieldCards) {
-            if(card.getCard() == Card.DYNAMITE){
+    public void moveDynamiteCardToTheLeft(Player currPlayer) {
+        for (BlueCard card : cards) {
+            if (card.getCard() == Card.DYNAMITE) {
                 removeOnFieldCard(card);
                 currPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(card);
             }
@@ -75,21 +77,26 @@ public class OnFieldCards {
     }
 
     public List<BlueCard> getOnFieldCards() {
-        return onFieldCards;
+        return cards;
     }
 
     public void setOnFieldCards(List<BlueCard> cards) {
         for (int i = 0; i < cards.size(); i++) {
-            onFieldCards.add(cards.get(0));
+            cards.add(cards.get(0));
         }
     }
 
-    public void addOnFieldCard(BlueCard card){
-        onFieldCards.add(card);
+    public void addOnFieldCard(BlueCard card) {
+        cards.add(card);
     }
 
     public void removeOnFieldCard(BlueCard card) {
-        onFieldCards.remove(card);
+        cards.remove(card);
     }
+
+    // TODO check for duplicates (player playing a weapon card when one is already
+    // present)
+    // probably best to run card.undo() for old card and card.use() for new card
+    // (with function arguments obviously)
 
 }

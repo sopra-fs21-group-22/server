@@ -10,39 +10,25 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 
 @Entity
-public class Schofield extends BlueCard {
+public class Remington extends BlueCard {
 
-    public Schofield() {
+    public Remington() {
+
     }
 
-    public Schofield(Rank rank, Suit suit) {
+    public Remington(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
-        this.card = Card.SCHOFIELD;
+        this.card = Card.REMINGTON;
     }
 
     @Override
     protected void useOnce(Player usingPlayer, Player target) {
-        usingPlayer.setRange(2);
-        usingPlayer.getOnFieldCards().addOnFieldCard(this);
-    }
-
-    @Override
-    public void onTurnStart(Player affectedPlayer) {
-        // Does nothing on turn start
-        return;
+        usingPlayer.setRange(3);
     }
 
     @Override
     public void undo(Player affectedPlayer) {
         affectedPlayer.setRange(1);
-
     }
-
-    @Override
-    public void onHit(Player affectedPlayer) {
-        // Does nothing on hit
-        return;
-    }
-
 }

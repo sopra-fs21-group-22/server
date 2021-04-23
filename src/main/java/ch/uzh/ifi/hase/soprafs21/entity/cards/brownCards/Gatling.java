@@ -21,8 +21,7 @@ public class Gatling extends BrownCard {
     }
 
     @Override
-    public void use(Player usingPlayer, List<Player> targets) {
-        super.use(usingPlayer, targets);
+    protected void useOnce(Player usingPlayer, List<Player> targets) {
         for (int i = 0; i < targets.size(); i++) {
             Player target = targets.get(i);
             target.setBullets(target.getBullets() - 1);

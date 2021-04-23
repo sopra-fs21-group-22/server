@@ -23,8 +23,7 @@ public class Bang extends BrownCard {
     }
 
     @Override
-    public void use(Player usingPlayer, List<Player> targets) {
-        super.use(usingPlayer, targets);
+    protected void useOnce(Player usingPlayer, List<Player> targets) {
         if (targets.size() != 1) {
             throw new GameLogicException("A BANG card can only hit one target!");
         }

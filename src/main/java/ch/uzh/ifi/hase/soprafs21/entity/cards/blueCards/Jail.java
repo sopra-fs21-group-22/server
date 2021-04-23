@@ -7,10 +7,12 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 
 @Entity
-public class Jail extends BlueCard{
+public class Jail extends BlueCard {
 
     public Jail() {
     }
@@ -22,9 +24,9 @@ public class Jail extends BlueCard{
     }
 
     @Override
-    public void use(Player usingPlayer, Player targetPlayer) {
-        if(targetPlayer.getGameRole() != GameRole.SHERIFF){
-            targetPlayer.getOnFieldCards().addOnFieldCard(this);
+    protected void useOnce(Player usingPlayer, Player target) {
+        if (target.getGameRole() != GameRole.SHERIFF) {
+            target.getOnFieldCards().addOnFieldCard(this);
         } else {
             throw new GameLogicException("You can't put the Sheriff in Jail!");
         }

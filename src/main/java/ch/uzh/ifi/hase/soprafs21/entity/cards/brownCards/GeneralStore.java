@@ -26,8 +26,7 @@ public class GeneralStore extends BrownCard {
     }
 
     @Override
-    public void use(Player usingPlayer, List<Player> targets) {
-        super.use(usingPlayer, targets);
+    protected void useOnce(Player usingPlayer, List<Player> targets) {
         int number_of_players = targets.size() + 1;
         PlayerTable table = usingPlayer.getTable();
         Deck currDeck = table.getDeck();
@@ -38,11 +37,12 @@ public class GeneralStore extends BrownCard {
         currVisibleCards.setVisibleCards(drawnCards);
 
         /*
-        Now each player chooses a card --> happens in the frontend, once every player has chosen a card,
-        we get a list of players and their chosen cards which are then added to their hand and removed
-        from the visible cards. This all happens in the game controller.
-        The frontend has to make a get visible cards request once a General Store is played, and collect
-        all cards picked by each player in one List and then make a post mapping which then handles the logic.
+         * Now each player chooses a card --> happens in the frontend, once every player
+         * has chosen a card, we get a list of players and their chosen cards which are
+         * then added to their hand and removed from the visible cards. This all happens
+         * in the game controller. The frontend has to make a get visible cards request
+         * once a General Store is played, and collect all cards picked by each player
+         * in one List and then make a post mapping which then handles the logic.
          */
     }
 

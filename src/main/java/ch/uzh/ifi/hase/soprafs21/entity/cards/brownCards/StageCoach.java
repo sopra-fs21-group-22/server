@@ -24,8 +24,7 @@ public class StageCoach extends BrownCard {
     }
 
     @Override
-    public void use(Player usingPlayer, List<Player> targets) {
-        super.use(usingPlayer, targets);
+    protected void useOnce(Player usingPlayer, List<Player> targets) {
         Hand userHand = usingPlayer.getHand();
         List<PlayCard> cards = usingPlayer.getTable().getDeck().drawCards(2);
         userHand.addCards(cards);

@@ -14,6 +14,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 
 @Entity
@@ -25,16 +26,45 @@ public abstract class BlueCard extends PlayCard {
     }
 
     @Override
-    public void use(Player usingPlayer, List<Player> targets) {
-        // TODO Auto-generated method stub
+    public final void use(Player usingPlayer, List<Player> targets) {
+        super.use(usingPlayer, targets);
+        if (targets.size() > 1) {
+            throw new GameLogicException("A blue card can only be played on one player.");
+        }
+        if (targets.isEmpty()) {
+            useOnce(usingPlayer, usingPlayer);
+        } else {
+            useOnce(usingPlayer, targets.get(0));
+        }
 
     }
 
-    public abstract void use(Player usingPlayer, Player targetPlayer);
+    protected abstract void useOnce(Player usingPlayer, Player targetPlayer);
 
-    public abstract void onTurnStart(Player affectedPlayer);
+    /**
+     * Runs every time the user starts his turn
+     * 
+     * @param affectedPlayer
+     */
+    public void onTurnStart(Player affectedPlayer) {
+        // Default behaviour is to do nothing
+    }
 
-    public abstract void undo(Player affectedPlayer);
+    /**
+     * Runs when the card leaves the user
+     * 
+     * @param affectedPlayer
+     */
+    public void undo(Player affectedPlayer) {
+        // Default behaviour is to do nothing
+    }
 
-    public abstract void onHit(Player affectedPlayer);
+    /**
+     * Runs when the player having this card gets hit
+     * 
+     * @param affectedPlayer
+     */
+    public void onHit(Player affectedPlayer) {
+        // Default behaviour is to do nothing
+    }
 }
