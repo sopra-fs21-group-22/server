@@ -41,10 +41,4 @@ public class Jail extends BlueCard {
     public void undo(Player affectedPlayer) {
         affectedPlayer.getOnFieldCards().removeJailCard();
     }
-
-    @Override
-    public void onHit(Player affectedPlayer) {
-        // Does nothing on hit
-        return;
-    }
 }

@@ -63,8 +63,9 @@ public abstract class BlueCard extends PlayCard {
      * Runs when the player having this card gets hit
      * 
      * @param affectedPlayer
+     * @return True if the hit has been absorbed false otherwise
      */
-    public void onHit(Player affectedPlayer) {
-        // Default behaviour is to do nothing
+    public boolean takeHit(Player affectedPlayer) {
+        return false;
     }
 }

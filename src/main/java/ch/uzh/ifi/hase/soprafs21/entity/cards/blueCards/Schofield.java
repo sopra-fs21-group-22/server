@@ -28,21 +28,8 @@ public class Schofield extends BlueCard {
     }
 
     @Override
-    public void onTurnStart(Player affectedPlayer) {
-        // Does nothing on turn start
-        return;
-    }
-
-    @Override
     public void undo(Player affectedPlayer) {
         affectedPlayer.setRange(1);
 
     }
-
-    @Override
-    public void onHit(Player affectedPlayer) {
-        // Does nothing on hit
-        return;
-    }
-
 }

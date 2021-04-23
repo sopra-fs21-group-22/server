@@ -34,10 +34,4 @@ public class Dynamite extends BlueCard {
     public void undo(Player affectedPlayer) {
         affectedPlayer.getOnFieldCards().removeDynamiteCard();
     }
-
-    @Override
-    public void onHit(Player affectedPlayer) {
-        // Does nothing on hit
-        return;
-    }
 }
