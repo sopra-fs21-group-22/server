@@ -17,6 +17,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Volcanic;
 
 @Service
 @Transactional
@@ -33,6 +34,9 @@ public class PlayCardService {
         cardList.add(new Remington(Rank.KING, Suit.CLUBS));
 
         cardList.add(new Carabine(Rank.ACE, Suit.CLUBS));
+
+        cardList.add(new Volcanic(Rank.TEN, Suit.CLUBS));
+        cardList.add(new Volcanic(Rank.TEN, Suit.SPADES));
 
         // All Bang Cards
         cardList.add(new Bang(Rank.FOUR, Suit.DIAMONDS));
