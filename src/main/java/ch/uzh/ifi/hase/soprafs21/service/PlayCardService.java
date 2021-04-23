@@ -6,6 +6,7 @@ import java.util.List;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Mustang;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Remington;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class PlayCardService {
 
         cardList.add(new Volcanic(Rank.TEN, Suit.CLUBS));
         cardList.add(new Volcanic(Rank.TEN, Suit.SPADES));
+
+        cardList.add(new Mustang(Rank.EIGHT, Suit.HEARTS));
+        cardList.add(new Mustang(Rank.NINE, Suit.HEARTS));
 
         // All Bang Cards
         cardList.add(new Bang(Rank.FOUR, Suit.DIAMONDS));
