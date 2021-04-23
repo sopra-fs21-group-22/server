@@ -41,9 +41,6 @@ public class Player {
     Integer distanceDecreaseToOthers = 0;
 
     @Column
-    Integer maxAmountOfBangPlayed = 1;
-
-    @Column
     Integer stillPlayableBangsThisRound = 1;
 
     @OneToOne
@@ -242,14 +239,6 @@ public class Player {
         this.rightNeighbor = rightNeighbor;
     }
 
-    public Integer getMaxAmountOfBangPlayed() {
-        return maxAmountOfBangPlayed;
-    }
-
-    public void setMaxAmountOfBangPlayed(Integer maxAmountOfBangPlayed) {
-        this.maxAmountOfBangPlayed = maxAmountOfBangPlayed;
-    }
-
     public Integer getStillPlayableBangsThisRound() {
         return stillPlayableBangsThisRound;
     }
@@ -258,7 +247,7 @@ public class Player {
         this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
     }
 
-    public void pickACard(PlayCard card){
+    public void pickACard(PlayCard card) {
         List<PlayCard> cards = new ArrayList<>();
         cards.add(card);
         hand.addCards(cards);
