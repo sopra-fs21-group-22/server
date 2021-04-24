@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 
 @Entity
 public class Volcanic extends BlueCard {
@@ -24,7 +25,7 @@ public class Volcanic extends BlueCard {
     }
 
     @Override
-    public void onTurnStart(Player affectedPlayer) {
+    public void onTurnStart(Player affectedPlayer, PlayerTable table) {
         affectedPlayer.setStillPlayableBangsThisRound(100);
     }
 

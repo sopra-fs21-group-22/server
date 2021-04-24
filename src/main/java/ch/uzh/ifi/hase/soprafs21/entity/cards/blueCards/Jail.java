@@ -1,13 +1,11 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Card;
-import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
+import ch.uzh.ifi.hase.soprafs21.constant.*;
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
-
-import java.util.List;
 
 import javax.persistence.Entity;
 
@@ -21,6 +19,7 @@ public class Jail extends BlueCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.JAIL;
+        this.priority = Priority.SECOND;
     }
 
     @Override
@@ -33,13 +32,19 @@ public class Jail extends BlueCard {
     }
 
     @Override
-    public void onTurnStart(Player affectedPlayer) {
-        // TODO
+    public void onTurnStart(Player affectedPlayer, PlayerTable table) {
+        Deck deck = table.getDeck();
+        PlayCard referenceCard = deck.drawCards(1).get(0);
+        if (referenceCard.getSuit() != Suit.HEARTS){
+            // TODO notify player that he is still in jail for this turn
+            table.setPlayerOnTurn(affectedPlayer.getRightNeighbor());
+        }
+        affectedPlayer.getOnFieldCards().removeOnFieldCard(this); // card is removed whether or not the player stays in jail for current turn
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.getOnFieldCards().removeJailCard();
+       // does nothing
     }
 
     @Override

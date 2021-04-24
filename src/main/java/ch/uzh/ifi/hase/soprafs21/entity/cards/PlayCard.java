@@ -10,6 +10,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -37,9 +38,12 @@ public abstract class PlayCard {
     @Column
     protected Card card;
 
+    @Column
+    protected Priority priority;
+
     /**
      * Meant to be run only once when the card is used by the user
-     * 
+     *
      * @param usingPlayer
      * @param targets
      */
@@ -97,5 +101,13 @@ public abstract class PlayCard {
     @Override
     public String toString() {
         return this.card.toString();
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }

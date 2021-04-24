@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -258,40 +256,13 @@ public class PlayerTableService {
 
     }
 
-    public void startTurn(Player nextPlayer, PlayerTable table) {
+    public void startTurn(Player nextPlayer, PlayerTable table){
+        OnFieldCards onFieldCards = nextPlayer.getOnFieldCards();
 
-        // check for Dynamite
-        if (nextPlayer.getOnFieldCards().hasDynamite()) {
-            PlayCard referenceCard = deckService.getReferenceCard(table);
-            Rank r = referenceCard.getRank();
-            Boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING
-                    && r != Rank.ACE);
-            if (referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine) {
-                // TODO notify player that Dynamite exploded
-                int lives = nextPlayer.getBullets();
-                if (lives > 3) {
-                    nextPlayer.setBullets(lives - 3);
-                    nextPlayer.getOnFieldCards().moveDynamiteCardToTheLeft(nextPlayer);
-                } else {
-                    nextPlayer.getOnFieldCards().removeDynamiteCard();
-                    // player dies
-
-                }
-
-                // TODO handle death
-            }
-        }
-
-        // check for Jail
-        if (nextPlayer.getOnFieldCards().isInJail()) {
-            nextPlayer.getOnFieldCards().removeJailCard(); // card is removed whether or not the player stays in jail
-                                                           // for current turn
-            PlayCard referenceCard = deckService.getReferenceCard(table);
-            if (referenceCard.getSuit() != Suit.HEARTS) { // still in jail
-                // TODO notify player that he is still in jail for this turn
-                nextPlayersTurn(table);
-                return;
-            }
+        // go through all onFieldCards to check if they have a functionality at the beginning of a turn
+        for (int i = 0; i < onFieldCards.getLength(); i++) {
+            BlueCard currCard = onFieldCards.get(i);
+            currCard.onTurnStart(nextPlayer, table);
         }
 
         // TODO change to dynamic amount of cards

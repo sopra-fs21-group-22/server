@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 import javax.persistence.*;
@@ -18,6 +18,10 @@ public class OnFieldCards {
     @JoinColumn(name = "onFieldCards_id")
     private List<BlueCard> cards = new ArrayList<>();
 
+    public BlueCard get(int index){
+        return cards.get(index);
+    }
+
     public Long getId() {
         return id;
     }
@@ -31,63 +35,41 @@ public class OnFieldCards {
         return temp.size();
     }
 
-    public boolean isInJail() {
-        for (BlueCard card : cards) {
-            if (card.getCard() == Card.JAIL) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void removeJailCard() {
-        for (BlueCard card : cards) {
-            if (card.getCard() == Card.JAIL) {
-                removeOnFieldCard(card);
-                // TODO: add card to discard pile
-            }
-        }
-    }
-
-    public boolean hasDynamite() {
-        for (BlueCard card : cards) {
-            if (card.getCard() == Card.DYNAMITE) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void removeDynamiteCard() {
-        for (BlueCard card : cards) {
-            if (card.getCard() == Card.DYNAMITE) {
-                removeOnFieldCard(card);
-                // TODO put on stack
-            }
-        }
-    }
-
-    public void moveDynamiteCardToTheLeft(Player currPlayer) {
-        for (BlueCard card : cards) {
-            if (card.getCard() == Card.DYNAMITE) {
-                removeOnFieldCard(card);
-                currPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(card);
-            }
-        }
-    }
-
     public List<BlueCard> getOnFieldCards() {
         return cards;
     }
 
     public void setOnFieldCards(List<BlueCard> cards) {
-        for (int i = 0; i < cards.size(); i++) {
-            cards.add(cards.get(0));
+        for (BlueCard card : cards) {
+            addOnFieldCard(card); // makes sure the cards are added in order
         }
     }
 
-    public void addOnFieldCard(BlueCard card) {
-        cards.add(card);
+    /**
+     * This function makes sure that the cards in OnFieldCards are added in the order of their priority.
+     * The first card (index 0) has the highest priority and the last card the lowest. The cards with
+     * the same priority are in arbitrary order.
+     */
+
+    public void addOnFieldCard(BlueCard card){
+        // TODO depending on how many priorities there will be --> loop over priorities instead of if else
+        if(card.getPriority() == Priority.FIRST){
+            cards.add(0, card);
+        } else if (card.getPriority() == Priority.SECOND){
+            int i = 0;
+            while (cards.get(i).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
+                i++;
+            }
+            cards.add(i, card);
+        } else if (card.getPriority() == Priority.THIRD){
+            int i = 0;
+            while (cards.get(i).getPriority() == Priority.FIRST || cards.get(i).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
+                i++;
+            }
+            cards.add(i, card);
+        } else {
+            cards.add(card);
+        }
     }
 
     public void removeOnFieldCard(BlueCard card) {
