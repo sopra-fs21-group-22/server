@@ -16,6 +16,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.CharacterPile;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
@@ -54,6 +55,9 @@ public class PlayerTableService {
 
     @Autowired
     DeckService deckService;
+
+    @Autowired
+    OnFieldCardsService onFieldCardsService;
 
     /**
      * Creates and adds a <Player> to a preexisting or new <PlayerTable>.
@@ -114,7 +118,7 @@ public class PlayerTableService {
     // playerTableRepository.save(table);
     // }
 
-    public CharacterPile makeCharacterPile(){
+    public CharacterPile makeCharacterPile() {
         CharacterPile characterPile = new CharacterPile();
         List<CharacterCard> characterCards = new ArrayList<CharacterCard>();
         CharacterCard characterCard1 = new CharacterCard("Willy The Kid", 4);
@@ -135,13 +139,15 @@ public class PlayerTableService {
 
         characterPile.setCharacterCards(characterCards);
         return characterPile;
-        
+
     }
 
-    public CharacterCard pickCharacter(Player player, PlayerTable table){
+    public CharacterCard pickCharacter(Player player, PlayerTable table) {
         Random rand = new Random();
-        CharacterCard card = table.getCharacterPile().getCharacterCards().get(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
-        table.getCharacterPile().getCharacterCards().remove(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
+        CharacterCard card = table.getCharacterPile().getCharacterCards()
+                .get(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
+        table.getCharacterPile().getCharacterCards()
+                .remove(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
         player.setCharacterCard(card);
         player.setMaxBullets(player.getCharacterCard().getLifeAmount());
         player.setBullets(player.getCharacterCard().getLifeAmount());
@@ -162,12 +168,14 @@ public class PlayerTableService {
         // assign first player on turn
 
         for (int i = 0; i < table.getPlayers().size(); i++) {
-            if (table.getPlayers().get(i).getGameRole().equals(GameRole.SHERIFF)) {
-                table.setPlayerOnTurn(table.getPlayers().get(i));
+            Player currPlayer = table.getPlayers().get(i);
+            if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
+                table.setPlayerOnTurn(currPlayer);
             }
-            deckService.drawCards(table, table.getPlayers().get(i), table.getPlayers().get(i).getBullets());
-        }
+            deckService.drawCards(table, currPlayer, currPlayer.getBullets());
 
+            currPlayer.setOnFieldCards(onFieldCardsService.createOnFieldCards());
+        }
         playerTableRepository.saveAndFlush(table);
     }
 
@@ -250,20 +258,21 @@ public class PlayerTableService {
 
     }
 
-    public void startTurn(Player nextPlayer, PlayerTable table){
+    public void startTurn(Player nextPlayer, PlayerTable table) {
 
         // check for Dynamite
-        if(nextPlayer.getOnFieldCards().hasDynamite()){
+        if (nextPlayer.getOnFieldCards().hasDynamite()) {
             PlayCard referenceCard = deckService.getReferenceCard(table);
             Rank r = referenceCard.getRank();
-            Boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING && r != Rank.ACE);
-            if(referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine){
+            Boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING
+                    && r != Rank.ACE);
+            if (referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine) {
                 // TODO notify player that Dynamite exploded
                 int lives = nextPlayer.getBullets();
                 if (lives > 3) {
                     nextPlayer.setBullets(lives - 3);
                     nextPlayer.getOnFieldCards().moveDynamiteCardToTheLeft(nextPlayer);
-                } else{
+                } else {
                     nextPlayer.getOnFieldCards().removeDynamiteCard();
                     // player dies
 
@@ -274,10 +283,11 @@ public class PlayerTableService {
         }
 
         // check for Jail
-        if(nextPlayer.getOnFieldCards().isInJail()){
-            nextPlayer.getOnFieldCards().removeJailCard(); // card is removed whether or not the player stays in jail for current turn
+        if (nextPlayer.getOnFieldCards().isInJail()) {
+            nextPlayer.getOnFieldCards().removeJailCard(); // card is removed whether or not the player stays in jail
+                                                           // for current turn
             PlayCard referenceCard = deckService.getReferenceCard(table);
-            if(referenceCard.getSuit() != Suit.HEARTS){ // still in jail
+            if (referenceCard.getSuit() != Suit.HEARTS) { // still in jail
                 // TODO notify player that he is still in jail for this turn
                 nextPlayersTurn(table);
                 return;

@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
@@ -11,6 +12,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs21.service.GameRoleService;
+import ch.uzh.ifi.hase.soprafs21.service.OnFieldCardsService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import ch.uzh.ifi.hase.soprafs21.util.JwtUtil;
 
@@ -19,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -82,6 +85,9 @@ public class UserControllerTest {
 
     @MockBean
     HandRepository handRepository;
+
+    @MockBean
+    OnFieldCardsService onFieldCardsService;
 
     private User user;
 
