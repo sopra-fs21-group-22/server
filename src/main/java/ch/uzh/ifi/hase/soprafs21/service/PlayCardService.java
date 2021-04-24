@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
@@ -92,6 +94,8 @@ public class PlayCardService {
         cardList.add(new Jail(Rank.FOUR, Suit.HEARTS));
 
         cardList.add(new Dynamite(Rank.TWO, Suit.HEARTS));
+
+        Collections.shuffle(cardList);
 
         return cardList;
     }

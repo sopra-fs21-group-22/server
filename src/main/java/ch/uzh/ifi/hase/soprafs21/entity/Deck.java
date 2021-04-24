@@ -44,4 +44,8 @@ public class Deck {
         this.playCards.removeAll(drawnCards);
         return drawnCards;
     }
+
+    public void addCard(PlayCard card) {
+        this.playCards.add(0, card);
+    }
 }

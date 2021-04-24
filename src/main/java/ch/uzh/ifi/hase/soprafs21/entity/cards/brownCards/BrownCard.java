@@ -30,6 +30,7 @@ public abstract class BrownCard extends PlayCard {
             throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
         }
         onPlacement(usingPlayer, targets);
+        usingPlayer.getTable().getDiscardPile().addCard(this);
     }
 
     protected abstract void onPlacement(Player usingPlayer, List<Player> targets);
