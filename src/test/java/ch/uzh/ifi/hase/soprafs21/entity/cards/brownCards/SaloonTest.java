@@ -4,12 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 public class SaloonTest {
@@ -21,7 +22,12 @@ public class SaloonTest {
     public void beforeEach() {
         saloon = new Saloon();
         user = new Player();
+        PlayerTable table = new PlayerTable();
+        Deck discardPile = new Deck();
+        discardPile.setPlayCards(new ArrayList<>());
+        table.setDiscardPile(discardPile);
         user.setId(1L);
+        user.setTable(table);
     }
 
     @Test

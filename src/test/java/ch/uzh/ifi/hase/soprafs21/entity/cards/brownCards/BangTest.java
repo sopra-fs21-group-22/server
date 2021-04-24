@@ -9,8 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 public class BangTest {
@@ -21,17 +23,23 @@ public class BangTest {
 
     @BeforeEach
     public void beforeEach() {
+        PlayerTable table = new PlayerTable();
+        Deck deck = new Deck();
+        deck.setPlayCards(new ArrayList<>());
+        table.setDiscardPile(deck);
         targets = new ArrayList<>();
         players = new ArrayList<>();
         Player oldPlayer = new Player();
         oldPlayer.setId(15L);
         players.add(oldPlayer);
+        oldPlayer.setTable(table);
         oldPlayer.setOnFieldCards(new OnFieldCards());
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
+            newPlayer.setTable(table);
             players.add(newPlayer);
             newPlayer.setRightNeighbor(oldPlayer);
             oldPlayer.setLeftNeighbor(newPlayer);
