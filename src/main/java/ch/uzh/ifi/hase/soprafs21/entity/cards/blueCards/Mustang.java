@@ -19,12 +19,17 @@ public class Mustang extends BlueCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, Player targetPlayer) {
+    protected void onPlacement(Player usingPlayer, Player targetPlayer) {
         usingPlayer.setDistanceIncreaseForOthers(usingPlayer.getDistanceIncreaseForOthers() + 1);
     }
 
     @Override
-    public void undo(Player affectedPlayer) {
+    public void onRemoval(Player affectedPlayer) {
         affectedPlayer.setDistanceIncreaseForOthers(affectedPlayer.getDistanceIncreaseForOthers() - 1);
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 }

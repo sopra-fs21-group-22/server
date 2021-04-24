@@ -26,7 +26,7 @@ public class GeneralStore extends BrownCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, List<Player> targets) {
+    protected void onPlacement(Player usingPlayer, List<Player> targets) {
         int number_of_players = targets.size() + 1;
         PlayerTable table = usingPlayer.getTable();
         Deck currDeck = table.getDeck();

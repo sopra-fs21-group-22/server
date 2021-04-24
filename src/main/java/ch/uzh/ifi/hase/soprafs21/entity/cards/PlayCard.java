@@ -48,10 +48,6 @@ public abstract class PlayCard {
             if (target.getBullets() <= 0) {
                 throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
             }
-            if (target.getId().equals(usingPlayer.getId())) {
-                throw new GameLogicException(
-                        "Targets can't include the user! If a brown card is used on the player itself, leave target list empty!");
-            }
         }
         if (usingPlayer.getBullets() <= 0) {
             throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");

@@ -28,18 +28,35 @@ public abstract class BlueCard extends PlayCard {
     @Override
     public final void use(Player usingPlayer, List<Player> targets) {
         super.use(usingPlayer, targets);
+        Player targetPlayer = usingPlayer;
         if (targets.size() > 1) {
             throw new GameLogicException("A blue card can only be played on one player.");
         }
-        if (targets.isEmpty()) {
-            useOnce(usingPlayer, usingPlayer);
-        } else {
-            useOnce(usingPlayer, targets.get(0));
+        if (targets.size() == 1) {
+            targetPlayer = targets.get(0);
         }
-
+        if (!targetIsValid(usingPlayer, targetPlayer)) {
+            throw new GameLogicException(String.format("Target player is not valid for card %s.", this.card));
+        }
+        onPlacement(usingPlayer, targetPlayer);
+        targetPlayer.getOnFieldCards().addOnFieldCard(this);
     }
 
-    protected abstract void useOnce(Player usingPlayer, Player targetPlayer);
+    /**
+     * Runs when the card is played. Responsible for placing the card correctly
+     * 
+     * @param usingPlayer
+     * @param targetPlayer
+     */
+    protected abstract void onPlacement(Player usingPlayer, Player targetPlayer);
+
+    /**
+     * Validates if the target is a valid target
+     * 
+     * @param usingPlayer
+     * @param targetPlayer
+     */
+    protected abstract boolean targetIsValid(Player usingPlayer, Player targetPlayer);
 
     /**
      * Runs every time the user starts his turn
@@ -51,21 +68,21 @@ public abstract class BlueCard extends PlayCard {
     }
 
     /**
-     * Runs when the card leaves the user
+     * Runs when the card is removed from the user field
      * 
      * @param affectedPlayer
      */
-    public void undo(Player affectedPlayer) {
+    public void onRemoval(Player affectedPlayer) {
         // Default behaviour is to do nothing
     }
 
     /**
-     * Runs when the player having this card gets hit
+     * Runs when the player having this card gets hit by a bang card
      * 
      * @param affectedPlayer
      * @return True if the hit has been absorbed false otherwise
      */
-    public boolean takeHit(Player affectedPlayer) {
+    public boolean onBang(Player affectedPlayer) {
         return false;
     }
 }

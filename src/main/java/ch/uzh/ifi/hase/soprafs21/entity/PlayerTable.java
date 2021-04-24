@@ -147,4 +147,14 @@ public class PlayerTable {
         this.visibleCards = visibleCards;
     }
 
+    public List<Player> getAlivePlayers() {
+        List<Player> alivePlayers = new ArrayList<>();
+        for (Player player : players) {
+            if (player.getBullets() > 0) {
+                alivePlayers.add(player);
+            }
+        }
+        return alivePlayers;
+    }
+
 }

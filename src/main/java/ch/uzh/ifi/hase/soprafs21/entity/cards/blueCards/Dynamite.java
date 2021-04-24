@@ -21,7 +21,7 @@ public class Dynamite extends BlueCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, Player target) {
+    protected void onPlacement(Player usingPlayer, Player target) {
         target.getOnFieldCards().addOnFieldCard(this);
     }
 
@@ -31,7 +31,12 @@ public class Dynamite extends BlueCard {
     }
 
     @Override
-    public void undo(Player affectedPlayer) {
+    public void onRemoval(Player affectedPlayer) {
         affectedPlayer.getOnFieldCards().removeDynamiteCard();
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 }

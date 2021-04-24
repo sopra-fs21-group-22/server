@@ -22,13 +22,18 @@ public class Barrel extends BlueCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, Player targetPlayer) {
+    protected void onPlacement(Player usingPlayer, Player targetPlayer) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public boolean takeHit(Player affectedPlayer) {
+    public boolean onBang(Player affectedPlayer) {
         PlayCard card = affectedPlayer.getTable().getDeck().drawCards(1).get(0);
         return card.getSuit().equals(Suit.HEARTS);
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 }

@@ -23,15 +23,16 @@ public class Bang extends BrownCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, List<Player> targets) {
-        if (targets.size() != 1) {
-            throw new GameLogicException("A BANG card can only hit one target!");
-        }
-
+    protected void onPlacement(Player usingPlayer, List<Player> targets) {
         if (usingPlayer.getStillPlayableBangsThisRound() <= 0) {
             throw new GameLogicException("Can't play more BANG cards this round!");
         }
         Player target = targets.get(0);
+
+        if (!(usingPlayer.reachesWithWeapon(target))) {
+            throw new GameLogicException("Player is out of range!");
+        }
+
         target.setBullets(target.getBullets() - 1);
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }

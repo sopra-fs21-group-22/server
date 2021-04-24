@@ -81,7 +81,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PlayerTableGetDTO getPlayerInformation(@RequestHeader("Authorization") String auth,
-                                                  @PathVariable Long game_id) {
+            @PathVariable Long game_id) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
     }
@@ -90,7 +90,7 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PlayerGetDTO getPlayerInformation(@PathVariable Long game_id, @PathVariable Long player_id,
-                                             @RequestHeader("Authorization") String auth) {
+            @RequestHeader("Authorization") String auth) {
         if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
             return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(playerRepository.getOne(player_id));
         }
@@ -101,7 +101,7 @@ public class GameController {
     @PutMapping("/{game_id}/players/{player_id}/ready")
     @ResponseStatus(HttpStatus.OK)
     public void markPlayerAsReady(@PathVariable Long game_id, @PathVariable Long player_id,
-                                  @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
+            @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
     }
@@ -122,7 +122,7 @@ public class GameController {
     @PutMapping("/{game_id}/players/{player_id}/turn")
     @ResponseStatus(HttpStatus.OK)
     public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
-                               @PathVariable Long player_id) {
+            @PathVariable Long player_id) {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         if (!player_id.equals(table.getPlayerOnTurn().getId())) {
@@ -134,7 +134,7 @@ public class GameController {
     @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
     @ResponseStatus(HttpStatus.OK)
     public void playCard2(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
-                          @RequestBody List<Long> targets) {
+            @RequestBody List<Long> targets) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player usingPlayer = table.getPlayerByPlayerID(player_id);
         if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
@@ -158,17 +158,17 @@ public class GameController {
 
     @PostMapping("/{game_id}/visiblecards")
     @ResponseStatus(HttpStatus.OK)
-    public void pickACard(@PathVariable Long game_id,  @RequestBody List<Long> playersAndCards) {
+    public void pickACard(@PathVariable Long game_id, @RequestBody List<Long> playersAndCards) {
         // playersAndCards = [player_id, card_id, player_id, card_id, etc.]
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         int number_of_players = table.getPlayers().size();
         VisibleCards visibleCards = table.getVisibleCards();
 
-
-        // for each player: tell the visible cards which card to remove and the player which card to add to his*her hand card
+        // for each player: tell the visible cards which card to remove and the player
+        // which card to add to his*her hand card
         for (int i = 0; i < number_of_players; i = i + 2) {
             Player currPlayer = table.getPlayerByPlayerID(playersAndCards.get(i));
-            PlayCard card = visibleCards.getCardByID(playersAndCards.get(i+1));
+            PlayCard card = visibleCards.getCardByID(playersAndCards.get(i + 1));
             currPlayer.pickACard(card);
             visibleCards.removeACard(card);
         }

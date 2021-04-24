@@ -72,6 +72,10 @@ public class Player {
     private OnFieldCards onFieldCards;
 
     public OnFieldCards getOnFieldCards() {
+        if (onFieldCards == null) {
+            this.onFieldCards = new OnFieldCards();
+            return onFieldCards;
+        }
         return onFieldCards;
     }
 

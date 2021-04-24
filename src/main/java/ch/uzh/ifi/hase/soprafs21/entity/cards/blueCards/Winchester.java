@@ -8,29 +8,24 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 
 @Entity
-public class Volcanic extends BlueCard {
-    public Volcanic() {
+public class Winchester extends BlueCard {
+    public Winchester() {
     }
 
-    public Volcanic(Rank rank, Suit suit) {
+    public Winchester(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
-        this.card = Card.VOLCANIC;
+        this.card = Card.WINCHESTER;
     }
 
     @Override
     protected void onPlacement(Player usingPlayer, Player targetPlayer) {
-        usingPlayer.setStillPlayableBangsThisRound(100);
-    }
-
-    @Override
-    public void onTurnStart(Player affectedPlayer) {
-        affectedPlayer.setStillPlayableBangsThisRound(100);
+        usingPlayer.setRange(5);
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setStillPlayableBangsThisRound(1);
+        affectedPlayer.setRange(1);
     }
 
     @Override

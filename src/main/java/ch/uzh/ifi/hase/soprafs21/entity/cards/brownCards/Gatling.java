@@ -21,9 +21,13 @@ public class Gatling extends BrownCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, List<Player> targets) {
-        for (int i = 0; i < targets.size(); i++) {
-            Player target = targets.get(i);
+    protected void onPlacement(Player usingPlayer, List<Player> targets) {
+        List<Player> alivePlayers = usingPlayer.getTable().getAlivePlayers();
+        for (int i = 0; i < alivePlayers.size(); i++) {
+            Player target = alivePlayers.get(i);
+            if (target.getId().equals(usingPlayer.getId())) {
+                continue;
+            }
             target.setBullets(target.getBullets() - 1);
         }
     }

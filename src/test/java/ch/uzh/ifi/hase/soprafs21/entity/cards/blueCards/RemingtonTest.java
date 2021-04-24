@@ -41,7 +41,7 @@ public class RemingtonTest {
     public void testRange() {
         Remington card = new Remington();
         Player player = players.get(0);
-        card.use(player, new ArrayList<>());
+        card.use(player, players.subList(0, 1));
         assertEquals(3, player.getRange());
     }
 
@@ -49,9 +49,9 @@ public class RemingtonTest {
     public void testUndo() {
         Remington card = new Remington();
         Player player = players.get(0);
-        card.use(player, new ArrayList<>());
+        card.use(player, players.subList(0, 1));
         assertEquals(3, player.getRange());
-        card.undo(player);
+        card.onRemoval(player);
         assertEquals(1, player.getRange());
     }
 

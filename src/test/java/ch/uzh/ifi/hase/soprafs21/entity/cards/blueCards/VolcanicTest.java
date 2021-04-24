@@ -16,7 +16,8 @@ import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 public class VolcanicTest {
 
     private Player player;
-    private List<Player> targets;
+    private List<Player> bangTargets;
+    private List<Player> volcanicTargets;
     private Bang bang;
 
     @BeforeEach
@@ -25,22 +26,27 @@ public class VolcanicTest {
         player.setId(1L);
         Player target = new Player();
         target.setId(2L);
+        player.setRightNeighbor(target);
+        player.setLeftNeighbor(target);
+        target.setLeftNeighbor(player);
+        target.setRightNeighbor(player);
+
         bang = new Bang();
-        targets = new ArrayList<>();
-        targets.add(target);
+        bangTargets = new ArrayList<>();
+        bangTargets.add(target);
     }
 
     @Test
     public void playingMultipleBang() {
         Volcanic card = new Volcanic();
 
-        int expectedBullets = targets.get(0).getBullets() - 2;
+        int expectedBullets = bangTargets.get(0).getBullets() - 2;
 
         card.use(player, new ArrayList<>());
-        bang.use(player, targets);
-        bang.use(player, targets);
+        bang.use(player, bangTargets);
+        bang.use(player, bangTargets);
 
-        assertEquals(expectedBullets, targets.get(0).getBullets());
+        assertEquals(expectedBullets, bangTargets.get(0).getBullets());
     }
 
     @Test
@@ -48,11 +54,11 @@ public class VolcanicTest {
         Volcanic card = new Volcanic();
 
         card.use(player, new ArrayList<>());
-        card.undo(player);
-        bang.use(player, targets);
+        card.onRemoval(player);
+        bang.use(player, bangTargets);
 
         assertThrows(GameLogicException.class, () -> {
-            bang.use(player, targets);
+            bang.use(player, bangTargets);
         });
     }
 }

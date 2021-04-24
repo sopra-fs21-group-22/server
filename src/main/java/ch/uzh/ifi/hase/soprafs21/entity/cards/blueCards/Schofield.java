@@ -22,14 +22,19 @@ public class Schofield extends BlueCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, Player target) {
+    protected void onPlacement(Player usingPlayer, Player target) {
         usingPlayer.setRange(2);
         usingPlayer.getOnFieldCards().addOnFieldCard(this);
     }
 
     @Override
-    public void undo(Player affectedPlayer) {
+    public void onRemoval(Player affectedPlayer) {
         affectedPlayer.setRange(1);
 
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 }

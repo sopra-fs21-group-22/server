@@ -22,7 +22,7 @@ public class Saloon extends BrownCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, List<Player> targets) {
+    protected void onPlacement(Player usingPlayer, List<Player> targets) {
         if (usingPlayer.getBullets().equals(usingPlayer.getMaxBullets())) {
             throw new GameLogicException("Player is already at max health!");
         }

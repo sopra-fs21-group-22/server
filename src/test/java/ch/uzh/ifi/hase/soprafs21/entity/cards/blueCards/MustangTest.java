@@ -44,14 +44,16 @@ public class MustangTest {
     @Test
     public void testDistanceIncrease() {
         Player player = players.get(0);
-        mustang.use(player, new ArrayList<>());
+        List<Player> targets = new ArrayList<>();
+        targets.add(player);
+        mustang.use(player, targets);
         assertEquals(1, player.getDistanceIncreaseForOthers());
     }
 
     public void testDistanceIncrease_undo() {
         Player player = players.get(0);
         mustang.use(player, new ArrayList<>());
-        mustang.undo(player);
+        mustang.onRemoval(player);
         assertEquals(0, player.getDistanceIncreaseForOthers());
     }
 }

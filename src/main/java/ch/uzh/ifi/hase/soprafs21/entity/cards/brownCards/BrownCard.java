@@ -25,17 +25,13 @@ public abstract class BrownCard extends PlayCard {
             if (target.getBullets() <= 0) {
                 throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
             }
-            if (target.getId().equals(usingPlayer.getId())) {
-                throw new GameLogicException(
-                        "Targets can't include the user! If a brown card is used on the player itself, leave target list empty!");
-            }
         }
         if (usingPlayer.getBullets() <= 0) {
             throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
         }
-        useOnce(usingPlayer, targets);
+        onPlacement(usingPlayer, targets);
     }
 
-    protected abstract void useOnce(Player usingPlayer, List<Player> targets);
+    protected abstract void onPlacement(Player usingPlayer, List<Player> targets);
 
 }

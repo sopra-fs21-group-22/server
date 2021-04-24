@@ -24,7 +24,7 @@ public class WellsFargo extends BrownCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, List<Player> targets) {
+    protected void onPlacement(Player usingPlayer, List<Player> targets) {
         Hand userHand = usingPlayer.getHand();
         List<PlayCard> cards = usingPlayer.getTable().getDeck().drawCards(3);
         userHand.addCards(cards);

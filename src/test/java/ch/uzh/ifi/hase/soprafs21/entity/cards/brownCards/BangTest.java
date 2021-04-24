@@ -9,40 +9,57 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 public class BangTest {
 
-    private Player user;
-    private Bang bang;
-    private Player target;
+    private List<Player> players;
     private List<Player> targets;
+    private Bang bang = new Bang();
 
     @BeforeEach
     public void beforeEach() {
-        bang = new Bang();
-        user = new Player();
-        user.setId(2L);
         targets = new ArrayList<>();
-        target = new Player();
-        target.setId(5L);
-        targets.add(target);
+        players = new ArrayList<>();
+        Player oldPlayer = new Player();
+        oldPlayer.setId(15L);
+        players.add(oldPlayer);
+        oldPlayer.setOnFieldCards(new OnFieldCards());
+
+        for (int i = 0; i < 6; i++) {
+            Player newPlayer = new Player();
+            newPlayer.setId(Long.valueOf(i));
+            newPlayer.setOnFieldCards(new OnFieldCards());
+            players.add(newPlayer);
+            newPlayer.setRightNeighbor(oldPlayer);
+            oldPlayer.setLeftNeighbor(newPlayer);
+            oldPlayer = newPlayer;
+        }
+        Player firstPlayer = players.get(0);
+        Player lastPlayer = players.get(players.size() - 1);
+        firstPlayer.setRightNeighbor(lastPlayer);
+        lastPlayer.setLeftNeighbor(firstPlayer);
     }
 
     @Test
     public void testBang_reducesLives() {
 
+        Player user = players.get(0);
+        Player target = user.getRightNeighbor();
+        targets.add(target);
         int expectedLives = target.getBullets() - 1;
 
         bang.use(user, targets);
 
-        assertEquals(expectedLives, targets.get(0).getBullets());
+        assertEquals(expectedLives, target.getBullets());
     }
 
     @Test
     public void cantUseBangOnYourself() {
-        targets.remove(target);
+        Player user = players.get(0);
+        Player target = user.getRightNeighbor();
         targets.add(user);
         assertThrows(GameLogicException.class, () -> {
             bang.use(user, targets);
@@ -51,7 +68,20 @@ public class BangTest {
 
     @Test
     public void cantPlayMoreBangCards() {
+        Player user = players.get(0);
+        Player target = user.getRightNeighbor();
+        targets.add(target);
         bang.use(user, targets);
+        assertThrows(GameLogicException.class, () -> {
+            bang.use(user, targets);
+        });
+    }
+
+    @Test
+    public void outOfRange_CantAttack() {
+        Player user = players.get(0);
+        Player target = user.getRightNeighbor().getRightNeighbor();
+        targets.add(target);
         assertThrows(GameLogicException.class, () -> {
             bang.use(user, targets);
         });

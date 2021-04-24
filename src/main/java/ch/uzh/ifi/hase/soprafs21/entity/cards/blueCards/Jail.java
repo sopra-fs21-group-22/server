@@ -24,7 +24,7 @@ public class Jail extends BlueCard {
     }
 
     @Override
-    protected void useOnce(Player usingPlayer, Player target) {
+    protected void onPlacement(Player usingPlayer, Player target) {
         if (target.getGameRole() != GameRole.SHERIFF) {
             target.getOnFieldCards().addOnFieldCard(this);
         } else {
@@ -38,7 +38,14 @@ public class Jail extends BlueCard {
     }
 
     @Override
-    public void undo(Player affectedPlayer) {
+    public void onRemoval(Player affectedPlayer) {
         affectedPlayer.getOnFieldCards().removeJailCard();
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        boolean targetIsUser = usingPlayer.getId().equals(targetPlayer.getId());
+        boolean targetIsSheriff = targetPlayer.getGameRole().equals(GameRole.SHERIFF);
+        return !targetIsSheriff && !targetIsUser;
     }
 }
