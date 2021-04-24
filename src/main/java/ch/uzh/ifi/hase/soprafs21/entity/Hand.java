@@ -52,6 +52,16 @@ public class Hand {
         playCards.remove(card);
     }
 
+    public void removeCardById(Long cardId) {
+        PlayCard cardToRemove = null;
+        for (PlayCard card : playCards) {
+            if (card.getId().equals(cardId)) {
+                cardToRemove = card;
+            }
+        }
+        playCards.remove(cardToRemove);
+    }
+
     public void addCards(List<PlayCard> newCards) {
         this.playCards.addAll(newCards);
     }

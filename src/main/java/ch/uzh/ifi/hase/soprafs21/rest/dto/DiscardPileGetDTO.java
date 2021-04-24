@@ -22,6 +22,6 @@ public class DiscardPileGetDTO {
         if (playCards.isEmpty()) {
             return null;
         }
-        return DTOMapper.INSTANCE.convertEntityToPlayCardGetAuthDTO(this.playCards.get(0));
+        return DTOMapper.INSTANCE.convertEntityToPlayCardGetAuthDTO(this.playCards.get(this.playCards.size() - 1));
     }
 }

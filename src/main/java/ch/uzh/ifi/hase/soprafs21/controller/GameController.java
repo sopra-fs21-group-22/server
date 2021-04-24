@@ -3,8 +3,11 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.*;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.exceptions.NotOnTurnException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.service.*;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,24 +129,37 @@ public class GameController {
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         if (!player_id.equals(table.getPlayerOnTurn().getId())) {
-            throw new GameLogicException("Player is not on turn!");
+            throw new NotOnTurnException();
         }
         playerTableService.nextPlayersTurn(table);
     }
 
     @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
     @ResponseStatus(HttpStatus.OK)
-    public void playCard2(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
+    public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
             @RequestBody List<Long> targets) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player usingPlayer = table.getPlayerByPlayerID(player_id);
         if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
-            throw new GameLogicException("Player is not on turn!");
+            throw new NotOnTurnException();
         }
         List<Player> targetPlayers = table.getPlayersById(targets);
 
         usingPlayer.playCard(card_id, targetPlayers);
         playerRepository.save(usingPlayer);
+        playerTableRepository.saveAndFlush(table);
+    }
+
+    @DeleteMapping("/{game_id}/players/{player_id}/hand/{card_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void discardCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Player usingPlayer = table.getPlayerByPlayerID(player_id);
+        if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
+            throw new NotOnTurnException();
+        }
+
+        usingPlayer.getHand().removeCardById(card_id);
         playerTableRepository.saveAndFlush(table);
     }
 
