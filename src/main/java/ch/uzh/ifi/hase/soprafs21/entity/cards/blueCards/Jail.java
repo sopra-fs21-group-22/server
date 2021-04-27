@@ -32,11 +32,11 @@ public class Jail extends BlueCard {
     }
 
     @Override
-    public void onTurnStart(Player affectedPlayer, PlayerTable table) {
+    public void onTurnStart(Player affectedPlayer) {
+        PlayerTable table = affectedPlayer.getTable();
         Deck deck = table.getDeck();
         PlayCard referenceCard = deck.drawCards(1).get(0);
         if (referenceCard.getSuit() != Suit.HEARTS){
-            // TODO notify player that he is still in jail for this turn
             table.setPlayerOnTurn(affectedPlayer.getRightNeighbor());
         }
         affectedPlayer.getOnFieldCards().removeOnFieldCard(this); // card is removed whether or not the player stays in jail for current turn

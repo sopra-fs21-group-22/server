@@ -30,13 +30,13 @@ public class Dynamite extends BlueCard {
     }
 
     @Override
-    public void onTurnStart(Player affectedPlayer, PlayerTable table) {
+    public void onTurnStart(Player affectedPlayer) {
+        PlayerTable table = affectedPlayer.getTable();
         Deck deck = table.getDeck();
         PlayCard referenceCard = deck.drawCards(1).get(0);
         Rank r = referenceCard.getRank();
         Boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING && r != Rank.ACE);
         if(referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine){
-            // TODO notify player that Dynamite exploded
             int lives = affectedPlayer.getBullets();
             if (lives > 3) {
                 affectedPlayer.setBullets(lives - 3);

@@ -262,7 +262,7 @@ public class PlayerTableService {
         // go through all onFieldCards to check if they have a functionality at the beginning of a turn
         for (int i = 0; i < onFieldCards.getLength(); i++) {
             BlueCard currCard = onFieldCards.get(i);
-            currCard.onTurnStart(nextPlayer, table);
+            currCard.onTurnStart(nextPlayer);
         }
 
         // TODO change to dynamic amount of cards

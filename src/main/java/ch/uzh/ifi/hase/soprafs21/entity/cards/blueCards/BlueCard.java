@@ -56,7 +56,7 @@ public abstract class BlueCard extends PlayCard {
      *
      * @param affectedPlayer
      */
-    public void onTurnStart(Player affectedPlayer, PlayerTable table) {
+    public void onTurnStart(Player affectedPlayer) {
         // Default behaviour is to do nothing
     }
 

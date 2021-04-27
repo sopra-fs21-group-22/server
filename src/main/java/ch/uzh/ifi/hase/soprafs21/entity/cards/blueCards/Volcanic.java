@@ -25,7 +25,7 @@ public class Volcanic extends BlueCard {
     }
 
     @Override
-    public void onTurnStart(Player affectedPlayer, PlayerTable table) {
+    public void onTurnStart(Player affectedPlayer) {
         affectedPlayer.setStillPlayableBangsThisRound(100);
     }
 
