@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
@@ -85,7 +86,12 @@ public class Player {
     }
 
     public void takeHit() {
-        this.bullets -= 1;
+        if(onFieldCards.containsCardType(Card.BARREL)){
+            int index = onFieldCards.getIndexByCardType(Card.BARREL);
+            Boolean isSafe = onFieldCards.get(index).onBang(this);
+        }
+        // check for missed
+        // check for beer if life = 1
     }
 
     public void playCard(Long cardId, List<Player> targets) {

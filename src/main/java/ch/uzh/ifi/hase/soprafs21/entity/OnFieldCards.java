@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
@@ -72,13 +73,22 @@ public class OnFieldCards {
         }
     }
 
-    public Boolean contains(BlueCard card){
+    public Boolean containsCardType(Card card){
         for (BlueCard blueCard : cards) {
-            if (blueCard.getCard() == card.getCard()) {
+            if (blueCard.getCard() == card) {
                 return true;
             }
         }
         return false;
+    }
+
+    public int getIndexByCardType(Card card){
+        for (int i = 0; i < cards.size(); i++) {
+            if(cards.get(i).getCard() == card){
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void removeOnFieldCard(BlueCard card) {
