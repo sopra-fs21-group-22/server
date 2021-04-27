@@ -72,6 +72,15 @@ public class OnFieldCards {
         }
     }
 
+    public Boolean contains(BlueCard card){
+        for (BlueCard blueCard : cards) {
+            if (blueCard.getCard() == card.getCard()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void removeOnFieldCard(BlueCard card) {
         cards.remove(card);
     }

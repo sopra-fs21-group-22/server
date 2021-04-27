@@ -25,8 +25,8 @@ public class Dynamite extends BlueCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, Player target) {
-        target.getOnFieldCards().addOnFieldCard(this);
+    protected void onPlacement(Player usingPlayer, Player randomPlayer) {
+        usingPlayer.getOnFieldCards().addOnFieldCard(this); // the dynamite card is always placed on your own onFieldCards as soon as you have it in your hands
     }
 
     @Override
@@ -34,9 +34,10 @@ public class Dynamite extends BlueCard {
         PlayerTable table = affectedPlayer.getTable();
         Deck deck = table.getDeck();
         PlayCard referenceCard = deck.drawCards(1).get(0);
+        System.out.println("SUIT: " + referenceCard.getSuit());
         Rank r = referenceCard.getRank();
         Boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING && r != Rank.ACE);
-        if(referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine){
+        if(referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine){ // explosion
             int lives = affectedPlayer.getBullets();
             if (lives > 3) {
                 affectedPlayer.setBullets(lives - 3);
@@ -47,6 +48,9 @@ public class Dynamite extends BlueCard {
                 // player dies
                 // TODO handle death
             }
+        } else { // no explosion
+            affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
+            affectedPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(this); // move Dynamite card to the left
         }
     }
 

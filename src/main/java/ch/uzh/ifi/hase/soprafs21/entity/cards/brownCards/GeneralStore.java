@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.controller.GameController;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
@@ -27,7 +26,7 @@ public class GeneralStore extends BrownCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, List<Player> targets) {
-        int number_of_players = targets.size() + 1;
+        int number_of_players = targets.size();
         PlayerTable table = usingPlayer.getTable();
         Deck currDeck = table.getDeck();
 

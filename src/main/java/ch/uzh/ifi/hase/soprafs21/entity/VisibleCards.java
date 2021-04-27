@@ -29,6 +29,9 @@ public class VisibleCards {
         this.id = id;
     }
 
+    public int getLength(){
+        return visibleCards.size();
+    }
 
     public List<PlayCard> getVisibleCards() {
         return visibleCards;
