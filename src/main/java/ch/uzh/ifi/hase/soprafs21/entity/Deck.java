@@ -39,9 +39,8 @@ public class Deck {
         }
         List<PlayCard> drawnCards = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            drawnCards.add(this.playCards.get(i));
+            drawnCards.add(this.playCards.remove(0));
         }
-        this.playCards.removeAll(drawnCards);
         return drawnCards;
     }
 

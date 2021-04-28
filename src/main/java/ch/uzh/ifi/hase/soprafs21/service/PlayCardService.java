@@ -86,8 +86,9 @@ public class PlayCardService {
         cardList.add(new WellsFargo(Rank.THREE, Suit.HEARTS));
         cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
         cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
-        cardList.add(new GeneralStore(Rank.NINE, Suit.CLUBS));
-        cardList.add(new GeneralStore(Rank.QUEEN, Suit.SPADES));
+        // TODO fix general store and readd
+        // cardList.add(new GeneralStore(Rank.NINE, Suit.CLUBS));
+        // cardList.add(new GeneralStore(Rank.QUEEN, Suit.SPADES));
 
         cardList.add(new Jail(Rank.JACK, Suit.SPADES));
         cardList.add(new Jail(Rank.TEN, Suit.SPADES));

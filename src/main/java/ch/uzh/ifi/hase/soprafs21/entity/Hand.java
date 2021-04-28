@@ -59,6 +59,9 @@ public class Hand {
                 cardToRemove = card;
             }
         }
+        if (cardToRemove == null) {
+            throw new GameLogicException("Card to be removed doesn't exist!");
+        }
         playCards.remove(cardToRemove);
     }
 
