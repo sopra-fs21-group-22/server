@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -34,6 +35,9 @@ public class Player {
 
     @Column
     private Integer range = 1;
+    
+    @Column
+    private Integer baseRange = 1; 
 
     @Column
     private Integer distanceIncreaseForOthers = 0;
@@ -43,6 +47,9 @@ public class Player {
 
     @Column
     Integer stillPlayableBangsThisRound = 1;
+
+    @Column
+    Integer playableBangsAnyRound = 1; 
 
     @OneToOne
     private User user;
@@ -145,11 +152,19 @@ public class Player {
         this.range = range;
     }
 
+    public Integer getBaseRange() {
+        return baseRange;
+    }
+
+    public void setBaseRange(Integer baseRange) {
+        this.baseRange = baseRange;
+    }
+
     public Integer getBullets() {
         return bullets;
     }
 
-    public void setBullets(Integer bullets) {
+    public void setBullets(Integer bullets) {     
         this.bullets = bullets;
     }
 
@@ -251,6 +266,14 @@ public class Player {
     public void setStillPlayableBangsThisRound(Integer stillPlayableBangsThisRound) {
         this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
     }
+
+    public Integer getPlaybleBangsAnyRound() {
+        return playableBangsAnyRound;
+    }
+
+    public void setPlayableBangsAnyRound(Integer playableBangsAnyRound) {
+        this.playableBangsAnyRound = playableBangsAnyRound;
+    } 
 
     public void pickACard(PlayCard card) {
         List<PlayCard> cards = new ArrayList<>();

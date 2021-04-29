@@ -43,7 +43,7 @@ public class WinchesterTest {
         Winchester card = new Winchester();
         Player player = players.get(0);
         card.use(player, players.subList(0, 1));
-        assertEquals(5, player.getRange());
+        assertEquals(player.getBaseRange()+4, player.getRange());
     }
 
     @Test
@@ -51,8 +51,8 @@ public class WinchesterTest {
         Winchester card = new Winchester();
         Player player = players.get(0);
         card.use(player, players.subList(0, 1));
-        assertEquals(5, player.getRange());
+        assertEquals(player.getBaseRange()+4, player.getRange());
         card.onRemoval(player);
-        assertEquals(1, player.getRange());
+        assertEquals(player.getBaseRange(), player.getRange());
     }
 }

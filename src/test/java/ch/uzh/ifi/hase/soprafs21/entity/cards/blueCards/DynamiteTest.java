@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.*;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,6 +86,7 @@ public class DynamiteTest {
 
     @Test
     public void testOnTurnStartExplosionPlayerLives(){
+        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setBullets(4);
         Player randomPlayer = players.get(1);
@@ -94,13 +96,13 @@ public class DynamiteTest {
         Bang bang = new Bang(Rank.THREE, Suit.SPADES);
         playCards.add(bang);
         table.getDeck().setPlayCards(playCards);
+        playerWithDynamite.setCharacterCard(characterCard);
 
         dynamite.onTurnStart(playerWithDynamite); // DYNAMITE PLAYED
 
-        // there is an explosion, so the dynamite card gets moved to the left
+        // there is an explosion, so the dynamite card gets removed
         assertEquals(1, playerWithDynamite.getBullets());
         assertFalse(playerWithDynamite.getOnFieldCards().contains(dynamite));
-        assertTrue(playerWithDynamite.getLeftNeighbor().getOnFieldCards().contains(dynamite));
     }
 
     @Test
