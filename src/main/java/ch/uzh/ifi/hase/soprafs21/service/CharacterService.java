@@ -69,7 +69,7 @@ public class CharacterService {
         player.setBullets(player.getCharacterCard().getLifeAmount());
         playerTableRepository.save(table);
 
-        if (player.getCharacterCard().getName().equals("Willy The Kid")) {
+        /* if (player.getCharacterCard().getName().equals("Willy The Kid")) {
             player.setPlayableBangsAnyRound(255);
             player.setStillPlayableBangsThisRound(255);
         }
@@ -81,7 +81,7 @@ public class CharacterService {
 
         if (player.getCharacterCard().getName().equals("Paul Regret")) {
             player.setDistanceIncreaseForOthers(1);
-        }
+        } */
 
         playerTableRepository.save(table);
         playerTableRepository.flush();

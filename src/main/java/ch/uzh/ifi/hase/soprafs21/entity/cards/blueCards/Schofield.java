@@ -21,7 +21,7 @@ public class Schofield extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target) {
-        usingPlayer.setRange(usingPlayer.getRange()+2);
+        usingPlayer.setRange(usingPlayer.getBaseRange()+1);
         usingPlayer.getOnFieldCards().addOnFieldCard(this);
     }
 
