@@ -1,30 +1,18 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.CharacterPile;
-import ch.uzh.ifi.hase.soprafs21.entity.Deck;
-import ch.uzh.ifi.hase.soprafs21.entity.Hand;
-import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
-import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
-import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
-import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
-import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
-import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 
 @Service
 @Transactional
