@@ -189,6 +189,97 @@ public class PlayerTableServiceIntTest {
         assertEquals(1, table.getPlayers().size());
     }
 
+    @Test
+    @Transactional
+    public void newPlayersGetCorrectLifePoints() {
+        PlayerTable table;
+        table = playerTableService.addPlayer(users.get(0).getId());
+        for (int i = 1; i < 7; i++) {
+            playerTableService.addPlayer(users.get(i).getId());
+        }
+
+       Integer sum = 0;
+       for (int i = 0; i < 7; i++) {
+            sum = sum + table.getPlayers().get(i).getBullets();
+        }
+
+        assertEquals(26,sum);
+    }
+
+    @Test
+    @Transactional
+    public void oneOfEveryCharacterExists() {
+        PlayerTable table;
+        table = playerTableService.addPlayer(users.get(0).getId());
+        for (int i = 1; i < 7; i++) {
+            playerTableService.addPlayer(users.get(i).getId());
+        }
+
+       Integer count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Willy The Kid")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+
+    count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Rose Doolan")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+
+       count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Paul Regret")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+
+       count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Jourdonnais")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+
+        count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Bart Cassidy")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+
+        count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Suzy Lafayette")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+
+        count = 0;
+       for (int i = 0; i < 7; i++) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("El Gringo")) {
+                count++;
+            }
+        }
+
+        assertEquals(1,count);
+    }
+    
+
     // @Transactional
     // @Test
     // public void setPlayerAsReady_tablePositionsGetAssigned() {

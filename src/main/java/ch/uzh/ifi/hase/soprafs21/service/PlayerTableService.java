@@ -83,7 +83,7 @@ public class PlayerTableService {
                 players.add(player);
                 playerTable.setPlayers(players);
                 player.setTable(playerTable);
-                //player.setCharacterCard(this.pickCharacter(player, playerTable));
+                player.setCharacterCard(this.pickCharacter(player, playerTable));
                 playerTableRepository.save(playerTable);
                 playerTableRepository.flush();
 
@@ -101,7 +101,8 @@ public class PlayerTableService {
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
         playerTable.setCharacterPile(this.makeCharacterPile());
-        //player.setCharacterCard(this.pickCharacter(player, playerTable));
+        playerTableRepository.save(playerTable);
+        player.setCharacterCard(this.pickCharacter(player, playerTable));
         playerTableRepository.save(playerTable);
         playerTableRepository.flush();
         return playerTable;
@@ -142,17 +143,17 @@ public class PlayerTableService {
     }
 
     public CharacterCard pickCharacter(Player player, PlayerTable table) {
-        Random rand = new Random();
-        CharacterCard card = table.getCharacterPile().getCharacterCards()
-                .get(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
-        table.getCharacterPile().getCharacterCards()
-                .remove(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
+        List<CharacterCard> characterCards = table.getCharacterPile().getCharacterCards();
+        Collections.shuffle(characterCards);
+        CharacterCard card = characterCards.get(0);
+        characterCards.remove(0);
         player.setCharacterCard(card);
         player.setMaxBullets(player.getCharacterCard().getLifeAmount());
         player.setBullets(player.getCharacterCard().getLifeAmount());
-        //playerTableRepository.save(table);
+        table.getCharacterPile().setCharacterCards(characterCards);
+        playerTableRepository.save(table);
 
-        /* if (player.getCharacterCard().getName().equals("Willy The Kid")) {
+         if (player.getCharacterCard().getName().equals("Willy The Kid")) {
             player.setPlayableBangsAnyRound(255);
             player.setStillPlayableBangsThisRound(255);
         }
@@ -164,10 +165,10 @@ public class PlayerTableService {
 
         if (player.getCharacterCard().getName().equals("Paul Regret")) {
             player.setDistanceIncreaseForOthers(1);
-        } */
+        } 
 
         playerTableRepository.save(table);
-        playerTableRepository.flush();
+        
         return card;
     }
 
