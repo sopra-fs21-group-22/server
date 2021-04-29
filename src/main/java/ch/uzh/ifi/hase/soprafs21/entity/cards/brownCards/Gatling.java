@@ -34,6 +34,10 @@ public class Gatling extends BrownCard {
                 DeckService deckservice = new DeckService();
                 deckservice.cassidyDraw(target); 
             } 
+            if (target.getCharacterCard().getName().equals("El Gringo")){         // El Gringo Ability
+                DeckService deckservice = new DeckService();
+                deckservice.gringoDraw(target, usingPlayer); 
+            } 
         }
     }
 }
