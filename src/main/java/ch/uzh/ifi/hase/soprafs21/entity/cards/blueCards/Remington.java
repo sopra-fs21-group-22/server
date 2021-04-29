@@ -24,12 +24,12 @@ public class Remington extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target) {
-        usingPlayer.setRange(3);
+        usingPlayer.setRange(usingPlayer.getRange()+3);
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setRange(1);
+        affectedPlayer.setRange(affectedPlayer.getBaseRange());
     }
 
     @Override

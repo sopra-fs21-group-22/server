@@ -21,13 +21,13 @@ public class Schofield extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target) {
-        usingPlayer.setRange(2);
+        usingPlayer.setRange(usingPlayer.getRange()+2);
         usingPlayer.getOnFieldCards().addOnFieldCard(this);
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setRange(1);
+        affectedPlayer.setRange(affectedPlayer.getBaseRange());
 
     }
 

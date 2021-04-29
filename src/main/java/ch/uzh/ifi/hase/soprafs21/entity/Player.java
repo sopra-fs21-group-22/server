@@ -34,6 +34,9 @@ public class Player {
 
     @Column
     private Integer range = 1;
+    
+    @Column
+    private Integer baseRange = 1;
 
     @Column
     private Integer distanceIncreaseForOthers = 0;
@@ -43,6 +46,9 @@ public class Player {
 
     @Column
     Integer stillPlayableBangsThisRound = 1;
+
+    @Column
+    Integer playableBangsAnyRound = 1;
 
     @OneToOne
     private User user;
@@ -141,8 +147,16 @@ public class Player {
         return range;
     }
 
-    public void setRange(Integer range) {
-        this.range = range;
+    public void setRange(Integer baseRange) {
+        this.baseRange = baseRange;
+    }
+
+    public Integer getBaseRange() {
+        return range;
+    }
+
+    public void setBaseRange(Integer baseRange) {
+        this.baseRange = baseRange;
     }
 
     public Integer getBullets() {
@@ -250,6 +264,14 @@ public class Player {
 
     public void setStillPlayableBangsThisRound(Integer stillPlayableBangsThisRound) {
         this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
+    }
+
+    public Integer getPlaybleBangsAnyRound() {
+        return playableBangsAnyRound;
+    }
+
+    public void setPlayableBangsAnyRound(Integer playableBangsAnyRound) {
+        this.playableBangsAnyRound = playableBangsAnyRound;
     }
 
     public void pickACard(PlayCard card) {
