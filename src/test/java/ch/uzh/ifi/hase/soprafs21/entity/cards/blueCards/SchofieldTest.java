@@ -46,7 +46,7 @@ public class SchofieldTest {
         Schofield card = new Schofield();
         Player player = players.get(0);
         card.use(player, players.subList(0, 1));
-        assertEquals(2, player.getRange());
+        assertEquals(player.getBaseRange()+1, player.getRange());
     }
 
     @Test
@@ -54,8 +54,8 @@ public class SchofieldTest {
         Schofield card = new Schofield();
         Player player = players.get(0);
         card.use(player, players.subList(0, 1));
-        assertEquals(2, player.getRange());
+        assertEquals(player.getBaseRange()+1, player.getRange());
         card.onRemoval(player);
-        assertEquals(1, player.getRange());
+        assertEquals(player.getBaseRange(), player.getRange());
     }
 }
