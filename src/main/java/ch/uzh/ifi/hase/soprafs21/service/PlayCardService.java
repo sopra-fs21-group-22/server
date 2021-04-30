@@ -71,6 +71,21 @@ public class PlayCardService {
         cardList.add(new Bang(Rank.ACE, Suit.HEARTS));
         cardList.add(new Bang(Rank.THREE, Suit.DIAMONDS));
 
+        // All Missed Cards
+        cardList.add(new Missed(Rank.TWO, Suit.SPADES));
+        cardList.add(new Missed(Rank.THREE, Suit.SPADES));
+        cardList.add(new Missed(Rank.FOUR, Suit.SPADES));
+        cardList.add(new Missed(Rank.FIVE, Suit.SPADES));
+        cardList.add(new Missed(Rank.SIX, Suit.SPADES));
+        cardList.add(new Missed(Rank.SEVEN, Suit.SPADES));
+        cardList.add(new Missed(Rank.EIGHT, Suit.SPADES));
+        cardList.add(new Missed(Rank.TEN, Suit.CLUBS));
+        cardList.add(new Missed(Rank.JACK, Suit.CLUBS));
+        cardList.add(new Missed(Rank.QUEEN, Suit.CLUBS));
+        cardList.add(new Missed(Rank.KING, Suit.CLUBS));
+        cardList.add(new Missed(Rank.ACE, Suit.CLUBS));
+
+
         cardList.add(new Beer(Rank.SEVEN, Suit.HEARTS));
         cardList.add(new Beer(Rank.SIX, Suit.HEARTS));
         cardList.add(new Beer(Rank.TEN, Suit.HEARTS));
