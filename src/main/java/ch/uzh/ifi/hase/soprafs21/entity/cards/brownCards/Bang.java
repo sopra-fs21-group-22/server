@@ -35,14 +35,9 @@ public class Bang extends BrownCard {
         }
 
         target.setBullets(target.getBullets() - 1);
-         if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability
+         if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // BArt Cassidy Ability
             DeckService deckservice = new DeckService();
             deckservice.cassidyDraw(target); 
-        } 
-
-        if (target.getCharacterCard().getName().equals("El Gringo")){         // El Gringo Ability
-            DeckService deckservice = new DeckService();
-            deckservice.gringoDraw(target, usingPlayer); 
         } 
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }
