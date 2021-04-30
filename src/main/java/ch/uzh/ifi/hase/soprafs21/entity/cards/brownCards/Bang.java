@@ -35,6 +35,8 @@ public class Bang extends BrownCard {
         }
 
         target.setBullets(target.getBullets() - 1);
+        target.takeHit();
+
          if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability
             DeckService deckservice = new DeckService();
             deckservice.cassidyDraw(target); 

@@ -16,6 +16,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 /**
@@ -93,12 +94,23 @@ public class Player {
     }
 
     public void takeHit() {
+        Boolean isSafe = false;
+        List<Player> targets = new ArrayList<>(); // empty target list since Missed & Beer both dont have any targets
         if(onFieldCards.containsCardType(Card.BARREL)){
-            int index = onFieldCards.getIndexByCardType(Card.BARREL);
-            Boolean isSafe = onFieldCards.get(index).onBang(this);
+            BlueCard barrel = onFieldCards.getCardsByCardType(Card.BARREL).get(0);
+            isSafe = barrel.onBang(this);
         }
-        // check for missed
-        // check for beer if life = 1
+        if(!isSafe && !hand.getCardsByCardType(Card.MISSED).isEmpty()){
+            PlayCard randomMISSED = hand.getCardsByCardType(Card.MISSED).get(0);
+            randomMISSED.use(this, targets);
+        }
+        else if (this.getBullets() == 0 && !hand.getCardsByCardType(Card.BEER).isEmpty()){
+            PlayCard randomBEER = hand.getCardsByCardType(Card.BEER).get(0);
+            randomBEER.use(this, targets);
+        }
+        if(this.getBullets() == 0){
+            //TODO player dies
+        }
     }
 
     public void playCard(Long cardId, List<Player> targets) {

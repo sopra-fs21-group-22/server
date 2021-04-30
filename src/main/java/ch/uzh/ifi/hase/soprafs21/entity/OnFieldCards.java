@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 import javax.persistence.*;
@@ -73,6 +74,31 @@ public class OnFieldCards {
         }
     }
 
+    /**
+     * getCardsByCardType: returns all the cards in the hand which have a certain card type
+     * e.g. getCardsByCardType(Card.MISSED) returns an ArrayList of all missed cards
+     * @param card
+     * @return
+     */
+    public List<BlueCard> getCardsByCardType(Card card){
+        List<BlueCard> soughtForCard = new ArrayList<>();
+        for (BlueCard cardInOnFieldCards : cards) {
+            if (cardInOnFieldCards.getCard() == card) {
+                soughtForCard.add(cardInOnFieldCards);
+            }
+        }
+        return soughtForCard;
+    }
+
+    public Boolean contains(BlueCard card){
+        for (BlueCard blueCard : cards) {
+            if (blueCard.getCard() == card.getCard()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean containsCardType(Card card){
         for (BlueCard blueCard : cards) {
             if (blueCard.getCard() == card) {
@@ -80,15 +106,6 @@ public class OnFieldCards {
             }
         }
         return false;
-    }
-
-    public int getIndexByCardType(Card card){
-        for (int i = 0; i < cards.size(); i++) {
-            if(cards.get(i).getCard() == card){
-                return i;
-            }
-        }
-        return -1;
     }
 
     public void removeOnFieldCard(BlueCard card) {

@@ -9,7 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Entity
@@ -63,6 +65,22 @@ public class Hand {
             throw new GameLogicException("Card to be removed doesn't exist!");
         }
         playCards.remove(cardToRemove);
+    }
+
+    /**
+     * getCardsByCardType: returns all the cards in the hand which have a certain card type
+     * e.g. getCardsByCardType(Card.MISSED) returns an ArrayList of all missed cards
+     * @param card
+     * @return
+     */
+    public List<PlayCard> getCardsByCardType(Card card){
+        List<PlayCard> soughtForCard = new ArrayList<>();
+        for (PlayCard cardInHand : playCards) {
+            if (cardInHand.getCard() == card) {
+                soughtForCard.add(cardInHand);
+            }
+        }
+        return soughtForCard;
     }
 
     public void addCards(List<PlayCard> newCards) {

@@ -68,7 +68,7 @@ public class JailTest {
         Player playerWithJail = players.get(0);
         Player target = players.get(1);
         jail.onPlacement(playerWithJail, target);
-        assertTrue(target.getOnFieldCards().containsCardType(Card.JAIL));
+        assertTrue(target.getOnFieldCards().contains(jail));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class JailTest {
         player.getTable().setPlayerOnTurn(playerInJail);
 
         jail.onTurnStart(playerInJail); // next player on turn
-        assertFalse(playerInJail.getOnFieldCards().containsCardType(Card.JAIL));
+        assertFalse(playerInJail.getOnFieldCards().contains(jail));
 
         // since the only card in the deck is a HEARTS card, the player should get out of jail
         assertSame(player.getTable().getPlayerOnTurn(), playerInJail);
@@ -108,7 +108,7 @@ public class JailTest {
         player.getTable().getDeck().setPlayCards(playCards);
 
         jail.onTurnStart(playerInJail);
-        assertFalse(playerInJail.getOnFieldCards().containsCardType(Card.JAIL));
+        assertFalse(playerInJail.getOnFieldCards().contains(jail));
 
         // since the only card in the deck is a Spades card, it should be the next players turn
         assertNotSame(playerInJail.getTable().getPlayerOnTurn(), playerInJail);
