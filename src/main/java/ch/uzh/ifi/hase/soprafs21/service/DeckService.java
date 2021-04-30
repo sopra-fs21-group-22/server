@@ -103,32 +103,6 @@ public class DeckService {
         }
     }
 
-    public void cassidyDraw(Player player) {
-
-        PlayerTable table = player.getTable();
-
-        if (table.getDeck().getPlayCards().size() < 2) {
-            player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
-            table.getDeck().getPlayCards().remove(0);
-            this.shuffle(table);
-
-            playerTableRepository.save(table);
-            playerTableRepository.flush();
-
-            playerRepository.save(player);
-            playerRepository.flush();
-        } else {
-            player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
-            table.getDeck().getPlayCards().remove(0);
-
-            playerTableRepository.save(table);
-            playerTableRepository.flush();
-
-            playerRepository.save(player);
-            playerRepository.flush();
-        }
-    }
-
     /**
      * A card is drawn from the deck, instead of putting it on a players hand it is
      * placed onto the Visible Cards, for everyone to see.

@@ -13,7 +13,6 @@ import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
@@ -59,8 +58,6 @@ public class VolcanicTest {
 
     @Test
     public void playingMultipleBang() {
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
-        players.get(1).setCharacterCard(characterCard);
         Volcanic card = new Volcanic();
         bangTargets.add(players.get(1));
         int expectedBullets = bangTargets.get(0).getBullets() - 2;
@@ -74,8 +71,6 @@ public class VolcanicTest {
 
     @Test
     public void undo() {
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
-        players.get(1).setCharacterCard(characterCard);
         Volcanic card = new Volcanic();
 
         bangTargets.add(players.get(1));
