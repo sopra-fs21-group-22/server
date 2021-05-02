@@ -14,6 +14,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Entity
@@ -64,6 +65,35 @@ public abstract class PlayCard {
      */
     public boolean onBang(Player affectedPlayer) {
         return false;
+    }
+
+    /**
+     * This function makes sure that the hand cards are added in the order of their priority.
+     * The first card (index 0) has the highest priority and the last card the lowest. The cards with
+     * the same priority are in arbitrary order.
+     * @param playCards
+     */
+
+    public void addCardInOrder(List<PlayCard> playCards){
+        // TODO depending on how many priorities there will be --> loop over priorities instead of if else
+        Priority cardPrio = this.getPriority();
+        int index = (playCards == null || playCards.size() == 0) ? 0 : playCards.size() - 1;
+
+        int i = 0;
+        if(cardPrio == Priority.FIRST || index == 0){
+            index = 0;
+        } else if (cardPrio == Priority.SECOND){
+            while (playCards.get(i).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
+                i++;
+            }
+            index = i;
+        } else if (cardPrio == Priority.THIRD){
+            while (playCards.get(i).getPriority() == Priority.FIRST || playCards.get(index).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
+                i++;
+            }
+            index = i;
+        }
+        playCards.add(index, this);
     }
 
     public Card getCard() {

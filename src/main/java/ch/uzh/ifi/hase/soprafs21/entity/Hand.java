@@ -54,13 +54,13 @@ public class Hand {
     }
 
     public List<PlayCard> getPlayCards() {
-        return playCards;
+        List<PlayCard> inOrder = checkOrder(playCards);
+        return inOrder;
     }
 
     public void setPlayCards(List<PlayCard> playCards) {
-        for (PlayCard card: playCards) {
-            addCardInOrder(card); // makes sure cards are added in order of priority
-        }
+        List<PlayCard> inOrder = checkOrder(playCards);
+        this.playCards = inOrder;
     }
 
     public void removeCard(PlayCard card) {
@@ -83,32 +83,15 @@ public class Hand {
 
     public void addCards(List<PlayCard> newCards) {
         for (PlayCard card: newCards) {
-            addCardInOrder(card); // makes sure cards are added in order of priority
+            card.addCardInOrder(playCards); // makes sure cards are added in order of priority
         }
     }
 
-    /**
-     * This function makes sure that the hand cards are added in the order of their priority.
-     * The first card (index 0) has the highest priority and the last card the lowest. The cards with
-     * the same priority are in arbitrary order.
-     */
-
-    public void addCardInOrder(PlayCard card){
-        // TODO depending on how many priorities there will be --> loop over priorities instead of if else
-        Priority cardPrio = card.getPriority();
-        int index = playCards.size() - 1;
-
-        if(cardPrio == Priority.FIRST){
-            index = 0;
-        } else if (cardPrio == Priority.SECOND){
-            while (playCards.get(index).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
-                index++;
-            }
-        } else if (cardPrio == Priority.THIRD){
-            while (playCards.get(index).getPriority() == Priority.FIRST || playCards.get(index).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
-                index++;
-            }
+    public List<PlayCard> checkOrder(List<PlayCard> playCards){
+        List<PlayCard> inOrder = new ArrayList<>();
+        for (int i = 0; i < playCards.size(); i++) {
+            playCards.get(i).addCardInOrder(inOrder);
         }
-        playCards.add(index, card);
+        return inOrder;
     }
 }

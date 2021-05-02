@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 import javax.persistence.*;
@@ -54,18 +55,21 @@ public class OnFieldCards {
     public void addOnFieldCard(BlueCard card){
         // TODO depending on how many priorities there will be --> loop over priorities instead of if else
         Priority cardPrio = card.getPriority();
-        int index = cards.size() - 1;
+        int index = (cards == null || cards.size() == 0) ? 0 : cards.size() - 1;
 
-        if(cardPrio == Priority.FIRST){
+        int i = 0;
+        if(cardPrio == Priority.FIRST || index == 0){
             index = 0;
         } else if (cardPrio == Priority.SECOND){
-            while (cards.get(index).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
-                index++;
+            while (cards.get(i).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
+                i++;
             }
+            index = i;
         } else if (cardPrio == Priority.THIRD){
-            while (cards.get(index).getPriority() == Priority.FIRST || cards.get(index).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
-                index++;
+            while (cards.get(i).getPriority() == Priority.FIRST || cards.get(index).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
+                i++;
             }
+            index = i;
         }
         cards.add(index, card);
     }
