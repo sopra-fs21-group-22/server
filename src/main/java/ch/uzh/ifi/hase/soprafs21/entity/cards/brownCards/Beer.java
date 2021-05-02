@@ -1,10 +1,12 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -17,6 +19,7 @@ public class Beer extends BrownCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.BEER;
+        this.priority = Priority.THIRD;
     }
 
     public Beer() {
@@ -28,5 +31,15 @@ public class Beer extends BrownCard {
             throw new GameLogicException("Player is already at max health!");
         }
         usingPlayer.setBullets(usingPlayer.getBullets() + 1);
+    }
+
+    @Override
+    public boolean onBang(Player affectedPlayer){
+        if(affectedPlayer.getBullets() == 0){
+            List<Player> targets = new ArrayList<>();
+            onPlacement(affectedPlayer, targets);
+            return true;
+        }
+        return false;
     }
 }

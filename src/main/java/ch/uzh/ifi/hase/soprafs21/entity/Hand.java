@@ -9,10 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
+/**
+ * Hand has all the cards that a player has on his*her hand in order of priority.
+ */
 @Entity
 public class Hand {
 
@@ -24,6 +27,10 @@ public class Hand {
     @JoinColumn(name = "hand_id")
     private List<PlayCard> playCards;
 
+    public PlayCard get(int index){
+        return playCards.get(index);
+    }
+
     public PlayCard getCardById(Long cardId) {
         for (PlayCard card : playCards) {
             if (card.getId().equals(cardId)) {
@@ -31,6 +38,11 @@ public class Hand {
             }
         }
         throw new GameLogicException(String.format("Player doesn't have a card with id %s in his hand.", cardId));
+    }
+
+    public Integer getLength() {
+        List<PlayCard> temp = playCards;
+        return temp == null ? 0 : temp.size();
     }
 
     public Long getId() {
@@ -46,7 +58,9 @@ public class Hand {
     }
 
     public void setPlayCards(List<PlayCard> playCards) {
-        this.playCards = playCards;
+        for (PlayCard card: playCards) {
+            addCardInOrder(card); // makes sure cards are added in order of priority
+        }
     }
 
     public void removeCard(PlayCard card) {
@@ -66,23 +80,35 @@ public class Hand {
         playCards.remove(cardToRemove);
     }
 
-    /**
-     * getCardsByCardType: returns all the cards in the hand which have a certain card type
-     * e.g. getCardsByCardType(Card.MISSED) returns an ArrayList of all missed cards
-     * @param card
-     * @return
-     */
-    public List<PlayCard> getCardsByCardType(Card card){
-        List<PlayCard> soughtForCard = new ArrayList<>();
-        for (PlayCard cardInHand : playCards) {
-            if (cardInHand.getCard() == card) {
-                soughtForCard.add(cardInHand);
-            }
-        }
-        return soughtForCard;
-    }
 
     public void addCards(List<PlayCard> newCards) {
-        this.playCards.addAll(newCards);
+        for (PlayCard card: newCards) {
+            addCardInOrder(card); // makes sure cards are added in order of priority
+        }
+    }
+
+    /**
+     * This function makes sure that the hand cards are added in the order of their priority.
+     * The first card (index 0) has the highest priority and the last card the lowest. The cards with
+     * the same priority are in arbitrary order.
+     */
+
+    public void addCardInOrder(PlayCard card){
+        // TODO depending on how many priorities there will be --> loop over priorities instead of if else
+        Priority cardPrio = card.getPriority();
+        int index = playCards.size() - 1;
+
+        if(cardPrio == Priority.FIRST){
+            index = 0;
+        } else if (cardPrio == Priority.SECOND){
+            while (playCards.get(index).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
+                index++;
+            }
+        } else if (cardPrio == Priority.THIRD){
+            while (playCards.get(index).getPriority() == Priority.FIRST || playCards.get(index).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
+                index++;
+            }
+        }
+        playCards.add(index, card);
     }
 }

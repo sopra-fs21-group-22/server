@@ -14,9 +14,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
-import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -56,6 +54,16 @@ public abstract class PlayCard {
         if (usingPlayer.getBullets() <= 0) {
             throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
         }
+    }
+
+    /**
+     * Runs when the player having this card gets hit by a bang card
+     *
+     * @param affectedPlayer
+     * @return True if the hit has been absorbed false otherwise
+     */
+    public boolean onBang(Player affectedPlayer) {
+        return false;
     }
 
     public Card getCard() {

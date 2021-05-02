@@ -12,12 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
-import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -94,21 +91,20 @@ public class Player {
     }
 
     public void takeHit() {
-        Boolean isSafe = false;
-        List<Player> targets = new ArrayList<>(); // empty target list since Missed & Beer both dont have any targets
-        if(onFieldCards.containsCardType(Card.BARREL)){
-            BlueCard barrel = onFieldCards.getCardsByCardType(Card.BARREL).get(0);
-            isSafe = barrel.onBang(this);
+        boolean isSafe = false;
+
+        // first go through onFieldCards for the Barrel
+        for (int i = 0; i < onFieldCards.getLength(); i++) {
+            isSafe = onFieldCards.get(i).onBang(this);
         }
-        if(!isSafe && !hand.getCardsByCardType(Card.MISSED).isEmpty()){
-            PlayCard randomMISSED = hand.getCardsByCardType(Card.MISSED).get(0);
-            randomMISSED.use(this, targets);
+
+        // then go through Hand cards for Missed & Beer
+        int i = 0;
+        while(!isSafe && i<hand.getLength()){
+            isSafe = hand.get(i).onBang(this); // since hand is in order of priority this will check Missed before Beer
+            i++;
         }
-        else if (this.getBullets() == 0 && !hand.getCardsByCardType(Card.BEER).isEmpty()){
-            PlayCard randomBEER = hand.getCardsByCardType(Card.BEER).get(0);
-            randomBEER.use(this, targets);
-        }
-        if(this.getBullets() == 0){
+        if(bullets == 0){
             //TODO player dies
         }
     }

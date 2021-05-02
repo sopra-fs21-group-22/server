@@ -37,7 +37,7 @@ public class Dynamite extends BlueCard {
         PlayCard referenceCard = deck.drawCards(1).get(0);
         System.out.println("SUIT: " + referenceCard.getSuit());
         Rank r = referenceCard.getRank();
-        Boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING && r != Rank.ACE);
+        boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING && r != Rank.ACE);
         if(referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine){ // explosion
             int lives = affectedPlayer.getBullets();
             if (lives > 3) {
