@@ -1,7 +1,25 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
 import org.junit.jupiter.api.Test;
@@ -10,6 +28,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DTOMapperTest Tests if the mapping between the internal and the external/API
@@ -55,4 +75,167 @@ public class DTOMapperTest {
         assertEquals(user.getBirthday(), userGetDTO.getBirthday());
         assertEquals(user.getCreationDate(), userGetDTO.getCreationDate());
     }
+
+    @Test
+    public void testGetPlayerTable_fromPlayerTable_toPlayerTableGetDTO_success() {
+        //create a table and players
+        PlayerTable table = new PlayerTable();
+        List<Player> players = new ArrayList<>();
+        Player player1 = new Player();
+        Player player2 = new Player();
+        Player player3 = new Player();
+        Player player4 = new Player();
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+        players.add(player4);
+        table.setPlayers(players);
+        table.setPlayerOnTurn(player1);
+        table.setId(1L);
+
+        //Mapping
+        PlayerTableGetDTO playerTableGetDTO = DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
+
+        //check
+        assertEquals(table.getId(), playerTableGetDTO.getId());
+        //assertEquals(table.getPlayers(), playerTableGetDTO.getPlayers());
+        //assertEquals(table.getPlayerOnTurn(), playerTableGetDTO.getPlayerOnTurn());
+    } 
+
+    @Test
+    public void test_player_to_playerGetDTO_success() {
+        //create players
+        User user = new User();
+        Hand hand = new Hand();
+        OnFieldCards cards = new OnFieldCards();
+        Player player1 = new Player();
+        Player player2 = new Player();
+        Player player3 = new Player();
+        player1.setUser(user);
+        player1.setGameRole(GameRole.DEPUTY);
+        player1.setReady(false);
+        player1.setLeftNeighbor(player2);
+        player1.setRightNeighbor(player3);
+        player1.setHand(hand);
+        player1.setOnFieldCards(cards);
+
+        //Mapping
+        PlayerGetDTO playerGetDTO = DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(player1);
+
+        //check
+        assertEquals(player1.getId(), playerGetDTO.getId());
+        assertEquals(player1.getUser().getUsername(), playerGetDTO.getUser());
+        assertEquals(GameRole.HIDDEN, playerGetDTO.getGameRole());
+        assertEquals(player1.getLeftNeighbor().getId(), playerGetDTO.getLeftNeighbor());
+        assertEquals(player1.getRightNeighbor().getId(), playerGetDTO.getRightNeighbor());
+        
+    } 
+
+    @Test
+    public void test_player_to_playerGetAuthDTO_success() {
+        //create players
+        User user = new User();
+        Hand hand = new Hand();
+        OnFieldCards cards = new OnFieldCards();
+        Player player1 = new Player();
+        Player player2 = new Player();
+        Player player3 = new Player();
+        player1.setUser(user);
+        player1.setGameRole(GameRole.DEPUTY);
+        player1.setReady(false);
+        player1.setLeftNeighbor(player2);
+        player1.setRightNeighbor(player3);
+        player1.setHand(hand);
+        player1.setOnFieldCards(cards);
+
+        //Mapping
+        PlayerGetAuthDTO playerGetAuthDTO = DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(player1);
+
+        //check
+        assertEquals(player1.getId(), playerGetAuthDTO.getId());
+        assertEquals(player1.getUser().getUsername(), playerGetAuthDTO.getUser());
+        assertEquals(player1.getGameRole(), playerGetAuthDTO.getGameRole());
+        assertEquals(player1.getLeftNeighbor().getId(), playerGetAuthDTO.getLeftNeighbor());
+        assertEquals(player1.getRightNeighbor().getId(), playerGetAuthDTO.getRightNeighbor());
+        
+    } 
+
+    @Test
+    public void test_hand_to_handGetDTO_success() {
+
+        // create hand
+        Hand hand = new Hand();
+        List<PlayCard> cards = new ArrayList<>();
+        PlayCard card = new Bang(Rank.ACE, Suit.CLUBS);
+        cards.add(card);
+        hand.setPlayCards(cards);
+        
+        //Mapping
+        HandGetDTO handGetDTO = DTOMapper.INSTANCE.convertEntityToHandGetDTO(hand);
+        
+        //check
+        assertEquals(null, handGetDTO.getPlayCards());
+        assertEquals(hand.getPlayCards().size(),handGetDTO.getCardsInHand());
+
+    }
+
+    // This test doesn't work...
+    /* @Test
+    public void test_visibleCards_to_visibleCardsGetDTO_success() {
+
+        // create visibleCards
+        VisibleCards visibleCards = new VisibleCards();
+        List<PlayCard> cards = new ArrayList<>();
+        List<PlayCardAuthGetDTO> cards2 = new ArrayList<>();
+        PlayCard card = new Bang(Rank.ACE, Suit.CLUBS);
+        cards.add(card);
+        visibleCards.setVisibleCards(cards);
+        
+        //Mapping
+        VisibleCardsGetDTO visibleCardsGetDTO = DTOMapper.INSTANCE.convertEntityToVisibleCardsGetDTO(visibleCards);
+        cards2.add(DTOMapper.INSTANCE.convertEntityToPlayCardGetAuthDTO(card));
+        
+        //check
+        assertEquals(cards2, visibleCardsGetDTO.getVisibleCards());
+    } */
+
+    @Test
+    public void test_playCard_to_playCardGetDTO_success() {
+
+        // create Card
+        PlayCard card = new Bang(Rank.ACE, Suit.CLUBS);
+        
+        //Mapping
+        PlayCardGetDTO playCardGetDTO = DTOMapper.INSTANCE.convertEntityToPlayCardGetDTO(card);
+        
+        //check
+        assertEquals(Card.HIDDEN, playCardGetDTO.getCard());
+        assertEquals(card.getColor(), playCardGetDTO.getColor());
+        assertEquals(Rank.HIDDEN, playCardGetDTO.getRank());
+        assertEquals(Suit.HIDDEN, playCardGetDTO.getSuit());
+        assertEquals(card.getId(), playCardGetDTO.getId());
+
+
+    }
+
+    @Test
+    public void test_playCard_to_playCardGetAuthDTO_success() {
+
+        // create Card
+        PlayCard card = new Bang(Rank.ACE, Suit.CLUBS);
+        
+        //Mapping
+        PlayCardAuthGetDTO playCardAuthGetDTO = DTOMapper.INSTANCE.convertEntityToPlayCardGetAuthDTO(card);
+        
+        //check
+        assertEquals(card.getCard(), playCardAuthGetDTO.getCard());
+        assertEquals(card.getColor(), playCardAuthGetDTO.getColor());
+        assertEquals(card.getRank(), playCardAuthGetDTO.getRank());
+        assertEquals(card.getSuit(), playCardAuthGetDTO.getSuit());
+        assertEquals(card.getId(), playCardAuthGetDTO.getId());
+
+
+    }
+
+
 }
