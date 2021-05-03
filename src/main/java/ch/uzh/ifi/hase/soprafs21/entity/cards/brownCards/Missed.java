@@ -30,8 +30,7 @@ public class Missed extends BrownCard {
 
     @Override
     public boolean onBang(Player affectedPlayer){
-        List<Player> targets = new ArrayList<>();
-        onPlacement(affectedPlayer, targets);
+        onPlacement(affectedPlayer, new ArrayList<>());
         return true;
     }
 

@@ -41,8 +41,7 @@ public class Hand {
     }
 
     public Integer getLength() {
-        List<PlayCard> temp = playCards;
-        return temp == null ? 0 : temp.size();
+        return playCards == null ? 0 : playCards.size();
     }
 
     public Long getId() {
