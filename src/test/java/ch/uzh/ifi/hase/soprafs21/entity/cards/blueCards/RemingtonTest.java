@@ -42,7 +42,7 @@ public class RemingtonTest {
         Remington card = new Remington();
         Player player = players.get(0);
         card.use(player, players.subList(0, 1));
-        assertEquals(player.getBaseRange()+2, player.getRange());
+        assertEquals(3, player.getRange());
     }
 
     @Test
@@ -50,9 +50,9 @@ public class RemingtonTest {
         Remington card = new Remington();
         Player player = players.get(0);
         card.use(player, players.subList(0, 1));
-        assertEquals(player.getBaseRange()+2, player.getRange());
+        assertEquals(3, player.getRange());
         card.onRemoval(player);
-        assertEquals(player.getBaseRange(), player.getRange());
+        assertEquals(1, player.getRange());
     }
 
 }

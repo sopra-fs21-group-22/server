@@ -10,6 +10,10 @@ import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
@@ -56,11 +60,9 @@ public class BangTest {
     @Test
     public void testBang_reducesLives() {
 
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
         targets.add(target);
-        target.setCharacterCard(characterCard);
         int expectedLives = target.getBullets() - 1;
 
         bang.use(user, targets);
@@ -80,11 +82,9 @@ public class BangTest {
 
     @Test
     public void cantPlayMoreBangCards() {
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
         targets.add(target);
-        target.setCharacterCard(characterCard);
         bang.use(user, targets);
         assertThrows(GameLogicException.class, () -> {
             bang.use(user, targets);

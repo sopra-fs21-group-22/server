@@ -20,12 +20,12 @@ public class Winchester extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player targetPlayer) {
-        usingPlayer.setRange(usingPlayer.getRange()+4);
+        usingPlayer.setRange(5);
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setRange(affectedPlayer.getBaseRange());
+        affectedPlayer.setRange(1);
     }
 
     @Override
