@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -34,5 +33,4 @@ public abstract class BrownCard extends PlayCard {
     }
 
     protected abstract void onPlacement(Player usingPlayer, List<Player> targets);
-
 }

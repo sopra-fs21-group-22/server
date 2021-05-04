@@ -85,7 +85,26 @@ public class Player {
     }
 
     public void takeHit() {
-        this.bullets -= 1;
+        boolean isSafe = false;
+
+        // first go through onFieldCards for the Barrel
+        for (int i = 0; i < onFieldCards.getLength(); i++) {
+            isSafe = onFieldCards.get(i).onBang(this);
+            if(isSafe){
+                break;
+            }
+        }
+        // then go through Hand cards for Missed & Beer
+        int i = 0;
+        while(!isSafe && i<hand.getLength()){
+            if(hand.get(i).getColor() == "brown"){ // to make sure no blue cards on hand are activated
+                isSafe = hand.get(i).onBang(this); // since hand is in order of priority this will check Missed before Beer
+                i++;
+            }
+        }
+        if(bullets == 0){
+            //TODO player dies
+        }
     }
 
     public void playCard(Long cardId, List<Player> targets) {

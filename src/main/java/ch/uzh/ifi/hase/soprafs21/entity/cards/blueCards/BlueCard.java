@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
@@ -69,13 +67,5 @@ public abstract class BlueCard extends PlayCard {
         // Default behaviour is to do nothing
     }
 
-    /**
-     * Runs when the player having this card gets hit by a bang card
-     *
-     * @param affectedPlayer
-     * @return True if the hit has been absorbed false otherwise
-     */
-    public boolean onBang(Player affectedPlayer) {
-        return false;
-    }
+
 }

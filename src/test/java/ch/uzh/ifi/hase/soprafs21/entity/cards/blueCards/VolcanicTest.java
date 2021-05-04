@@ -6,9 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -39,11 +41,15 @@ public class VolcanicTest {
         players.add(oldPlayer);
         oldPlayer.setTable(table);
         oldPlayer.setOnFieldCards(new OnFieldCards());
+        Hand hand = new Hand();
+        hand.setPlayCards(new ArrayList<>());
+        oldPlayer.setHand(hand);
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
+            newPlayer.setHand(hand);
             newPlayer.setTable(table);
             players.add(newPlayer);
             newPlayer.setRightNeighbor(oldPlayer);
