@@ -132,6 +132,7 @@ public class GameController {
             throw new NotOnTurnException();
         }
         playerTableService.nextPlayersTurn(table);
+        playerTableRepository.save(table);
     }
 
     @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")

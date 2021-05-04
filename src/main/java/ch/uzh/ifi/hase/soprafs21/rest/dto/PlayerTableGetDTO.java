@@ -3,15 +3,25 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class PlayerTableGetDTO {
+    private Long id;
+    private GameStatus gameStatus;
+    private Deck discardPile;
     private Player playerOnTurn;
     private List<Player> players;
-    private Long id;
-    private Deck discardPile;
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
 
     public DiscardPileGetDTO getDiscardPile() {
         return DTOMapper.INSTANCE.convertEntityTDiscardPileGetDTO(discardPile);

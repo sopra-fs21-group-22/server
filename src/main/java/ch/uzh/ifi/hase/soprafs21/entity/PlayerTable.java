@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
+
 @Entity
 @Table(name = "playertable")
 public class PlayerTable {
@@ -40,7 +42,7 @@ public class PlayerTable {
     private CharacterPile characterPile;
 
     @Column
-    private Boolean gameHasStarted = false;
+    private GameStatus gameStatus = GameStatus.PREPARATION;
 
     public List<Player> getPlayersById(List<Long> playerIds) {
         List<Player> targetPlayers = new ArrayList<>();
@@ -63,6 +65,14 @@ public class PlayerTable {
             }
         }
         return playersInRange;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     public Long getId() {
@@ -111,14 +121,6 @@ public class PlayerTable {
 
     public void setCharacterPile(CharacterPile characterPile) {
         this.characterPile = characterPile;
-    }
-
-    public Boolean getGameHasStarted() {
-        return gameHasStarted;
-    }
-
-    public void setGameHasStarted(Boolean gameHasStarted) {
-        this.gameHasStarted = gameHasStarted;
     }
 
     public Optional<Player> getPlayerById(Long id) {

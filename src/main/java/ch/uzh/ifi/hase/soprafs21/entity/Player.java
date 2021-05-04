@@ -13,8 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -84,26 +86,55 @@ public class Player {
         this.onFieldCards = cards;
     }
 
-    public void takeHit() {
+    public void takeHit(Player attacker) {
         boolean isSafe = false;
 
         // first go through onFieldCards for the Barrel
         for (int i = 0; i < onFieldCards.getLength(); i++) {
             isSafe = onFieldCards.get(i).onBang(this);
-            if(isSafe){
+            if (isSafe) {
                 break;
             }
         }
         // then go through Hand cards for Missed & Beer
         int i = 0;
-        while(!isSafe && i<hand.getLength()){
-            if(hand.get(i).getColor() == "brown"){ // to make sure no blue cards on hand are activated
-                isSafe = hand.get(i).onBang(this); // since hand is in order of priority this will check Missed before Beer
+        while (!isSafe && i < hand.getLength()) {
+            if (hand.get(i).getColor() == "brown") { // to make sure no blue cards on hand are activated
+                isSafe = hand.get(i).onBang(this); // since hand is in order of priority this will check Missed before
+                                                   // Beer
                 i++;
             }
         }
-        if(bullets == 0){
-            //TODO player dies
+
+        if (!isSafe) {
+            this.bullets -= 1;
+        }
+
+        if (bullets == 0) {
+            onDeath(attacker);
+        }
+    }
+
+    private void onDeath(Player killer) {
+        if (killer.getGameRole().equals(GameRole.SHERIFF) && this.getGameRole().equals(GameRole.DEPUTY)) {
+            // punish sheriff
+            List<PlayCard> handCards = killer.getHand().getPlayCards();
+            List<BlueCard> onFieldCards = killer.getOnFieldCards().getOnFieldCards();
+            for (PlayCard card : handCards) {
+                killer.getTable().getDiscardPile().addCard(card);
+            }
+            for (PlayCard card : onFieldCards) {
+                killer.getTable().getDiscardPile().addCard(card);
+            }
+            killer.getHand().setPlayCards(new ArrayList<>());
+            killer.getOnFieldCards().removeAllCards();
+
+        } else if (this.getGameRole().equals(GameRole.OUTLAW)) {
+            // killer draws three cards
+            killer.getHand().addCards(killer.getTable().getDeck().drawCards(3));
+        } else if (this.getGameRole().equals(GameRole.SHERIFF) || killer.getTable().getAlivePlayers().size() == 1) {
+            // game over
+            this.table.setGameStatus(GameStatus.ENDED);
         }
     }
 
@@ -137,7 +168,6 @@ public class Player {
 
         return distance - this.getRange() + this.getDistanceDecreaseToOthers()
                 + targetPlayer.getDistanceIncreaseForOthers() <= 0;
-
     }
 
     public PlayerTable getTable() {

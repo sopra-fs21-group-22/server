@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.CharacterPile;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
@@ -78,7 +79,7 @@ public class PlayerTableService {
         // add user to existing playerTable
         for (PlayerTable playerTable : playerTables) {
             List<Player> players = playerTable.getPlayers();
-            if (players.size() < 7 && !playerTable.getGameHasStarted()) {
+            if (players.size() < 7 && playerTable.getGameStatus() == GameStatus.PREPARATION) {
 
                 players.add(player);
                 playerTable.setPlayers(players);
@@ -159,7 +160,7 @@ public class PlayerTableService {
     }
 
     private void startGame(PlayerTable table) {
-        table.setGameHasStarted(true);
+        table.setGameStatus(GameStatus.ONGOING);
 
         this.assignGameRoles(table);
         this.assignTablePositions(table);
@@ -199,7 +200,7 @@ public class PlayerTableService {
             throw new IllegalArgumentException(String.format("Player %s is not in PlayerTable with id %s.",
                     player.getUser().getUsername(), table.getId()));
         }
-        if (table.getGameHasStarted()) {
+        if (table.getGameStatus() != GameStatus.PREPARATION) {
             throw new IllegalArgumentException("Game has already started!");
         }
         player.setReady(status);
@@ -256,10 +257,11 @@ public class PlayerTableService {
 
     }
 
-    public void startTurn(Player nextPlayer, PlayerTable table){
+    public void startTurn(Player nextPlayer, PlayerTable table) {
         OnFieldCards onFieldCards = nextPlayer.getOnFieldCards();
 
-        // go through all onFieldCards to check if they have a functionality at the beginning of a turn
+        // go through all onFieldCards to check if they have a functionality at the
+        // beginning of a turn
         for (int i = 0; i < onFieldCards.getLength(); i++) {
             BlueCard currCard = onFieldCards.get(i);
             currCard.onTurnStart(nextPlayer);

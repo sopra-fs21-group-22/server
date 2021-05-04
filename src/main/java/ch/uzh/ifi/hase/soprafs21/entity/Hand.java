@@ -14,7 +14,8 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 /**
- * Hand has all the cards that a player has on his*her hand in order of priority.
+ * Hand has all the cards that a player has on his*her hand in order of
+ * priority.
  */
 @Entity
 public class Hand {
@@ -27,7 +28,7 @@ public class Hand {
     @JoinColumn(name = "hand_id")
     private List<PlayCard> playCards;
 
-    public PlayCard get(int index){
+    public PlayCard get(int index) {
         return playCards.get(index);
     }
 
@@ -79,14 +80,16 @@ public class Hand {
         playCards.remove(cardToRemove);
     }
 
-
     public void addCards(List<PlayCard> newCards) {
-        for (PlayCard card: newCards) {
+        if (playCards == null) {
+            playCards = new ArrayList<>();
+        }
+        for (PlayCard card : newCards) {
             card.addCardInOrder(playCards); // makes sure cards are added in order of priority
         }
     }
 
-    public List<PlayCard> checkOrder(List<PlayCard> playCards){
+    public List<PlayCard> checkOrder(List<PlayCard> playCards) {
         List<PlayCard> inOrder = new ArrayList<>();
         for (int i = 0; i < playCards.size(); i++) {
             playCards.get(i).addCardInOrder(inOrder);
