@@ -28,7 +28,7 @@ public class Gatling extends BrownCard {
             if (target.getId().equals(usingPlayer.getId())) {
                 continue;
             }
-            target.setBullets(target.getBullets() - 1);
+            target.takeHit(usingPlayer);
         }
     }
 }

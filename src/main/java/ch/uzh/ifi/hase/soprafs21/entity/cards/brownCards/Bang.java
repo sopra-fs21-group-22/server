@@ -33,7 +33,7 @@ public class Bang extends BrownCard {
             throw new GameLogicException("Player is out of range!");
         }
 
-        target.setBullets(target.getBullets() - 1);
+        target.takeHit(usingPlayer);
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }
 }
