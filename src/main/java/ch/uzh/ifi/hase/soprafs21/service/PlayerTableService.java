@@ -96,6 +96,7 @@ public class PlayerTableService {
         List<Player> players = new ArrayList<>();
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
+        deck.setDiscardPile(discardPile);
         players.add(player);
         player.setTable(playerTable);
         playerTable.setPlayers(players);
