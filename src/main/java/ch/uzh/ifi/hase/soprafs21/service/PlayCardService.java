@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Appaloosa;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
@@ -43,6 +44,8 @@ public class PlayCardService {
 
         cardList.add(new Mustang(Rank.EIGHT, Suit.HEARTS));
         cardList.add(new Mustang(Rank.NINE, Suit.HEARTS));
+
+        cardList.add(new Appaloosa(Rank.ACE, Suit.SPADES));
 
         // All Bang Cards
         cardList.add(new Bang(Rank.FOUR, Suit.DIAMONDS));
@@ -84,7 +87,6 @@ public class PlayCardService {
         cardList.add(new Missed(Rank.QUEEN, Suit.CLUBS));
         cardList.add(new Missed(Rank.KING, Suit.CLUBS));
         cardList.add(new Missed(Rank.ACE, Suit.CLUBS));
-
 
         cardList.add(new Beer(Rank.SEVEN, Suit.HEARTS));
         cardList.add(new Beer(Rank.SIX, Suit.HEARTS));
