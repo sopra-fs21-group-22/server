@@ -37,8 +37,8 @@ public class CharacterCardService {
         /* CharacterCard characterCard1 = new CharacterCard("Willy The Kid", 4);
         CharacterCard characterCard2 = new CharacterCard("Rose Doolan", 4);
         CharacterCard characterCard3 = new CharacterCard("Paul Regret", 3);
-        CharacterCard characterCard4 = new CharacterCard("Jourdonnais", 4);
-        CharacterCard characterCard5 = new CharacterCard("Bart Cassidy", 4);
+        CharacterCard characterCard4 = new CharacterCard("Jourdonnais", 4);   // for use with buggy constructor version of charactercard class
+        CharacterCard characterCard5 = new CharacterCard("Bart Cassidy", 4);    // do not enable
         CharacterCard characterCard6 = new CharacterCard("Suzy Lafayette", 4);
         CharacterCard characterCard7 = new CharacterCard("El Gringo", 3); */
 
@@ -82,16 +82,16 @@ public class CharacterCardService {
 
     public CharacterCard pickCharacter(Player player, PlayerTable table) {
         List<CharacterCard> characterCards = table.getCharacterPile().getCharacterCards();
-        //Collections.shuffle(characterCards);      //randomizes character cards
+        Collections.shuffle(characterCards);      //randomizes character cards
         CharacterCard card = characterCards.get(0);
-        //characterCards.remove(0); // removes already chosen card
+        characterCards.remove(0); // removes already chosen card
         player.setCharacterCard(card);
-        //player.setMaxBullets(player.getCharacterCard().getLifeAmount());
-        //player.setBullets(player.getCharacterCard().getLifeAmount());
-        //table.getCharacterPile().setCharacterCards(characterCards); // change the cardPile
+        player.setMaxBullets(player.getCharacterCard().getLifeAmount());
+        player.setBullets(player.getCharacterCard().getLifeAmount());
+        table.getCharacterPile().setCharacterCards(characterCards); 
         playerTableRepository.save(table);
 
-         /* if (player.getCharacterCard().getName().equals("Willy The Kid")) {
+        if (player.getCharacterCard().getName().equals("Willy The Kid")) {
             player.setPlayableBangsAnyRound(255);
             player.setStillPlayableBangsThisRound(255);
         }
@@ -103,7 +103,7 @@ public class CharacterCardService {
 
         if (player.getCharacterCard().getName().equals("Paul Regret")) {
             player.setDistanceIncreaseForOthers(1);
-        }  */
+        } 
 
         playerTableRepository.save(table);
         

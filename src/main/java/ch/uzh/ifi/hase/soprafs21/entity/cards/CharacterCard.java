@@ -19,7 +19,7 @@ public class CharacterCard {
 
   
 
-    /* public CharacterCard(String name, Integer lifeAmount){
+    /* public CharacterCard(String name, Integer lifeAmount){ //this causes a major bug
         this.name=name;
         this.lifeAmount=lifeAmount;
     } */

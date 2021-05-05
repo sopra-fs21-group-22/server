@@ -35,10 +35,10 @@ public class Bang extends BrownCard {
         }
 
         target.setBullets(target.getBullets() - 1);
-        /*  if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // BArt Cassidy Ability
+        if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // BArt Cassidy Ability
             DeckService deckservice = new DeckService();
             deckservice.cassidyDraw(target); 
-        }  */
+        } 
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }
 }
