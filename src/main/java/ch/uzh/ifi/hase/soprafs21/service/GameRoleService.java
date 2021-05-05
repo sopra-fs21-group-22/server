@@ -12,19 +12,6 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 @Service
 public class GameRoleService {
 
-    public void onDeath(Player killer, Player killed) {
-        if (killer.getGameRole().equals(GameRole.SHERIFF) && killed.getGameRole().equals(GameRole.DEPUTY)) {
-            // TODO
-            // punish sheriff
-        } else if (killed.getGameRole().equals(GameRole.OUTLAW)) {
-            // TODO
-            // killer draws cards
-        } else if (killed.getGameRole().equals(GameRole.SHERIFF)) {
-            // TODO
-            // game over
-        }
-    }
-
     public List<GameRole> getRoles(Integer numberOfPlayers) {
         List<GameRole> roles = new ArrayList<GameRole>();
         roles.add(GameRole.SHERIFF);

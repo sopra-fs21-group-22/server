@@ -11,7 +11,7 @@ public class HandGetDTO {
     protected int cardsInHand;
 
     public List<PlayCardGetDTO> getPlayCards() {
-        return null;
+        return new ArrayList<>();
     }
 
     public void setPlayCards(List<PlayCard> playCards) {

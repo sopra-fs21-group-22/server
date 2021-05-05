@@ -29,6 +29,7 @@ public class Barrel extends BlueCard {
     @Override
     public boolean onBang(Player affectedPlayer) {
         PlayCard card = affectedPlayer.getTable().getDeck().drawCards(1).get(0);
+        affectedPlayer.getTable().getDiscardPile().addCard(card);
         return card.getSuit().equals(Suit.HEARTS);
     }
 

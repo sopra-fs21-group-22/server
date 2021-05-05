@@ -81,7 +81,7 @@ public class DeckService {
     public void drawCards(PlayerTable table, Player player, Integer n) {
         for (int i = 0; i < n; i++) {
             if (table.getDeck().getPlayCards().size() < 2) {
-                player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
+                table.getDeck().getPlayCards().get(0).addCardInOrder(player.getHand().getPlayCards());
                 table.getDeck().getPlayCards().remove(0);
                 this.shuffle(table);
 
@@ -91,7 +91,7 @@ public class DeckService {
                 playerRepository.save(player);
                 playerRepository.flush();
             } else {
-                player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
+                table.getDeck().getPlayCards().get(0).addCardInOrder(player.getHand().getPlayCards());
                 table.getDeck().getPlayCards().remove(0);
 
                 playerTableRepository.save(table);
@@ -100,32 +100,6 @@ public class DeckService {
                 playerRepository.save(player);
                 playerRepository.flush();
             }
-        }
-    }
-
-    public void cassidyDraw(Player player) {
-
-        PlayerTable table = player.getTable();
-
-        if (table.getDeck().getPlayCards().size() < 2) {
-            player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
-            table.getDeck().getPlayCards().remove(0);
-            this.shuffle(table);
-
-            playerTableRepository.save(table);
-            playerTableRepository.flush();
-
-            playerRepository.save(player);
-            playerRepository.flush();
-        } else {
-            player.getHand().getPlayCards().add(table.getDeck().getPlayCards().get(0));
-            table.getDeck().getPlayCards().remove(0);
-
-            playerTableRepository.save(table);
-            playerTableRepository.flush();
-
-            playerRepository.save(player);
-            playerRepository.flush();
         }
     }
 

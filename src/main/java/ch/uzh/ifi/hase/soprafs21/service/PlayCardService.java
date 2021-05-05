@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Appaloosa;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
@@ -44,6 +45,8 @@ public class PlayCardService {
         cardList.add(new Mustang(Rank.EIGHT, Suit.HEARTS));
         cardList.add(new Mustang(Rank.NINE, Suit.HEARTS));
 
+        cardList.add(new Appaloosa(Rank.ACE, Suit.SPADES));
+
         // All Bang Cards
         cardList.add(new Bang(Rank.FOUR, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.EIGHT, Suit.DIAMONDS));
@@ -70,6 +73,20 @@ public class PlayCardService {
         cardList.add(new Bang(Rank.TWO, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.ACE, Suit.HEARTS));
         cardList.add(new Bang(Rank.THREE, Suit.DIAMONDS));
+
+        // All Missed Cards
+        cardList.add(new Missed(Rank.TWO, Suit.SPADES));
+        cardList.add(new Missed(Rank.THREE, Suit.SPADES));
+        cardList.add(new Missed(Rank.FOUR, Suit.SPADES));
+        cardList.add(new Missed(Rank.FIVE, Suit.SPADES));
+        cardList.add(new Missed(Rank.SIX, Suit.SPADES));
+        cardList.add(new Missed(Rank.SEVEN, Suit.SPADES));
+        cardList.add(new Missed(Rank.EIGHT, Suit.SPADES));
+        cardList.add(new Missed(Rank.TEN, Suit.CLUBS));
+        cardList.add(new Missed(Rank.JACK, Suit.CLUBS));
+        cardList.add(new Missed(Rank.QUEEN, Suit.CLUBS));
+        cardList.add(new Missed(Rank.KING, Suit.CLUBS));
+        cardList.add(new Missed(Rank.ACE, Suit.CLUBS));
 
         cardList.add(new Beer(Rank.SEVEN, Suit.HEARTS));
         cardList.add(new Beer(Rank.SIX, Suit.HEARTS));

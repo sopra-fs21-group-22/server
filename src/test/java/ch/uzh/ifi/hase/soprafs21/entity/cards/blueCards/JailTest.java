@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;

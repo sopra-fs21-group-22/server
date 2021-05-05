@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
@@ -36,7 +34,8 @@ public abstract class BlueCard extends PlayCard {
     }
 
     /**
-     * Runs when the card is played. Responsible for placing the card correctly
+     * Responsible for the effect that occurs when the card is placed. Runs when
+     * card is played from the players hand.
      *
      * @param usingPlayer
      * @param targetPlayer
@@ -44,7 +43,8 @@ public abstract class BlueCard extends PlayCard {
     protected abstract void onPlacement(Player usingPlayer, Player targetPlayer);
 
     /**
-     * Validates if the target is a valid target
+     * Validates if the target is a valid target. The card will end up on the field
+     * of the target player.
      *
      * @param usingPlayer
      * @param targetPlayer
@@ -52,7 +52,7 @@ public abstract class BlueCard extends PlayCard {
     protected abstract boolean targetIsValid(Player usingPlayer, Player targetPlayer);
 
     /**
-     * Runs every time the user starts his turn
+     * Runs every time the card owner starts his turn.
      *
      * @param affectedPlayer
      */
@@ -69,13 +69,4 @@ public abstract class BlueCard extends PlayCard {
         // Default behaviour is to do nothing
     }
 
-    /**
-     * Runs when the player having this card gets hit by a bang card
-     *
-     * @param affectedPlayer
-     * @return True if the hit has been absorbed false otherwise
-     */
-    public boolean onBang(Player affectedPlayer) {
-        return false;
-    }
 }

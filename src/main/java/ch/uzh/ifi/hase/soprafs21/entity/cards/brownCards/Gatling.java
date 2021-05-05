@@ -8,7 +8,6 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
-import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 @Entity
 public class Gatling extends BrownCard {
@@ -29,11 +28,7 @@ public class Gatling extends BrownCard {
             if (target.getId().equals(usingPlayer.getId())) {
                 continue;
             }
-            target.setBullets(target.getBullets() - 1);
-            if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability 
-                DeckService deckservice = new DeckService();
-                deckservice.cassidyDraw(target); 
-            } 
+            target.takeHit(usingPlayer);
         }
     }
 }

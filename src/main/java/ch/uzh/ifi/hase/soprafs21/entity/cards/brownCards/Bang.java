@@ -9,7 +9,6 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
-import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 @Entity
 public class Bang extends BrownCard {
@@ -39,6 +38,8 @@ public class Bang extends BrownCard {
             DeckService deckservice = new DeckService();
             deckservice.cassidyDraw(target); 
         } 
+
+        target.takeHit(usingPlayer);
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }
 }

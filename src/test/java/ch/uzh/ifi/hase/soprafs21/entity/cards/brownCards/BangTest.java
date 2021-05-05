@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,11 +36,15 @@ public class BangTest {
         players.add(oldPlayer);
         oldPlayer.setTable(table);
         oldPlayer.setOnFieldCards(new OnFieldCards());
+        Hand hand = new Hand();
+        hand.setPlayCards(new ArrayList<>());
+        oldPlayer.setHand(hand);
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
+            newPlayer.setHand(hand);
             newPlayer.setTable(table);
             players.add(newPlayer);
             newPlayer.setRightNeighbor(oldPlayer);
@@ -54,14 +59,12 @@ public class BangTest {
 
     @Test
     public void testBang_reducesLives() {
-
         CharacterCard characterCard = new CharacterCard();
         characterCard.setLifeAmount(3);
         characterCard.setName("Paul Regret");
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
         targets.add(target);
-        target.setCharacterCard(characterCard);
         int expectedLives = target.getBullets() - 1;
 
         bang.use(user, targets);
@@ -87,7 +90,6 @@ public class BangTest {
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
         targets.add(target);
-        target.setCharacterCard(characterCard);
         bang.use(user, targets);
         assertThrows(GameLogicException.class, () -> {
             bang.use(user, targets);

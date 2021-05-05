@@ -9,9 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
+/**
+ * Hand has all the cards that a player has on his*her hand in order of
+ * priority.
+ */
 @Entity
 public class Hand {
 
@@ -23,6 +28,10 @@ public class Hand {
     @JoinColumn(name = "hand_id")
     private List<PlayCard> playCards;
 
+    public PlayCard get(int index) {
+        return playCards.get(index);
+    }
+
     public PlayCard getCardById(Long cardId) {
         for (PlayCard card : playCards) {
             if (card.getId().equals(cardId)) {
@@ -30,6 +39,10 @@ public class Hand {
             }
         }
         throw new GameLogicException(String.format("Player doesn't have a card with id %s in his hand.", cardId));
+    }
+
+    public Integer getLength() {
+        return playCards == null ? 0 : playCards.size();
     }
 
     public Long getId() {
@@ -41,11 +54,13 @@ public class Hand {
     }
 
     public List<PlayCard> getPlayCards() {
-        return playCards;
+        List<PlayCard> inOrder = checkOrder(playCards);
+        return inOrder;
     }
 
     public void setPlayCards(List<PlayCard> playCards) {
-        this.playCards = playCards;
+        List<PlayCard> inOrder = checkOrder(playCards);
+        this.playCards = inOrder;
     }
 
     public void removeCard(PlayCard card) {
@@ -66,6 +81,19 @@ public class Hand {
     }
 
     public void addCards(List<PlayCard> newCards) {
-        this.playCards.addAll(newCards);
+        if (playCards == null) {
+            playCards = new ArrayList<>();
+        }
+        for (PlayCard card : newCards) {
+            card.addCardInOrder(playCards); // makes sure cards are added in order of priority
+        }
+    }
+
+    public List<PlayCard> checkOrder(List<PlayCard> playCards) {
+        List<PlayCard> inOrder = new ArrayList<>();
+        for (int i = 0; i < playCards.size(); i++) {
+            playCards.get(i).addCardInOrder(inOrder);
+        }
+        return inOrder;
     }
 }
