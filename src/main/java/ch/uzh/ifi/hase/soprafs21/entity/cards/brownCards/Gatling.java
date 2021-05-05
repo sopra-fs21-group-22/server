@@ -30,10 +30,10 @@ public class Gatling extends BrownCard {
                 continue;
             }
             target.setBullets(target.getBullets() - 1);
-            if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability 
+           /*  if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability 
                 DeckService deckservice = new DeckService();
                 deckservice.cassidyDraw(target); 
-            } 
+            }  */
         }
     }
 }

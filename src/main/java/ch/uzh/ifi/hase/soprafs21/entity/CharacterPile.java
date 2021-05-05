@@ -14,7 +14,7 @@ public class CharacterPile {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "characterpile_id")
+    @JoinColumn(name = "characterPile_id")
     private List<CharacterCard> characterCards;
 
     public Long getId() {

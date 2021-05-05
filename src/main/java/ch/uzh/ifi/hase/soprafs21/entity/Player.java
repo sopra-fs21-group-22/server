@@ -57,7 +57,7 @@ public class Player {
     @OneToOne(cascade = CascadeType.ALL)
     private Hand hand;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private CharacterCard characterCard;
 
     @Column

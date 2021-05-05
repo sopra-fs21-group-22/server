@@ -189,7 +189,7 @@ public class PlayerTableServiceIntTest {
         assertEquals(1, table.getPlayers().size());
     }
 
-    @Test
+   /*  @Test
     @Transactional
     public void newPlayersGetCorrectLifePoints() {
         PlayerTable table;
@@ -235,7 +235,7 @@ public class PlayerTableServiceIntTest {
 
        count = 0;
        for (int i = 0; i < 7; i++) {
-            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Paul Regret")) {
+            if (table.getPlayers().get(i).getCharacterCard().getName().equals("Paul Regret")) {                 //TESTING
                 count++;
             }
         }
@@ -278,7 +278,7 @@ public class PlayerTableServiceIntTest {
 
         assertEquals(1,count);
     }
-    
+     */
 
     // @Transactional
     // @Test

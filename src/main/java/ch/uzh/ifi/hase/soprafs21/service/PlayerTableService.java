@@ -55,6 +55,9 @@ public class PlayerTableService {
     DeckService deckService;
 
     @Autowired
+    CharacterCardService characterCardService;
+
+    @Autowired
     OnFieldCardsService onFieldCardsService;
 
     /**
@@ -83,7 +86,7 @@ public class PlayerTableService {
                 players.add(player);
                 playerTable.setPlayers(players);
                 player.setTable(playerTable);
-                player.setCharacterCard(this.pickCharacter(player, playerTable));
+                player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
                 playerTableRepository.save(playerTable);
                 playerTableRepository.flush();
 
@@ -95,14 +98,15 @@ public class PlayerTableService {
         List<Player> players = new ArrayList<>();
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
+        CharacterPile characterPile = characterCardService.createCharacterPile();
         players.add(player);
         player.setTable(playerTable);
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
-        playerTable.setCharacterPile(this.makeCharacterPile());
+        playerTable.setCharacterPile(characterPile);
         playerTableRepository.save(playerTable);
-        player.setCharacterCard(this.pickCharacter(player, playerTable));
+        player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
         playerTableRepository.save(playerTable);
         playerTableRepository.flush();
         return playerTable;
@@ -118,59 +122,7 @@ public class PlayerTableService {
     // playerTableRepository.save(table);
     // }
 
-    public CharacterPile makeCharacterPile() {
-        CharacterPile characterPile = new CharacterPile();
-        List<CharacterCard> characterCards = new ArrayList<CharacterCard>();
-        CharacterCard characterCard1 = new CharacterCard("Willy The Kid", 4);
-        CharacterCard characterCard2 = new CharacterCard("Rose Doolan", 4);
-        CharacterCard characterCard3 = new CharacterCard("Paul Regret", 3);
-        CharacterCard characterCard4 = new CharacterCard("Jourdonnais", 4);
-        CharacterCard characterCard5 = new CharacterCard("Bart Cassidy", 4);
-        CharacterCard characterCard6 = new CharacterCard("Suzy Lafayette", 4);
-        CharacterCard characterCard7 = new CharacterCard("El Gringo", 3);
-
-        characterCards.add(characterCard1);
-        characterCards.add(characterCard2);
-        characterCards.add(characterCard3);
-        characterCards.add(characterCard4);
-        characterCards.add(characterCard5);
-        characterCards.add(characterCard6);
-        characterCards.add(characterCard7);
-
-        characterPile.setCharacterCards(characterCards);
-        return characterPile;
-
-    }
-
-    public CharacterCard pickCharacter(Player player, PlayerTable table) {
-        List<CharacterCard> characterCards = table.getCharacterPile().getCharacterCards();
-        Collections.shuffle(characterCards);
-        CharacterCard card = characterCards.get(0);
-        characterCards.remove(0);
-        player.setCharacterCard(card);
-        player.setMaxBullets(player.getCharacterCard().getLifeAmount());
-        player.setBullets(player.getCharacterCard().getLifeAmount());
-        table.getCharacterPile().setCharacterCards(characterCards);
-        playerTableRepository.save(table);
-
-         if (player.getCharacterCard().getName().equals("Willy The Kid")) {
-            player.setPlayableBangsAnyRound(255);
-            player.setStillPlayableBangsThisRound(255);
-        }
-
-        if (player.getCharacterCard().getName().equals("Rose Doolan")) {
-            player.setBaseRange(2);
-            player.setRange(2);
-        }
-
-        if (player.getCharacterCard().getName().equals("Paul Regret")) {
-            player.setDistanceIncreaseForOthers(1);
-        } 
-
-        playerTableRepository.save(table);
-        
-        return card;
-    }
+    
 
     public PlayerTable getPlayerTableById(Long id) {
         return playerTableRepository.getOne(id);

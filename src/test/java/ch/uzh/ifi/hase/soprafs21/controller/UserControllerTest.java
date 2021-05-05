@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.UserNotFoundException;
+import ch.uzh.ifi.hase.soprafs21.repository.CharacterCardPileRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
@@ -88,6 +89,9 @@ public class UserControllerTest {
 
     @MockBean
     OnFieldCardsService onFieldCardsService;
+
+    @MockBean
+    CharacterCardPileRepository characterCardPileRepository;
 
     private User user;
 
