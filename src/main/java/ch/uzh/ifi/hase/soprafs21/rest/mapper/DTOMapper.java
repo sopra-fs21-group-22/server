@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.DiscardPileGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
@@ -121,4 +122,10 @@ public interface DTOMapper {
 
     @Mapping(source = "playCards", target = "playCards")
     DiscardPileGetDTO convertEntityTDiscardPileGetDTO(Deck discardPile);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "lifeAmount", target = "lifeAmount")
+    CharacterCardGetDTO convertEntityToCharacterCardGetDTO(CharacterCard characterCard);
+
 }
