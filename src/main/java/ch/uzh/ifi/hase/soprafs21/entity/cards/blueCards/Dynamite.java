@@ -48,10 +48,10 @@ public class Dynamite extends BlueCard {
         if (dynamiteExplodes) {
             int lives = affectedPlayer.getBullets();
             affectedPlayer.setBullets(Math.max(lives - 3, 0));
-            if (affectedPlayer.getCharacterCard().getName().equals("Bart Cassidy")){          // Bart Cassidy Ability
+            /* if (affectedPlayer.getCharacterCard().getName().equals("Bart Cassidy")){          // Bart Cassidy Ability
                 DeckService deckservice = new DeckService();
                 deckservice.cassidyDraw(affectedPlayer); 
-            } 
+            }  */
         } else {
             affectedPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(this);
         }
