@@ -47,6 +47,11 @@ public class PlayCardService {
 
         cardList.add(new Appaloosa(Rank.ACE, Suit.SPADES));
 
+        cardList.add(new Panic(Rank.EIGHT, Suit.DIAMONDS));
+        cardList.add(new Panic(Rank.ACE, Suit.HEARTS));
+        cardList.add(new Panic(Rank.JACK, Suit.HEARTS));
+        cardList.add(new Panic(Rank.QUEEN, Suit.HEARTS));
+
         // All Bang Cards
         cardList.add(new Bang(Rank.FOUR, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.EIGHT, Suit.DIAMONDS));
