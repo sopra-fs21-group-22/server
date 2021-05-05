@@ -21,6 +21,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.exceptions.IllegalGameStateException;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
@@ -124,7 +125,6 @@ public class PlayerTableService {
     // playerTableRepository.save(table);
     // }
 
-
     public PlayerTable getPlayerTableById(Long id) {
         return playerTableRepository.getOne(id);
     }
@@ -169,14 +169,17 @@ public class PlayerTableService {
      */
     public void setPlayerAsReady(Long gameId, Long playerId, Boolean status) {
         PlayerTable table = getPlayerTableById(gameId);
+
+        if (table.getGameStatus() != GameStatus.PREPARATION) {
+            throw new IllegalGameStateException(table.getGameStatus());
+        }
+
         Player player = playerRepository.getOne(playerId);
         if (!player.getTable().getId().equals(table.getId())) {
             throw new IllegalArgumentException(String.format("Player %s is not in PlayerTable with id %s.",
                     player.getUser().getUsername(), table.getId()));
         }
-        if (table.getGameStatus() != GameStatus.PREPARATION) {
-            throw new IllegalArgumentException("Game has already started!");
-        }
+
         player.setReady(status);
 
         Boolean playersReady = true;
@@ -212,6 +215,11 @@ public class PlayerTableService {
     }
 
     public void nextPlayersTurn(PlayerTable table) {
+
+        if (table.getGameStatus() != GameStatus.ONGOING) {
+            throw new IllegalGameStateException(table.getGameStatus());
+        }
+
         // End current turn
         Player currPlayer = table.getPlayerOnTurn();
         if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
@@ -231,7 +239,7 @@ public class PlayerTableService {
 
     }
 
-    public void startTurn(Player nextPlayer, PlayerTable table) {
+    private void startTurn(Player nextPlayer, PlayerTable table) {
         OnFieldCards onFieldCards = nextPlayer.getOnFieldCards();
 
         // go through all onFieldCards to check if they have a functionality at the
@@ -243,6 +251,13 @@ public class PlayerTableService {
 
         // TODO change to dynamic amount of cards
         deckService.drawCards(table, nextPlayer, 2);
+    }
+
+    public void checkGameState(Long gameId, GameStatus status) {
+        PlayerTable table = getPlayerTableById(gameId);
+        if (table.getGameStatus() != status) {
+            throw new IllegalGameStateException(table.getGameStatus());
+        }
     }
 
 }

@@ -25,8 +25,8 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(GlobalExceptionAdvice.class);
 
-    @ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class, GameLogicException.class,
-            NotOnTurnException.class })
+    @ExceptionHandler(value = { IllegalArgumentException.class, IllegalGameStateException.class,
+            GameLogicException.class, NotOnTurnException.class, IllegalGameStateException.class })
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);

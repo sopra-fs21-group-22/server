@@ -40,7 +40,7 @@ public class Player {
     private Integer range = 1;
 
     @Column
-    private Integer baseRange = 1; 
+    private Integer baseRange = 1;
 
     @Column
     private Integer distanceIncreaseForOthers = 0;
@@ -52,7 +52,7 @@ public class Player {
     Integer stillPlayableBangsThisRound = 1;
 
     @Column
-    Integer playableBangsAnyRound = 1; 
+    Integer playableBangsAnyRound = 1;
 
     @OneToOne
     private User user;
@@ -150,7 +150,6 @@ public class Player {
         PlayCard card = hand.getCardById(cardId);
         card.use(this, target, payload);
         hand.removeCard(card);
-
     }
 
     public boolean reachesWithDistance(Player target, int distance) {
@@ -330,7 +329,7 @@ public class Player {
 
     public void setPlayableBangsAnyRound(Integer playableBangsAnyRound) {
         this.playableBangsAnyRound = playableBangsAnyRound;
-    } 
+    }
 
     public void pickACard(PlayCard card) {
         List<PlayCard> cards = new ArrayList<>();
