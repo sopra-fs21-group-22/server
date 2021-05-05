@@ -59,7 +59,9 @@ public class VolcanicTest {
 
     @Test
     public void playingMultipleBang() {
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         players.get(1).setCharacterCard(characterCard);
         Volcanic card = new Volcanic();
         bangTargets.add(players.get(1));
@@ -74,7 +76,9 @@ public class VolcanicTest {
 
     @Test
     public void undo() {
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         players.get(1).setCharacterCard(characterCard);
         Volcanic card = new Volcanic();
 

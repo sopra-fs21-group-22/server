@@ -55,7 +55,9 @@ public class BangTest {
     @Test
     public void testBang_reducesLives() {
 
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
         targets.add(target);
@@ -79,7 +81,9 @@ public class BangTest {
 
     @Test
     public void cantPlayMoreBangCards() {
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
         targets.add(target);

@@ -86,7 +86,9 @@ public class DynamiteTest {
 
     @Test
     public void testOnTurnStartExplosionPlayerLives(){
-        CharacterCard characterCard = new CharacterCard("Paul Regret", 3);
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setBullets(4);
         Player randomPlayer = players.get(1);

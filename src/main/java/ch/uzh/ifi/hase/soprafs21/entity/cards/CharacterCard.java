@@ -19,10 +19,10 @@ public class CharacterCard {
 
   
 
-    public CharacterCard(String name, Integer lifeAmount){
+    /* public CharacterCard(String name, Integer lifeAmount){
         this.name=name;
         this.lifeAmount=lifeAmount;
-    }
+    } */
 
     public Long getId() {
         return id;
