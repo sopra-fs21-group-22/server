@@ -61,9 +61,12 @@ public class BangTest {
 
     @Test
     public void testBang_reducesLives() {
-
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
+        target.setCharacterCard(characterCard);
         int expectedLives = target.getBullets() - 1;
 
         bang.use(user, target, null);
@@ -81,8 +84,12 @@ public class BangTest {
 
     @Test
     public void cantPlayMoreBangCards() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
+        target.setCharacterCard(characterCard);
         bang.use(user, target, null);
         assertThrows(GameLogicException.class, () -> {
             bang.use(user, target, null);

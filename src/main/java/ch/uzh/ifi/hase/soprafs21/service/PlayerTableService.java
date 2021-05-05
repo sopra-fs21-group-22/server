@@ -56,6 +56,9 @@ public class PlayerTableService {
     DeckService deckService;
 
     @Autowired
+    CharacterCardService characterCardService;
+
+    @Autowired
     OnFieldCardsService onFieldCardsService;
 
     /**
@@ -84,7 +87,7 @@ public class PlayerTableService {
                 players.add(player);
                 playerTable.setPlayers(players);
                 player.setTable(playerTable);
-
+                player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
                 playerTableRepository.save(playerTable);
                 playerTableRepository.flush();
 
@@ -96,13 +99,16 @@ public class PlayerTableService {
         List<Player> players = new ArrayList<>();
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
+        CharacterPile characterPile = characterCardService.createCharacterPile();
         deck.setDiscardPile(discardPile);
         players.add(player);
         player.setTable(playerTable);
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
-        playerTable.setCharacterPile(this.makeCharacterPile());
+        playerTable.setCharacterPile(characterPile);
+        playerTableRepository.save(playerTable);
+        player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
         playerTableRepository.save(playerTable);
         playerTableRepository.flush();
         return playerTable;
@@ -118,43 +124,6 @@ public class PlayerTableService {
     // playerTableRepository.save(table);
     // }
 
-    public CharacterPile makeCharacterPile() {
-        CharacterPile characterPile = new CharacterPile();
-        List<CharacterCard> characterCards = new ArrayList<CharacterCard>();
-        CharacterCard characterCard1 = new CharacterCard("Willy The Kid", 4);
-        CharacterCard characterCard2 = new CharacterCard("Rose Doolan", 4);
-        CharacterCard characterCard3 = new CharacterCard("Paul Regret", 3);
-        CharacterCard characterCard4 = new CharacterCard("Jourdonnais", 4);
-        CharacterCard characterCard5 = new CharacterCard("Bart Cassidy", 4);
-        CharacterCard characterCard6 = new CharacterCard("Suzy Lafayette", 4);
-        CharacterCard characterCard7 = new CharacterCard("El Gringo", 3);
-
-        characterCards.add(characterCard1);
-        characterCards.add(characterCard2);
-        characterCards.add(characterCard3);
-        characterCards.add(characterCard4);
-        characterCards.add(characterCard5);
-        characterCards.add(characterCard6);
-        characterCards.add(characterCard7);
-
-        characterPile.setCharacterCards(characterCards);
-        return characterPile;
-
-    }
-
-    public CharacterCard pickCharacter(Player player, PlayerTable table) {
-        Random rand = new Random();
-        CharacterCard card = table.getCharacterPile().getCharacterCards()
-                .get(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
-        table.getCharacterPile().getCharacterCards()
-                .remove(rand.nextInt(table.getCharacterPile().getCharacterCards().size()));
-        player.setCharacterCard(card);
-        player.setMaxBullets(player.getCharacterCard().getLifeAmount());
-        player.setBullets(player.getCharacterCard().getLifeAmount());
-        playerTableRepository.save(table);
-        playerTableRepository.flush();
-        return card;
-    }
 
     public PlayerTable getPlayerTableById(Long id) {
         return playerTableRepository.getOne(id);

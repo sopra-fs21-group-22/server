@@ -21,12 +21,12 @@ public class Carabine extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player targetPlayer, PayLoadDTO payload) {
-        usingPlayer.setRange(4);
+        usingPlayer.setRange(usingPlayer.getRange()+3);
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setRange(1);
+        affectedPlayer.setRange(affectedPlayer.getBaseRange());
     }
 
     @Override

@@ -9,6 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.CharacterCardPileRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs21.service.GameRoleService;
@@ -88,6 +89,9 @@ public class UserControllerTest {
 
     @MockBean
     OnFieldCardsService onFieldCardsService;
+
+    @MockBean
+    CharacterCardPileRepository characterCardPileRepository;
 
     private User user;
 

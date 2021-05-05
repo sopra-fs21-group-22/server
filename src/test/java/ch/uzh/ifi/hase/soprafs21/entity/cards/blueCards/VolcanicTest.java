@@ -68,7 +68,11 @@ public class VolcanicTest {
 
     @Test
     public void playingMultipleBang() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player target = player.getRightNeighbor();
+        target.setCharacterCard(characterCard);
         int expectedBullets = target.getBullets() - 2;
         volcanic.use(player, player, null);
         bang.use(player, target, null);
@@ -79,7 +83,10 @@ public class VolcanicTest {
 
     @Test
     public void undo() {
-
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
+        players.get(1).setCharacterCard(characterCard);
         volcanic.use(player, player, null);
         volcanic.onRemoval(player);
         bang.use(player, players.get(1), null);

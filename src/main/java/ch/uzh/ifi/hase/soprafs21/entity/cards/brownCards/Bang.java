@@ -10,6 +10,8 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
+
 
 @Entity
 public class Bang extends BrownCard {
@@ -29,6 +31,10 @@ public class Bang extends BrownCard {
             throw new GameLogicException("Can't play more BANG cards this round!");
         }
         target.takeHit(usingPlayer);
+        if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // BArt Cassidy Ability
+            DeckService deckservice = new DeckService();
+            deckservice.cassidyDraw(target); 
+        } 
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }
 

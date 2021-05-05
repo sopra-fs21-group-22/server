@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,6 +86,9 @@ public class DynamiteTest {
 
     @Test
     public void testOnTurnStartExplosionPlayerLives() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setBullets(4);
 
@@ -94,6 +98,7 @@ public class DynamiteTest {
         Bang bang = new Bang(Rank.THREE, Suit.SPADES);
         playCards.add(bang);
         table.getDeck().setPlayCards(playCards);
+        playerWithDynamite.setCharacterCard(characterCard);
 
         dynamite.onTurnStart(playerWithDynamite); // DYNAMITE PLAYED
 
@@ -105,8 +110,13 @@ public class DynamiteTest {
 
     @Test
     public void testOnTurnStartExplosionPlayerDies() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player playerWithDynamite = players.get(0); // on turn
+        playerWithDynamite.setCharacterCard(characterCard);
         playerWithDynamite.setBullets(3);
+        
 
         dynamite.use(playerWithDynamite, playerWithDynamite, null);
 

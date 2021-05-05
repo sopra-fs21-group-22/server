@@ -32,7 +32,7 @@ public class Volcanic extends BlueCard {
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setStillPlayableBangsThisRound(1);
+        affectedPlayer.setStillPlayableBangsThisRound(affectedPlayer.getPlaybleBangsAnyRound());
     }
 
     @Override

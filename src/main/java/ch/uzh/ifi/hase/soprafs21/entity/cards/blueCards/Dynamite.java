@@ -10,6 +10,8 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
+
 
 import javax.persistence.Entity;
 
@@ -46,6 +48,10 @@ public class Dynamite extends BlueCard {
         if (dynamiteExplodes) {
             int lives = affectedPlayer.getBullets();
             affectedPlayer.setBullets(Math.max(lives - 3, 0));
+            if (affectedPlayer.getCharacterCard().getName().equals("Bart Cassidy")){          // Bart Cassidy Ability
+                DeckService deckservice = new DeckService();
+                deckservice.cassidyDraw(affectedPlayer); 
+            } 
         } else {
             affectedPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(this);
         }
