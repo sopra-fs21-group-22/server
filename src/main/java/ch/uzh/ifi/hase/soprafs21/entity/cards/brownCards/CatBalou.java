@@ -1,8 +1,5 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
-import java.util.List;
-import java.util.Random;
-
 import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
@@ -13,14 +10,15 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Panic extends BrownCard {
-    public Panic() {
+public class CatBalou extends BrownCard {
+
+    public CatBalou() {
     }
 
-    public Panic(Rank rank, Suit suit) {
+    public CatBalou(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
-        this.card = Card.PANIC;
+        this.card = Card.CATBALOU;
     }
 
     @Override
@@ -29,16 +27,16 @@ public class Panic extends BrownCard {
         PlayCard cardToAdd;
         if (id == null) {
             cardToAdd = target.getHand().removeRandomCard();
-            usingPlayer.getHand().addCard(cardToAdd);
+            usingPlayer.getTable().getDiscardPile().addCard(cardToAdd);
         } else {
             cardToAdd = target.getOnFieldCards().removeOnFieldCard(id);
-            usingPlayer.getHand().addCard(cardToAdd);
+            usingPlayer.getTable().getDiscardPile().addCard(cardToAdd);
         }
     }
 
     @Override
     protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
-        return usingPlayer.reachesWithDistance(targetPlayer, 1) && !usingPlayer.getId().equals(targetPlayer.getId());
+        return !targetPlayer.getId().equals(usingPlayer.getId());
     }
 
 }
