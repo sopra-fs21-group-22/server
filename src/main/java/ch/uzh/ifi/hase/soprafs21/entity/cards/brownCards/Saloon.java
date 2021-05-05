@@ -9,6 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class Saloon extends BrownCard {
@@ -22,10 +23,12 @@ public class Saloon extends BrownCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, List<Player> targets) {
-        if (usingPlayer.getBullets().equals(usingPlayer.getMaxBullets())) {
-            throw new GameLogicException("Player is already at max health!");
-        }
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
         usingPlayer.setBullets(usingPlayer.getBullets() + 1);
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return true;
     }
 }

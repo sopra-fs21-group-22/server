@@ -12,6 +12,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class GeneralStore extends BrownCard {
@@ -25,15 +26,15 @@ public class GeneralStore extends BrownCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, List<Player> targets) {
-        int number_of_players = targets.size();
-        PlayerTable table = usingPlayer.getTable();
-        Deck currDeck = table.getDeck();
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
+        // int number_of_players = targets.size();
+        // PlayerTable table = usingPlayer.getTable();
+        // Deck currDeck = table.getDeck();
 
         // draw cards from deck and add them to visible cards
-        List<PlayCard> drawnCards = currDeck.drawCards(number_of_players);
-        VisibleCards currVisibleCards = table.getVisibleCards();
-        currVisibleCards.setVisibleCards(drawnCards);
+        // List<PlayCard> drawnCards = currDeck.drawCards(number_of_players);
+        // VisibleCards currVisibleCards = table.getVisibleCards();
+        // currVisibleCards.setVisibleCards(drawnCards);
 
         /*
          * Now each player chooses a card --> happens in the frontend, once every player
@@ -43,6 +44,11 @@ public class GeneralStore extends BrownCard {
          * once a General Store is played, and collect all cards picked by each player
          * in one List and then make a post mapping which then handles the logic.
          */
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return false;
     }
 
 }

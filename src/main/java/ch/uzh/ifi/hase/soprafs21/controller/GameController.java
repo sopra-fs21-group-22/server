@@ -135,35 +135,6 @@ public class GameController {
         playerTableRepository.save(table);
     }
 
-    @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
-            @RequestBody List<Long> targets) {
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player usingPlayer = table.getPlayerByPlayerID(player_id);
-        if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
-            throw new NotOnTurnException();
-        }
-        List<Player> targetPlayers = table.getPlayersById(targets);
-
-        usingPlayer.playCard(card_id, targetPlayers);
-        playerRepository.save(usingPlayer);
-        playerTableRepository.saveAndFlush(table);
-    }
-
-    @DeleteMapping("/{game_id}/players/{player_id}/hand/{card_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void discardCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id) {
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player usingPlayer = table.getPlayerByPlayerID(player_id);
-        if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
-            throw new NotOnTurnException();
-        }
-
-        usingPlayer.getHand().removeCardById(card_id);
-        playerTableRepository.saveAndFlush(table);
-    }
-
     @GetMapping("/{game_id}/visiblecards")
     @ResponseStatus(HttpStatus.OK)
     public VisibleCardsGetDTO getVisibleCards(@PathVariable Long game_id) {

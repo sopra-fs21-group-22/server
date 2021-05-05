@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 import javax.persistence.Entity;
 
@@ -23,7 +24,7 @@ public class Jail extends BlueCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, Player target) {
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
         if (target.getGameRole() != GameRole.SHERIFF) {
             target.getOnFieldCards().addOnFieldCard(this);
         } else {
@@ -36,15 +37,16 @@ public class Jail extends BlueCard {
         PlayerTable table = affectedPlayer.getTable();
         Deck deck = table.getDeck();
         PlayCard referenceCard = deck.drawCards(1).get(0);
-        if (referenceCard.getSuit() != Suit.HEARTS){
+        if (referenceCard.getSuit() != Suit.HEARTS) {
             table.setPlayerOnTurn(affectedPlayer.getRightNeighbor());
         }
-        affectedPlayer.getOnFieldCards().removeOnFieldCard(this); // card is removed whether or not the player stays in jail for current turn
+        affectedPlayer.getOnFieldCards().removeOnFieldCard(this); // card is removed whether or not the player stays in
+                                                                  // jail for current turn
     }
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-       // does nothing
+        // does nothing
     }
 
     @Override

@@ -1,38 +1,41 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
 import java.util.List;
-
-import javax.persistence.Entity;
+import java.util.Random;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.Deck;
-import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
-@Entity
-public class StageCoach extends BrownCard {
-    public StageCoach() {
+public class Panic extends BrownCard {
+    public Panic() {
     }
 
-    public StageCoach(Rank rank, Suit suit) {
+    public Panic(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
-        this.card = Card.STAGECOACH;
+        this.card = Card.PANIC;
     }
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
-        Hand userHand = usingPlayer.getHand();
-        List<PlayCard> cards = usingPlayer.getTable().getDeck().drawCards(2);
-        userHand.addCards(cards);
+        Long id = payload.getTargetCardId();
+        PlayCard cardToAdd;
+        if (id == null) {
+            cardToAdd = target.getHand().removeRandomCard();
+            usingPlayer.getHand().addCard(cardToAdd);
+        } else {
+            cardToAdd = target.getOnFieldCards().removeOnFieldCard(id);
+            usingPlayer.getHand().addCard(cardToAdd);
+        }
     }
 
     @Override
     protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
-        return true;
+        return usingPlayer.reachesWithDistance(targetPlayer, 1);
     }
+
 }

@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class Appaloosa extends BlueCard {
@@ -21,7 +22,7 @@ public class Appaloosa extends BlueCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, Player targetPlayer) {
+    protected void onPlacement(Player usingPlayer, Player targetPlayer, PayLoadDTO payload) {
         targetPlayer.setDistanceDecreaseToOthers(targetPlayer.getDistanceDecreaseToOthers() + 1);
     }
 

@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -138,14 +140,24 @@ public class Player {
         }
     }
 
-    public void playCard(Long cardId, List<Player> targets) {
+    public void playCard(Long cardId, Player target, PayLoadDTO payload) {
         PlayCard card = hand.getCardById(cardId);
-        card.use(this, targets);
+        card.use(this, target, payload);
         hand.removeCard(card);
 
     }
 
+    public boolean reachesWithDistance(Player target, int distance) {
+        return this.getDistanceToNeighbor(target) - distance - this.getDistanceDecreaseToOthers()
+                + target.getDistanceIncreaseForOthers() <= 0;
+    }
+
     public boolean reachesWithWeapon(Player targetPlayer) {
+        return this.getDistanceToNeighbor(targetPlayer) - this.getRange() - this.getDistanceDecreaseToOthers()
+                + targetPlayer.getDistanceIncreaseForOthers() <= 0;
+    }
+
+    private int getDistanceToNeighbor(Player targetPlayer) {
         Player userRightNeighbor = this.getRightNeighbor();
         Player userLeftNeighbor = this.getLeftNeighbor();
         int rightDistance = 1;
@@ -164,10 +176,7 @@ public class Player {
             leftDistance++;
             userLeftNeighbor = userLeftNeighbor.getLeftNeighbor();
         }
-        int distance = rightDistance < leftDistance ? rightDistance : leftDistance;
-
-        return distance - this.getRange() + this.getDistanceDecreaseToOthers()
-                + targetPlayer.getDistanceIncreaseForOthers() <= 0;
+        return rightDistance < leftDistance ? rightDistance : leftDistance;
     }
 
     public PlayerTable getTable() {

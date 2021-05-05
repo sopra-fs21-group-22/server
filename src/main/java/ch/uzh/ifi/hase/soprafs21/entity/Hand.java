@@ -67,6 +67,14 @@ public class Hand {
         playCards.remove(card);
     }
 
+    public PlayCard removeRandomCard() {
+        if (playCards.size() == 0) {
+            throw new GameLogicException("Player doesn't have any hand cards!");
+        }
+        int idx = (int) Math.random() * playCards.size();
+        return playCards.remove(idx);
+    }
+
     public void removeCardById(Long cardId) {
         PlayCard cardToRemove = null;
         for (PlayCard card : playCards) {
@@ -87,6 +95,13 @@ public class Hand {
         for (PlayCard card : newCards) {
             card.addCardInOrder(playCards); // makes sure cards are added in order of priority
         }
+    }
+
+    public void addCard(PlayCard newCard) {
+        if (playCards == null) {
+            playCards = new ArrayList<>();
+        }
+        newCard.addCardInOrder(playCards);
     }
 
     public List<PlayCard> checkOrder(List<PlayCard> playCards) {

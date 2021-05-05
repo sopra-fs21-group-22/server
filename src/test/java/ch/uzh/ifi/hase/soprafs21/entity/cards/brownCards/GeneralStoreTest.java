@@ -17,7 +17,6 @@ public class GeneralStoreTest {
     private List<Player> players;
     private PlayerTable table = new PlayerTable();
 
-
     @BeforeEach
     public void beforeEach() {
         table.setId(33L);
@@ -29,15 +28,12 @@ public class GeneralStoreTest {
         table.setVisibleCards(visibleCards);
         ArrayList<PlayCard> playCards = new ArrayList<>();
 
-
-
         // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();
         Player oldPlayer = new Player();
         oldPlayer.setId(15L);
         players.add(oldPlayer);
         oldPlayer.setTable(table);
-
 
         for (int i = 0; i < 6; i++) {
             Bang bang = new Bang(Rank.ACE, Suit.HEARTS);
@@ -53,10 +49,10 @@ public class GeneralStoreTest {
         table.setDeck(deck);
     }
 
-    @Test
-    public void testOnPlacement(){
-        generalStore.onPlacement(players.get(0), players);
-        assertEquals(7, table.getVisibleCards().getLength());
-    }
+    // @Test
+    // public void testOnPlacement(){
+    // generalStore.onPlacement(players.get(0), players);
+    // assertEquals(7, table.getVisibleCards().getLength());
+    // }
 
 }

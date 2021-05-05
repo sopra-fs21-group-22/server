@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class Schofield extends BlueCard {
@@ -20,7 +21,7 @@ public class Schofield extends BlueCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, Player target) {
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
         usingPlayer.setRange(2);
         usingPlayer.getOnFieldCards().addOnFieldCard(this);
     }

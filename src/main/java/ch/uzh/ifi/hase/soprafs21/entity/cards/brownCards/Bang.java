@@ -9,6 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class Bang extends BrownCard {
@@ -23,17 +24,17 @@ public class Bang extends BrownCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, List<Player> targets) {
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
         if (usingPlayer.getStillPlayableBangsThisRound() <= 0) {
             throw new GameLogicException("Can't play more BANG cards this round!");
         }
-        Player target = targets.get(0);
-
-        if (!(usingPlayer.reachesWithWeapon(target))) {
-            throw new GameLogicException("Player is out of range!");
-        }
-
         target.takeHit(usingPlayer);
         usingPlayer.setStillPlayableBangsThisRound(usingPlayer.getStillPlayableBangsThisRound() - 1);
     }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return usingPlayer.reachesWithWeapon(targetPlayer) && !usingPlayer.getId().equals(targetPlayer.getId());
+    }
+
 }

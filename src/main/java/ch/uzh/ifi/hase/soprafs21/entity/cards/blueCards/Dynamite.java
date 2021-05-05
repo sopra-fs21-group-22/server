@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
@@ -8,6 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 import javax.persistence.Entity;
 
@@ -15,7 +17,6 @@ import javax.persistence.Entity;
 public class Dynamite extends BlueCard {
     public Dynamite() {
     }
-
 
     public Dynamite(Rank rank, Suit suit) {
         this.rank = rank;
@@ -25,38 +26,30 @@ public class Dynamite extends BlueCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, Player randomPlayer) {
-        usingPlayer.getOnFieldCards().addOnFieldCard(this); // the dynamite card is always placed on your own onFieldCards as soon as you have it in your hands
+    protected void onPlacement(Player usingPlayer, Player randomPlayer, PayLoadDTO payload) {
+        // nothing happens
     }
 
     @Override
     public void onTurnStart(Player affectedPlayer) {
         PlayerTable table = affectedPlayer.getTable();
-        Deck deck = table.getDeck();
-        PlayCard referenceCard = deck.drawCards(1).get(0);
-        System.out.println("SUIT: " + referenceCard.getSuit());
-        Rank r = referenceCard.getRank();
-        boolean rankBetweenTwoAndNine = (r != Rank.TEN && r != Rank.JACK && r != Rank.QUEEN && r != Rank.KING && r != Rank.ACE);
-        if(referenceCard.getSuit() == Suit.SPADES && rankBetweenTwoAndNine){ // explosion
-            int lives = affectedPlayer.getBullets();
-            if (lives > 3) {
-                affectedPlayer.setBullets(lives - 3);
-                affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
-                affectedPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(this); // move Dynamite card to the left
-            } else{
-                affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
-                // player dies
-                // TODO handle death
+        PlayCard referenceCard = table.getDeck().drawCards(1).get(0);
+        boolean correctNumberRange = false;
+        for (int i = 1; i < 9; i++) {
+            if (referenceCard.getRank() == Rank.values()[i]) {
+                correctNumberRange = true;
             }
-        } else { // no explosion
-            affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
-            affectedPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(this); // move Dynamite card to the left
         }
-    }
 
-    @Override
-    public void onRemoval(Player affectedPlayer) {
-        // nothing happens
+        boolean dynamiteExplodes = correctNumberRange && (referenceCard.getSuit() == Suit.SPADES);
+
+        if (dynamiteExplodes) {
+            int lives = affectedPlayer.getBullets();
+            affectedPlayer.setBullets(Math.max(lives - 3, 0));
+        } else {
+            affectedPlayer.getLeftNeighbor().getOnFieldCards().addOnFieldCard(this);
+        }
+        affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
     }
 
     @Override

@@ -1,29 +1,33 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
-import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
-public class BangTest {
+public class PanicTest {
 
     private List<Player> players;
     private List<Player> targets;
-    private Bang bang = new Bang(Rank.SEVEN, Suit.HEARTS);
+    private Panic panic = new Panic(Rank.SEVEN, Suit.HEARTS);
 
     @BeforeEach
     public void beforeEach() {
@@ -46,6 +50,8 @@ public class BangTest {
             Player newPlayer = new Player();
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
+            hand = new Hand();
+            hand.setPlayCards(new ArrayList<>());
             newPlayer.setHand(hand);
             newPlayer.setTable(table);
             players.add(newPlayer);
@@ -60,41 +66,45 @@ public class BangTest {
     }
 
     @Test
-    public void testBang_reducesLives() {
+    public void testValidTarget() {
+        Player user = players.get(0);
+        user.setDistanceDecreaseToOthers(1);
+        assertTrue(panic.targetIsValid(user, user.getRightNeighbor().getRightNeighbor()));
+    }
 
+    @Test
+    public void testInvalidTarget() {
+        Player user = players.get(0);
+        user.setRange(3);
+        assertFalse(panic.targetIsValid(user, user.getLeftNeighbor().getLeftNeighbor()));
+    }
+
+    @Test
+    public void testStealFieldCard() {
+        PayLoadDTO payload = new PayLoadDTO();
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
-        int expectedLives = target.getBullets() - 1;
+        BlueCard toBeStolenCard = new Schofield(Rank.ACE, Suit.SPADES);
+        toBeStolenCard.setId(100L);
+        target.getOnFieldCards().addOnFieldCard(toBeStolenCard);
+        payload.setTargetCardId(100L);
 
-        bang.use(user, target, null);
-
-        assertEquals(expectedLives, target.getBullets());
+        panic.use(user, target, payload);
+        assertTrue(user.getHand().getPlayCards().contains(toBeStolenCard));
+        assertFalse(target.getOnFieldCards().contains(toBeStolenCard));
     }
 
     @Test
-    public void cantUseBangOnYourself() {
-        Player user = players.get(0);
-        assertThrows(GameLogicException.class, () -> {
-            bang.use(user, user, null);
-        });
-    }
-
-    @Test
-    public void cantPlayMoreBangCards() {
+    public void testStealHandCard() {
+        PayLoadDTO payload = new PayLoadDTO();
         Player user = players.get(0);
         Player target = user.getRightNeighbor();
-        bang.use(user, target, null);
-        assertThrows(GameLogicException.class, () -> {
-            bang.use(user, target, null);
-        });
-    }
+        BlueCard toBeStolenCard = new Schofield(Rank.ACE, Suit.SPADES);
+        target.getHand().addCard(toBeStolenCard);
 
-    @Test
-    public void outOfRange_CantAttack() {
-        Player user = players.get(0);
-        Player target = user.getRightNeighbor().getRightNeighbor();
-        assertThrows(GameLogicException.class, () -> {
-            bang.use(user, target, null);
-        });
+        panic.use(user, target, payload);
+
+        assertTrue(user.getHand().getPlayCards().contains(toBeStolenCard));
+        assertFalse(target.getHand().getPlayCards().contains(toBeStolenCard));
     }
 }

@@ -17,18 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DynamiteTest {
     private List<Player> players;
 
-    private BlueCard dynamite = new Dynamite();
+    private BlueCard dynamite = new Dynamite(Rank.SEVEN, Suit.SPADES);
 
     private PlayerTable table = new PlayerTable();
 
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         dynamite.setId(11L);
 
         // create a table with a deck and a discard pile
         Deck deck = new Deck();
         table.setDeck(deck);
-
 
         // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();
@@ -58,19 +57,19 @@ public class DynamiteTest {
     }
 
     @Test
-    public void testOnPlacement(){
+    public void testOnPlacement() {
         Player playerWithDynamite = players.get(0);
-        Player randomPlayer = players.get(1);
-        dynamite.onPlacement(playerWithDynamite, randomPlayer);
+
+        dynamite.use(playerWithDynamite, playerWithDynamite, null);
         assertTrue(playerWithDynamite.getOnFieldCards().contains(dynamite));
     }
 
     @Test
-    public void testOnTurnStartNoExplosion(){
+    public void testOnTurnStartNoExplosion() {
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setBullets(4);
-        Player randomPlayer = players.get(1);
-        dynamite.onPlacement(playerWithDynamite, randomPlayer);
+
+        dynamite.use(playerWithDynamite, playerWithDynamite, null);
 
         ArrayList<PlayCard> playCards = new ArrayList<>();
         Bang bang = new Bang(Rank.THREE, Suit.HEARTS);
@@ -85,11 +84,11 @@ public class DynamiteTest {
     }
 
     @Test
-    public void testOnTurnStartExplosionPlayerLives(){
+    public void testOnTurnStartExplosionPlayerLives() {
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setBullets(4);
-        Player randomPlayer = players.get(1);
-        dynamite.onPlacement(playerWithDynamite, randomPlayer);
+
+        dynamite.use(playerWithDynamite, playerWithDynamite, null);
 
         ArrayList<PlayCard> playCards = new ArrayList<>();
         Bang bang = new Bang(Rank.THREE, Suit.SPADES);
@@ -98,18 +97,18 @@ public class DynamiteTest {
 
         dynamite.onTurnStart(playerWithDynamite); // DYNAMITE PLAYED
 
-        // there is an explosion, so the dynamite card gets moved to the left
+        // there is an explosion, so the dynamite card gets NOT moved to the left
         assertEquals(1, playerWithDynamite.getBullets());
         assertFalse(playerWithDynamite.getOnFieldCards().contains(dynamite));
-        assertTrue(playerWithDynamite.getLeftNeighbor().getOnFieldCards().contains(dynamite));
+        assertFalse(playerWithDynamite.getLeftNeighbor().getOnFieldCards().contains(dynamite));
     }
 
     @Test
-    public void testOnTurnStartExplosionPlayerDies(){
+    public void testOnTurnStartExplosionPlayerDies() {
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setBullets(3);
-        Player randomPlayer = players.get(1);
-        dynamite.onPlacement(playerWithDynamite, randomPlayer);
+
+        dynamite.use(playerWithDynamite, playerWithDynamite, null);
 
         ArrayList<PlayCard> playCards = new ArrayList<>();
         Bang bang = new Bang(Rank.THREE, Suit.SPADES);
@@ -118,8 +117,9 @@ public class DynamiteTest {
 
         dynamite.onTurnStart(playerWithDynamite); // DYNAMITE PLAYED
 
-        // there is an explosion, so the dynamite card gets moved to the left
+        // there is an explosion, so the dynamite card gets NOT moved to the left
         // TODO once death is handled test death here
+        assertEquals(0, playerWithDynamite.getBullets());
         assertFalse(playerWithDynamite.getOnFieldCards().contains(dynamite));
         assertFalse(playerWithDynamite.getLeftNeighbor().getOnFieldCards().contains(dynamite));
     }

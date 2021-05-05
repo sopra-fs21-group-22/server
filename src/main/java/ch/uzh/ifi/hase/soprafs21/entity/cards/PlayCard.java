@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -41,20 +43,23 @@ public abstract class PlayCard {
     protected Priority priority;
 
     /**
-     * Meant to be run only once when the card is used by the user
+     * Meant to be run only once when the card is on the users hand and played.
+     * BlueCards will get added to the target player field cards.
      *
      * @param usingPlayer
      * @param targets
      */
-    public void use(Player usingPlayer, List<Player> targets) {
-        for (Player target : targets) {
-            if (target.getBullets() <= 0) {
-                throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
-            }
+    public void use(Player usingPlayer, Player target, PayLoadDTO payload) {
+        if (target.getBullets() <= 0) {
+            throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
         }
-        if (usingPlayer.getBullets() <= 0) {
-            throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
+
+        if (!targetIsValid(usingPlayer, target)) {
+            throw new GameLogicException(
+                    String.format("Target player is not valid for card %s.", this.card.toString()));
         }
+
+        onPlacement(usingPlayer, target, payload);
     }
 
     /**
@@ -68,33 +73,57 @@ public abstract class PlayCard {
     }
 
     /**
-     * This function makes sure that the hand cards are added in the order of their priority.
-     * The first card (index 0) has the highest priority and the last card the lowest. The cards with
-     * the same priority are in arbitrary order.
+     * Validates if the target is a valid target. The card will end up on the field
+     * of the target player.
+     *
+     * @param usingPlayer
+     * @param targetPlayer
+     */
+    protected abstract boolean targetIsValid(Player usingPlayer, Player targetPlayer);
+
+    /**
+     * This function makes sure that the hand cards are added in the order of their
+     * priority. The first card (index 0) has the highest priority and the last card
+     * the lowest. The cards with the same priority are in arbitrary order.
+     * 
      * @param playCards
      */
 
-    public void addCardInOrder(List<PlayCard> playCards){
-        // TODO depending on how many priorities there will be --> loop over priorities instead of if else
+    public void addCardInOrder(List<PlayCard> playCards) {
+        // TODO depending on how many priorities there will be --> loop over priorities
+        // instead of if else
         Priority cardPrio = this.getPriority();
         int index = (playCards == null || playCards.size() == 0) ? 0 : playCards.size() - 1;
 
         int i = 0;
-        if(cardPrio == Priority.FIRST || index == 0){
+        if (cardPrio == Priority.FIRST || index == 0) {
             index = 0;
-        } else if (cardPrio == Priority.SECOND){
-            while (playCards.get(i).getPriority() == Priority.FIRST){ // in case there are multiple cards with the Priority FIRST
+        } else if (cardPrio == Priority.SECOND) {
+            while (playCards.get(i).getPriority() == Priority.FIRST) { // in case there are multiple cards with the
+                                                                       // Priority FIRST
                 i++;
             }
             index = i;
-        } else if (cardPrio == Priority.THIRD){
-            while (playCards.get(i).getPriority() == Priority.FIRST || playCards.get(index).getPriority() == Priority.SECOND){ // in case there are multiple cards with the Priority FIRST/SECOND
+        } else if (cardPrio == Priority.THIRD) {
+            while (playCards.get(i).getPriority() == Priority.FIRST
+                    || playCards.get(index).getPriority() == Priority.SECOND) { // in case there are multiple cards with
+                                                                                // the Priority FIRST/SECOND
                 i++;
             }
             index = i;
         }
         playCards.add(index, this);
     }
+
+    /**
+     * Responsible for the effect that occurs when the card is placed. Runs when
+     * card is played from the players hand.
+     *
+     * @param usingPlayer
+     * @param targetPlayer
+     * @param payload
+     */
+    protected abstract void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload);
 
     public Card getCard() {
         return card;

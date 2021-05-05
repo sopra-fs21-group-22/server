@@ -35,7 +35,7 @@ public class BeerTest {
 
         int expectedBullets = user.getBullets() + 1;
 
-        beer.use(user, new ArrayList<Player>());
+        beer.use(user, user, null);
 
         int actualBullets = user.getBullets();
 
@@ -45,7 +45,7 @@ public class BeerTest {
     @Test
     public void BeerAlreadyMaxHealth() {
         assertThrows(GameLogicException.class, () -> {
-            beer.use(user, new ArrayList<Player>());
+            beer.use(user, user, null);
         });
     }
 }

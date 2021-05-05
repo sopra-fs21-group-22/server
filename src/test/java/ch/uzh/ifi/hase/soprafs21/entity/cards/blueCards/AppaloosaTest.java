@@ -20,13 +20,13 @@ public class AppaloosaTest {
 
     @Test
     public void testDistanceDecreases() {
-        appa.onPlacement(player, player);
+        appa.onPlacement(player, player, null);
         assertEquals(1, player.getDistanceDecreaseToOthers());
     }
 
     @Test
     public void testCardRemoval() {
-        appa.onPlacement(player, player);
+        appa.onPlacement(player, player, null);
         appa.onRemoval(player);
         assertEquals(0, player.getDistanceDecreaseToOthers());
     }

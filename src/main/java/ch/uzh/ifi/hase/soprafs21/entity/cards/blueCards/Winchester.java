@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class Winchester extends BlueCard {
@@ -19,7 +20,7 @@ public class Winchester extends BlueCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, Player targetPlayer) {
+    protected void onPlacement(Player usingPlayer, Player targetPlayer, PayLoadDTO payload) {
         usingPlayer.setRange(5);
     }
 

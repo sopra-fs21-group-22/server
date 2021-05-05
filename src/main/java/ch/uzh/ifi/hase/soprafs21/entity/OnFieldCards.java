@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 import javax.persistence.*;
 
@@ -69,16 +70,8 @@ public class OnFieldCards {
             }
             index = i;
         } else if (cardPrio == Priority.THIRD) {
-            while (cards.get(i).getPriority() == Priority.FIRST || cards.get(index).getPriority() == Priority.SECOND) { // in
-                                                                                                                        // case
-                                                                                                                        // there
-                                                                                                                        // are
-                                                                                                                        // multiple
-                                                                                                                        // cards
-                                                                                                                        // with
-                                                                                                                        // the
-                                                                                                                        // Priority
-                                                                                                                        // FIRST/SECOND
+            // in case there are multiple cards with the Priority FIRST/SECOND
+            while (cards.get(i).getPriority() == Priority.FIRST || cards.get(index).getPriority() == Priority.SECOND) {
                 i++;
             }
             index = i;
@@ -97,6 +90,15 @@ public class OnFieldCards {
 
     public void removeOnFieldCard(BlueCard card) {
         cards.remove(card);
+    }
+
+    public BlueCard removeOnFieldCard(Long id) {
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i).getId().equals(id)) {
+                return cards.remove(i);
+            }
+        }
+        throw new GameLogicException(String.format("Player doesn't have a card with id %s on his field.", id));
     }
 
     public void removeAllCards() {

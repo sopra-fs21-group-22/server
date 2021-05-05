@@ -84,6 +84,41 @@ public class PlayerTest {
     }
 
     @Test
+    public void testWeaponRange_distanceToOthers_inRange() {
+        Player player = players.get(0);
+        player.setRange(1);
+        player.setDistanceDecreaseToOthers(2);
+        assertTrue(player.reachesWithWeapon(player.getRightNeighbor().getRightNeighbor().getRightNeighbor()));
+    }
+
+    @Test
+    public void testWeaponRange_distanceToOthers_outOfRange() {
+        Player player = players.get(0);
+        player.setRange(1);
+        player.setDistanceDecreaseToOthers(2);
+        Player target = player.getRightNeighbor().getRightNeighbor().getRightNeighbor().getRightNeighbor();
+        assertFalse(player.reachesWithWeapon(target));
+    }
+
+    @Test
+    public void testWeaponRange_distanceForOthers_inRange() {
+        Player player = players.get(0);
+        player.setRange(3);
+        Player target = player.getRightNeighbor();
+        target.setDistanceIncreaseForOthers(2);
+        assertTrue(player.reachesWithWeapon(target));
+    }
+
+    @Test
+    public void testWeaponRange_distanceForOthers_outOfRange() {
+        Player player = players.get(0);
+        player.setRange(3);
+        Player target = player.getRightNeighbor();
+        target.setDistanceIncreaseForOthers(3);
+        assertFalse(player.reachesWithWeapon(target));
+    }
+
+    @Test
     public void testOnDeath_Outlaw_drawCards() {
 
         Player outlaw = players.get(0);

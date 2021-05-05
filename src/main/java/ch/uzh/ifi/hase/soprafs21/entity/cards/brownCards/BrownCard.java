@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public abstract class BrownCard extends PlayCard {
@@ -16,21 +17,12 @@ public abstract class BrownCard extends PlayCard {
         return "brown";
     }
 
-    // adding checks applying to brown cards
+    // handling brown cards
     @Override
-    public final void use(Player usingPlayer, List<Player> targets) {
-        super.use(usingPlayer, targets);
-        for (Player target : targets) {
-            if (target.getBullets() <= 0) {
-                throw new GameLogicException("Target Player is already dead. Please don't attack corpses!");
-            }
-        }
-        if (usingPlayer.getBullets() <= 0) {
-            throw new GameLogicException("Card user is already dead. Corpses can't play anymore!");
-        }
-        onPlacement(usingPlayer, targets);
+    public final void use(Player usingPlayer, Player target, PayLoadDTO payload) {
+        super.use(usingPlayer, target, payload);
         usingPlayer.getTable().getDiscardPile().addCard(this);
     }
 
-    protected abstract void onPlacement(Player usingPlayer, List<Player> targets);
+    protected abstract void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload);
 }

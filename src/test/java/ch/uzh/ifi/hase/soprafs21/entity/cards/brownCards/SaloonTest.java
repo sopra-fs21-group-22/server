@@ -36,18 +36,10 @@ public class SaloonTest {
 
         int expectedBullets = user.getBullets() + 1;
 
-        saloon.use(user, new ArrayList<Player>());
+        saloon.use(user, user, null);
 
         int actualBullets = user.getBullets();
 
         assertEquals(expectedBullets, actualBullets);
     }
-
-    @Test
-    public void saloonAlreadyMaxHealth() {
-        assertThrows(GameLogicException.class, () -> {
-            saloon.use(user, new ArrayList<Player>());
-        });
-    }
-
 }

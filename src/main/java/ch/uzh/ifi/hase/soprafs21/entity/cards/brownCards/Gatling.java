@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
 public class Gatling extends BrownCard {
@@ -21,7 +22,7 @@ public class Gatling extends BrownCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, List<Player> targets) {
+    protected void onPlacement(Player usingPlayer, Player targetPlayer, PayLoadDTO payload) {
         List<Player> alivePlayers = usingPlayer.getTable().getAlivePlayers();
         for (int i = 0; i < alivePlayers.size(); i++) {
             Player target = alivePlayers.get(i);
@@ -30,5 +31,10 @@ public class Gatling extends BrownCard {
             }
             target.takeHit(usingPlayer);
         }
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return true;
     }
 }

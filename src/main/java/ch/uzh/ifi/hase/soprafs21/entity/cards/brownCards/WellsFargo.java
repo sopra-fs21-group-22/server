@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 import javax.persistence.Entity;
 
@@ -24,10 +25,15 @@ public class WellsFargo extends BrownCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, List<Player> targets) {
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
         Hand userHand = usingPlayer.getHand();
         List<PlayCard> cards = usingPlayer.getTable().getDeck().drawCards(3);
         userHand.addCards(cards);
+    }
+
+    @Override
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
+        return true;
     }
 
 }

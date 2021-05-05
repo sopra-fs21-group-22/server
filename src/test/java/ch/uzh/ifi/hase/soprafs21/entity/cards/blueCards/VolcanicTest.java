@@ -2,10 +2,13 @@ package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +28,11 @@ public class VolcanicTest {
     private List<Player> players;
     private List<Player> volcanicTargets;
     private Bang bang;
+    private Volcanic volcanic = new Volcanic(Rank.ACE, Suit.SPADES);
 
     @BeforeEach
     public void beforeEach() {
-        bang = new Bang();
+        bang = new Bang(Rank.ACE, Suit.SPADES);
         PlayerTable table = new PlayerTable();
         Deck deck = new Deck();
         deck.setPlayCards(new ArrayList<>());
@@ -64,29 +68,24 @@ public class VolcanicTest {
 
     @Test
     public void playingMultipleBang() {
-        Volcanic card = new Volcanic();
-        bangTargets.add(players.get(1));
-        int expectedBullets = bangTargets.get(0).getBullets() - 2;
+        Player target = player.getRightNeighbor();
+        int expectedBullets = target.getBullets() - 2;
+        volcanic.use(player, player, null);
+        bang.use(player, target, null);
+        bang.use(player, target, null);
 
-        card.use(player, new ArrayList<>());
-        bang.use(player, bangTargets);
-        bang.use(player, bangTargets);
-
-        assertEquals(expectedBullets, bangTargets.get(0).getBullets());
+        assertEquals(expectedBullets, target.getBullets());
     }
 
     @Test
     public void undo() {
-        Volcanic card = new Volcanic();
 
-        bangTargets.add(players.get(1));
-
-        card.use(player, new ArrayList<>());
-        card.onRemoval(player);
-        bang.use(player, bangTargets);
+        volcanic.use(player, player, null);
+        volcanic.onRemoval(player);
+        bang.use(player, players.get(1), null);
 
         assertThrows(GameLogicException.class, () -> {
-            bang.use(player, bangTargets);
+            bang.use(player, players.get(1), null);
         });
     }
 }

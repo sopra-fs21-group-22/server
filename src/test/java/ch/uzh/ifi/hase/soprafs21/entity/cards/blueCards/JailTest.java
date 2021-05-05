@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
-
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
@@ -20,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JailTest {
     private List<Player> players;
 
-    private BlueCard jail = new Jail();
+    private BlueCard jail = new Jail(Rank.SEVEN, Suit.HEARTS);
 
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         jail.setId(33L);
 
         // create a table with a deck and a discard pile
@@ -64,41 +63,42 @@ public class JailTest {
     }
 
     @Test
-    public void testOnPlacement(){
+    public void testOnPlacement() {
         Player playerWithJail = players.get(0);
         Player target = players.get(1);
-        jail.onPlacement(playerWithJail, target);
+        jail.use(playerWithJail, target, null);
         assertTrue(target.getOnFieldCards().contains(jail));
     }
 
     @Test
-    public void testOnPlacementWithSheriff(){
+    public void testOnPlacementWithSheriff() {
         Player playerWithJail = players.get(0);
         Player target = players.get(1);
         target.setGameRole(GameRole.SHERIFF);
-        assertThrows(GameLogicException.class, () -> jail.onPlacement(playerWithJail, target));
+        assertThrows(GameLogicException.class, () -> jail.use(playerWithJail, target, null));
     }
 
     @Test
-    public void testOnTurnStartWithHearts(){
+    public void testOnTurnStartWithHearts() {
         Player player = players.get(0); // on turn
         Player playerInJail = players.get(1);
-        jail.onPlacement(player, playerInJail);
+        jail.use(player, playerInJail, null);
         player.getTable().setPlayerOnTurn(playerInJail);
 
         jail.onTurnStart(playerInJail); // next player on turn
         assertFalse(playerInJail.getOnFieldCards().contains(jail));
 
-        // since the only card in the deck is a HEARTS card, the player should get out of jail
+        // since the only card in the deck is a HEARTS card, the player should get out
+        // of jail
         assertSame(player.getTable().getPlayerOnTurn(), playerInJail);
     }
 
     @Test
-    public void testOnTurnStartNoHearts(){
+    public void testOnTurnStartNoHearts() {
         Player player = players.get(0); // on turn
         Player playerInJail = players.get(1);
-        jail.onPlacement(player, playerInJail);
-        player.getTable().setPlayerOnTurn(playerInJail);  // next player on turn
+        jail.use(player, playerInJail, null);
+        player.getTable().setPlayerOnTurn(playerInJail); // next player on turn
 
         // change deck to SPADES card
         List<PlayCard> playCards = player.getTable().getDeck().getPlayCards();
@@ -110,7 +110,8 @@ public class JailTest {
         jail.onTurnStart(playerInJail);
         assertFalse(playerInJail.getOnFieldCards().contains(jail));
 
-        // since the only card in the deck is a Spades card, it should be the next players turn
+        // since the only card in the deck is a Spades card, it should be the next
+        // players turn
         assertNotSame(playerInJail.getTable().getPlayerOnTurn(), playerInJail);
     }
 }

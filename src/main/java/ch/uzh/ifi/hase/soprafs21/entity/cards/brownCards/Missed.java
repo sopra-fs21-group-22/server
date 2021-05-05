@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
@@ -24,14 +25,20 @@ public class Missed extends BrownCard {
     }
 
     @Override
-    protected void onPlacement(Player usingPlayer, List<Player> targets) {
-        usingPlayer.setBullets(usingPlayer.getBullets() + 1);
+    public boolean onBang(Player affectedPlayer) {
+        affectedPlayer.getHand().removeCard(this);
+        affectedPlayer.getTable().getDiscardPile().addCard(this);
+        return true;
     }
 
     @Override
-    public boolean onBang(Player affectedPlayer){
-        onPlacement(affectedPlayer, new ArrayList<>());
+    protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
         return true;
+    }
+
+    @Override
+    protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
+        // can't really be placed
     }
 
 }
