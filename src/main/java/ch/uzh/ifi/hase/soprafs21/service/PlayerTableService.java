@@ -129,6 +129,10 @@ public class PlayerTableService {
         return playerTableRepository.getOne(id);
     }
 
+    public Player getPlayerById(Long id) {
+        return playerRepository.getOne(id);
+    }
+
     private void startGame(PlayerTable table) {
         table.setGameStatus(GameStatus.ONGOING);
 
