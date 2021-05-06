@@ -48,10 +48,10 @@ public class PlayerTable {
     private Long turnStart;
 
     @Column
-    private Long timeRemaining = 60000L;
+    private Long timeRemaining = 10000L;
 
     @Column
-    private Long maxTime = 60000L;
+    private Long maxTime = 10000L;
 
 
     public List<Player> getPlayersById(List<Long> playerIds) {
