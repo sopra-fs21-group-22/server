@@ -279,7 +279,7 @@ public class PlayerTableService {
         else if(table.getTimeRemaining()<0L) { 
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
 
-            /* table.getPlayerOnTurn().setBullets(0);
+            table.getPlayerOnTurn().setBullets(0);
 
             List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
             List<BlueCard> onFieldCards = table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();          // this kills the player after 3 strikes
@@ -292,7 +292,7 @@ public class PlayerTableService {
             table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
             table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
 
-            nextPlayersTurn(table); */
+            nextPlayersTurn(table);
         }
     }
 
