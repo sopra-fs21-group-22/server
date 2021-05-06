@@ -20,6 +20,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.exceptions.IllegalGameStateException;
 import ch.uzh.ifi.hase.soprafs21.repository.DeckRepository;
@@ -144,6 +145,7 @@ public class PlayerTableService {
             Player currPlayer = table.getPlayers().get(i);
             if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
                 table.setPlayerOnTurn(currPlayer);
+                table.setTurnStart(System.currentTimeMillis());
             }
             deckService.drawCards(table, currPlayer, currPlayer.getBullets());
 
@@ -233,6 +235,7 @@ public class PlayerTableService {
         }
         Player nextPlayer = currPlayer.getRightNeighbor();
         table.setPlayerOnTurn(nextPlayer);
+        table.setTurnStart(System.currentTimeMillis());
 
         // next player's turn starts
         startTurn(nextPlayer, table);
@@ -257,6 +260,39 @@ public class PlayerTableService {
         PlayerTable table = getPlayerTableById(gameId);
         if (table.getGameStatus() != status) {
             throw new IllegalGameStateException(table.getGameStatus());
+        }
+    }
+
+    public void updateTimer(PlayerTable table) {
+        table.setTimeRemaining(table.getMaxTime() - (System.currentTimeMillis() - table.getTurnStart()));
+
+        // time runs out and it is not the 3rd strike
+        // a strike gets added and the timer is reset
+        if (table.getTimeRemaining()<0L && table.getPlayerOnTurn().getStrikes()<2){ 
+            table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
+            table.setTurnStart(System.currentTimeMillis());
+        }
+
+        // time runs out and its the 3rd strike
+        // a strike is added, all bullets, handcards and fieldcards are removed
+        // the next player can start their turn
+        else if(table.getTimeRemaining()<0L) { 
+            table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
+
+            table.getPlayerOnTurn().setBullets(0);
+
+            List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
+            List<BlueCard> onFieldCards = table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();
+            for (PlayCard card : handCards) {
+                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
+            }
+            for (PlayCard card : onFieldCards) {
+                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
+            }
+            table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
+            table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
+
+            nextPlayersTurn(table);
         }
     }
 

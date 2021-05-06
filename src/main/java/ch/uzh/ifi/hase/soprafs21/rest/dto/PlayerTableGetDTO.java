@@ -14,6 +14,7 @@ public class PlayerTableGetDTO {
     private Deck discardPile;
     private Player playerOnTurn;
     private List<Player> players;
+    private Long timeRemaining;
 
     public GameStatus getGameStatus() {
         return gameStatus;
@@ -57,6 +58,14 @@ public class PlayerTableGetDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(Long timeRemaining) {
+        this.timeRemaining = timeRemaining;
     }
 
 }

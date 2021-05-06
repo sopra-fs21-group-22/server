@@ -81,6 +81,9 @@ public class Player {
     @Column
     private Boolean ready = false;
 
+    @Column
+    private Integer strikes = 0;
+
     @OneToOne
     private OnFieldCards onFieldCards;
 
@@ -358,5 +361,13 @@ public class Player {
         List<PlayCard> cards = new ArrayList<>();
         cards.add(card);
         hand.addCards(cards);
+    }
+
+    public Integer getStrikes() {
+        return strikes;
+    }
+
+    public void setStrikes(Integer strikes) {
+        this.strikes = strikes;
     }
 }
