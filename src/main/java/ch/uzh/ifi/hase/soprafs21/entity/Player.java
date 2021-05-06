@@ -14,11 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
+import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -97,11 +99,22 @@ public class Player {
     public void takeHit(Player attacker) {
         boolean isSafe = false;
 
+
+        // see if character equals Jourdonnais
+        if(this.getCharacterCard().getName().equals("Jourdonnais")){
+            PlayCard card = this.getTable().getDeck().drawCards(1).get(0);    //Jourdonnais Ability
+            this.getTable().getDiscardPile().addCard(card);
+            isSafe = card.getSuit().equals(Suit.HEARTS);
+
+        }
+
         // first go through onFieldCards for the Barrel
-        for (int i = 0; i < onFieldCards.getLength(); i++) {
-            isSafe = onFieldCards.get(i).onBang(this);
-            if (isSafe) {
-                break;
+        if(!isSafe){
+            for (int i = 0; i < onFieldCards.getLength(); i++) {
+                isSafe = onFieldCards.get(i).onBang(this);
+                if (isSafe) {
+                    break;
+                }
             }
         }
         // then go through Hand cards for Missed & Beer
@@ -116,6 +129,16 @@ public class Player {
 
         if (!isSafe) {
             this.bullets -= 1;
+            if( this.bullets>0){
+                if (this.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability 
+                    DeckService deckservice = new DeckService();
+                    deckservice.drawCards(this.getTable(), this, 1); 
+                } 
+                if (this.getCharacterCard().getName().equals("El Gringo")){         // El Gringo Ability 
+                    DeckService deckservice = new DeckService();
+                    deckservice.gringoDraw(this, attacker); 
+                }
+            }
         }
 
         if (bullets == 0) {
