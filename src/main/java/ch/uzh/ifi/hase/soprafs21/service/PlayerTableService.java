@@ -268,15 +268,16 @@ public class PlayerTableService {
 
         // time runs out and it is not the 3rd strike
         // a strike gets added and the timer is reset
-        if (table.getTimeRemaining()<0L && table.getPlayerOnTurn().getStrikes()<2){ 
+        /* if (table.getTimeRemaining()<0L && table.getPlayerOnTurn().getStrikes()<2){ 
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
             table.setTurnStart(System.currentTimeMillis());
-        }
+        } */
 
         // time runs out and its the 3rd strike
         // a strike is added, all bullets, handcards and fieldcards are removed
         // the next player can start their turn
-        else if(table.getTimeRemaining()<0L) { 
+       //else 
+        if(table.getTimeRemaining()<0L) { 
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
 
             table.getPlayerOnTurn().setBullets(0);
