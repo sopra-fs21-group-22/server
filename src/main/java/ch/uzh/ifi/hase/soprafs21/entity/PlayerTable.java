@@ -44,6 +44,16 @@ public class PlayerTable {
     @Column
     private GameStatus gameStatus = GameStatus.PREPARATION;
 
+    @Column
+    private Long turnStart;
+
+    @Column
+    private Long timeRemaining = 60000L;
+
+    @Column
+    private Long maxTime = 60000L;
+
+
     public List<Player> getPlayersById(List<Long> playerIds) {
         List<Player> targetPlayers = new ArrayList<>();
         for (Long id : playerIds) {
@@ -157,6 +167,30 @@ public class PlayerTable {
             }
         }
         return alivePlayers;
+    }
+
+    public Long getTurnStart() {
+        return turnStart;
+    }
+
+    public void setTurnStart(Long time) {
+        this.turnStart = time;
+    }
+
+    public Long getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(Long time) {
+        this.timeRemaining = time;
+    }
+
+    public Long getMaxTime() {
+        return maxTime;
+    }
+
+    public void setMaxTime(Long time) {
+        this.maxTime = time;
     }
 
 }

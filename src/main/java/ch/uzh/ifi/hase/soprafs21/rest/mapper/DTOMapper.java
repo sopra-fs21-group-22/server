@@ -72,6 +72,7 @@ public interface DTOMapper {
     @Mapping(source = "playerOnTurn", target = "playerOnTurn")
     @Mapping(source = "players", target = "players")
     @Mapping(source = "gameStatus", target = "gameStatus")
+    @Mapping(source = "timeRemaining", target = "timeRemaining")
     PlayerTableGetDTO convertEntityToPlayerTableGetDTO(PlayerTable playerTable);
 
     @Mapping(source = "id", target = "id")
