@@ -81,7 +81,7 @@ public class DeckService {
     public void drawCards(PlayerTable table, Player player, Integer n) {
         for (int i = 0; i < n; i++) {
             if (table.getDeck().getPlayCards().size() < 2) {
-                table.getDeck().getPlayCards().get(0).addCardInOrder(player.getHand().getPlayCards());
+                player.getHand().addCardInOrder(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
                 this.shuffle(table);
 
@@ -91,7 +91,7 @@ public class DeckService {
                 playerRepository.save(player);
                 playerRepository.flush();
             } else {
-                table.getDeck().getPlayCards().get(0).addCardInOrder(player.getHand().getPlayCards());
+                player.getHand().addCardInOrder(table.getDeck().getPlayCards().get(0));
                 table.getDeck().getPlayCards().remove(0);
 
                 playerTableRepository.save(table);
@@ -110,7 +110,7 @@ public class DeckService {
         if(attacker.getHand().getPlayCards().size()>0) {
             PlayCard playCard = attacker.getHand().getPlayCards().get(0);
             attacker.getHand().getPlayCards().remove(0);
-            playCard.addCardInOrder(player.getHand().getPlayCards());
+            player.getHand().addCardInOrder(playCard);
             if(attacker.getHand().getPlayCards().size()<1) {
                 if(attacker.getCharacterCard().getName().equals("Suzy Lafayette")){     //Lafayette Ability
                     this.drawCards(table, attacker, 1);
