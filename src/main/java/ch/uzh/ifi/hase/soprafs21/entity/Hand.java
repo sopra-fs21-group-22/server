@@ -1,6 +1,10 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -105,6 +109,15 @@ public class Hand {
         addCardInOrder(newCard);
     }
 
+    private class SortByPriority implements Comparator<PlayCard> {
+
+        @Override
+        public int compare(PlayCard o1, PlayCard o2) {
+            List<Priority> priorities = Arrays.asList(Priority.values());
+            return priorities.indexOf(o1.getPriority()) - priorities.indexOf(o2.getPriority());
+        }
+    }
+
     /**
      * This function makes sure that the hand cards are added in the order of their
      * priority. The first card (index 0) has the highest priority and the last card
@@ -116,28 +129,7 @@ public class Hand {
     public void addCardInOrder(PlayCard card) {
         // TODO depending on how many priorities there will be --> loop over priorities
         // instead of if else
-        Priority cardPrio = card.getPriority();
-        int index = (playCards == null || playCards.size() == 0) ? 0 : playCards.size() - 1;
-
-        int i = 0;
-        if (cardPrio == Priority.FIRST || index == 0) {
-            index = 0;
-        } else if (cardPrio == Priority.SECOND) {
-            while (playCards.get(i).getPriority() == Priority.FIRST) { // in case there are multiple cards with the
-                                                                       // Priority
-                // FIRST
-                i++;
-            }
-            index = i;
-        } else if (cardPrio == Priority.THIRD) {
-            // in case there are multiple cards with the Priority FIRST/SECOND
-            while (playCards.get(i).getPriority() == Priority.FIRST
-                    || playCards.get(index).getPriority() == Priority.SECOND) {
-                i++;
-            }
-            index = i;
-
-        }
-        playCards.add(index, card);
+        playCards.add(card);
+        Collections.sort(playCards, new SortByPriority());
     }
 }
