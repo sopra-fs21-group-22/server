@@ -15,6 +15,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Barrel;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
@@ -120,9 +121,12 @@ public class PlayerTest {
 
     @Test
     public void testOnDeath_Outlaw_drawCards() {
-
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player outlaw = players.get(0);
         Player killer = players.get(1);
+        outlaw.setCharacterCard(characterCard);
         outlaw.setBullets(1);
         outlaw.setGameRole(GameRole.OUTLAW);
         killer.setGameRole(GameRole.SHERIFF);
@@ -137,8 +141,12 @@ public class PlayerTest {
 
     @Test
     public void testOnDeath_Sheriff_GameOver() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player outlaw = players.get(0);
         Player sheriff = players.get(1);
+        sheriff.setCharacterCard(characterCard);
 
         outlaw.setGameRole(GameRole.OUTLAW);
         sheriff.setGameRole(GameRole.SHERIFF);
@@ -152,8 +160,12 @@ public class PlayerTest {
 
     @Test
     public void testOnDeath_DeputyBySheriff() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         Player deputy = players.get(0);
         Player sheriff = players.get(1);
+        deputy.setCharacterCard(characterCard);
 
         deputy.setGameRole(GameRole.DEPUTY);
         sheriff.setGameRole(GameRole.SHERIFF);
@@ -175,11 +187,15 @@ public class PlayerTest {
 
     @Test
     public void testOnDeath_LastPlayer() {
+        CharacterCard characterCard = new CharacterCard();
+        characterCard.setLifeAmount(3);
+        characterCard.setName("Paul Regret");
         for (int i = 2; i < players.size(); i++) {
             players.get(i).setBullets(0);
         }
         Player killer = players.get(0);
         Player target = players.get(1);
+        target.setCharacterCard(characterCard);
         target.setBullets(1);
 
         target.takeHit(killer);
