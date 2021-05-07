@@ -50,6 +50,7 @@ public interface DTOMapper {
     @Mapping(source = "status", target = "status")
     @Mapping(source = "birthday", target = "birthday")
     @Mapping(source = "creationDate", target = "creationDate")
+    @Mapping(source = "player", target = "player")
     UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "id", target = "id")
@@ -58,6 +59,7 @@ public interface DTOMapper {
     @Mapping(source = "jwt", target = "jwt")
     @Mapping(source = "creationDate", target = "creationDate")
     @Mapping(source = "birthday", target = "birthday")
+    @Mapping(source = "player", target = "player")
     UserAuthGetDTO convertEntityToUserAuthGetDTO(User user);
 
     @Mapping(source = "username", target = "username")
@@ -83,6 +85,7 @@ public interface DTOMapper {
     @Mapping(source = "rightNeighbor", target = "rightNeighbor")
     @Mapping(source = "hand", target = "hand")
     @Mapping(source = "onFieldCards", target = "onFieldCards")
+    @Mapping(source = "table", target = "table")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
     @Mapping(source = "id", target = "id")

@@ -43,10 +43,10 @@ public class OngoingController {
     public void playerEndsTurn(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
             @PathVariable Long player_id) {
         playerTableService.checkGameState(game_id, GameStatus.ONGOING);
-        userService.throwIfNotIdAndTokenMatch(player_id, auth);
-        Player player = userService.getUserById(player_id).getPlayer();
+        Player player = playerRepository.getOne(player_id);
+        userService.throwIfNotIdAndTokenMatch(player.getUser().getId(), auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        // Player player = user.getPlayer();
+
         if (!player.getId().equals(table.getPlayerOnTurn().getId())) {
             throw new NotOnTurnException();
         }
@@ -56,11 +56,14 @@ public class OngoingController {
 
     @PostMapping("/{game_id}/players/{player_id}/hand/{card_id}/target/{target_id}")
     @ResponseStatus(HttpStatus.OK)
-    public void playCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id,
-            @PathVariable Long target_id, @RequestBody(required = false) PayLoadDTO payload) {
+    public void playCard(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
+            @PathVariable Long player_id, @PathVariable Long card_id, @PathVariable Long target_id,
+            @RequestBody(required = false) PayLoadDTO payload) {
+
         playerTableService.checkGameState(game_id, GameStatus.ONGOING);
+        Player usingPlayer = playerRepository.getOne(player_id);
+        userService.throwIfNotIdAndTokenMatch(usingPlayer.getUser().getId(), auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player usingPlayer = userService.getUserById(player_id).getPlayer();
         if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
             throw new NotOnTurnException();
         }
@@ -72,9 +75,12 @@ public class OngoingController {
 
     @DeleteMapping("/{game_id}/players/{player_id}/hand/{card_id}")
     @ResponseStatus(HttpStatus.OK)
-    public void discardCard(@PathVariable Long game_id, @PathVariable Long player_id, @PathVariable Long card_id) {
+    public void discardCard(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
+            @PathVariable Long player_id, @PathVariable Long card_id) {
+        playerTableService.checkGameState(game_id, GameStatus.ONGOING);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player usingPlayer = userService.getUserById(player_id).getPlayer();
+        Player usingPlayer = playerRepository.getOne(player_id);
+        userService.throwIfNotIdAndTokenMatch(usingPlayer.getUser().getId(), auth);
         if (!table.getPlayerOnTurn().getId().equals(usingPlayer.getId())) {
             throw new NotOnTurnException();
         }

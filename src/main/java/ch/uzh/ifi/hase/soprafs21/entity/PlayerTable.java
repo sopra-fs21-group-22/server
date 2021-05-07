@@ -53,13 +53,13 @@ public class PlayerTable {
     @Column
     private Long maxTime = 60000L;
 
-
     public List<Player> getPlayersById(List<Long> playerIds) {
         List<Player> targetPlayers = new ArrayList<>();
         for (Long id : playerIds) {
             targetPlayers.add(getPlayerById(id).get());
         }
         return targetPlayers;
+
     }
 
     public List<Player> getPlayersInRangeOf(Long id) {

@@ -121,6 +121,7 @@ public class Player {
                 isSafe = onFieldCards.get(i).onBang(this);
                 if (isSafe) {
                     break;
+
                 }
             }
         }
@@ -227,18 +228,24 @@ public class Player {
         Player userLeftNeighbor = this.getLeftNeighbor();
         int rightDistance = 1;
         int leftDistance = 1;
+
         for (int i = 0; i < 7; i++) {
             if (userRightNeighbor.getId().equals(targetPlayer.getId())) {
                 break;
             }
-            rightDistance++;
+            if (userRightNeighbor.getBullets() > 0) {
+                rightDistance++;
+            }
+
             userRightNeighbor = userRightNeighbor.getRightNeighbor();
         }
         for (int i = 0; i < 7; i++) {
             if (userLeftNeighbor.getId().equals(targetPlayer.getId())) {
                 break;
             }
-            leftDistance++;
+            if (userLeftNeighbor.getBullets() > 0) {
+                leftDistance++;
+            }
             userLeftNeighbor = userLeftNeighbor.getLeftNeighbor();
         }
         return rightDistance < leftDistance ? rightDistance : leftDistance;

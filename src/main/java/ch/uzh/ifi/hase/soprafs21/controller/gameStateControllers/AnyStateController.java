@@ -56,8 +56,8 @@ public class AnyStateController {
     @ResponseBody
     public PlayerGetDTO getPlayerInformation(@PathVariable Long game_id, @PathVariable Long player_id,
             @RequestHeader("Authorization") String auth) {
-        Player player = userService.getUserById(player_id).getPlayer();
-        if (userService.idAndTokenMatch(player_id, auth.substring(7))) {
+        Player player = playerRepository.getOne(player_id);
+        if (userService.idAndTokenMatch(player.getUser().getId(), auth.substring(7))) {
             return DTOMapper.INSTANCE.convertEntityToPlayerGetAuthDTO(playerRepository.getOne(player.getId()));
         }
         return DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(playerRepository.getOne(player.getId()));
@@ -67,7 +67,7 @@ public class AnyStateController {
     @GetMapping("/{game_id}/players/{player_id}/targets")
     @ResponseStatus(HttpStatus.OK)
     public List<PlayerGetDTO> getPlayersInRange(@PathVariable Long player_id, @PathVariable Long game_id) {
-        Player currPlayer = userService.getUserById(player_id).getPlayer();
+        Player currPlayer = playerRepository.getOne(player_id);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         List<Player> players = table.getPlayersInRangeOf(currPlayer.getId());
         List<PlayerGetDTO> playerGetDTOs = new ArrayList<>();
@@ -82,9 +82,9 @@ public class AnyStateController {
     @ResponseStatus(HttpStatus.OK)
     public void leaveGame(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
             @PathVariable Long player_id) {
-        userService.throwIfNotIdAndTokenMatch(player_id, auth);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        Player player = userService.getUserById(player_id).getPlayer();
+        Player player = playerRepository.getOne(player_id);
+        userService.throwIfNotIdAndTokenMatch(player.getUser().getId(), auth);
         player.setUser(null);
         if (table.getGameStatus() != GameStatus.ENDED) {
             player.setBullets(0);

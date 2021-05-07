@@ -3,6 +3,9 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto.users;
 import java.sql.Date;
 
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class UserGetDTO {
 
@@ -11,6 +14,25 @@ public class UserGetDTO {
     private UserStatus status;
     private Date creationDate;
     private Date birthday;
+    private Player player;
+
+    public Long getPlayer() {
+        if (player == null) {
+            return null;
+        }
+        return player.getId();
+    }
+
+    public Long getTableId() {
+        if (player == null) {
+            return null;
+        }
+        return player.getTable().getId();
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
     public Long getId() {
         return id;

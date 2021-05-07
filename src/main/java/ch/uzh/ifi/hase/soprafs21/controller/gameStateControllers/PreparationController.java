@@ -18,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -43,12 +46,17 @@ public class PreparationController {
     @Autowired
     private PlayerTableRepository playerTableRepository;
 
+    @Autowired
+    private PlayerRepository playerRepository;
+
     @PutMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public PlayerTableGetDTO joinGame(@RequestHeader("Authorization") String auth) {
-        PlayerTable playerTable = playerTableService.addPlayer(userService.getIdByToken(auth));
-        return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(playerTable);
+    public UserGetDTO joinGame(@RequestHeader("Authorization") String auth) {
+        User user = userService.getUserById(userService.getIdByToken(auth));
+        userService.throwIfNotIdAndTokenMatch(user.getId(), auth);
+        playerTableService.addPlayer(user.getId());
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
     }
 
     @PutMapping("/{game_id}/players/{player_id}/ready")
@@ -56,8 +64,8 @@ public class PreparationController {
     public void markPlayerAsReady(@PathVariable Long game_id, @PathVariable Long player_id,
             @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         playerTableService.checkGameState(game_id, GameStatus.PREPARATION);
-        userService.throwIfNotIdAndTokenMatch(player_id, auth);
-        Player player = userService.getUserById(player_id).getPlayer();
+        Player player = playerRepository.getOne(player_id);
+        userService.throwIfNotIdAndTokenMatch(player.getUser().getId(), auth);
         playerTableService.setPlayerAsReady(game_id, player.getId(), ready.getStatus());
     }
 

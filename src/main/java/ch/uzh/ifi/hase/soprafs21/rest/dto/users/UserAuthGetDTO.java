@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto.users;
 import java.sql.Date;
 
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
 
 public class UserAuthGetDTO {
     private String jwt;
@@ -11,6 +12,25 @@ public class UserAuthGetDTO {
     private UserStatus status;
     private Date creationDate;
     private Date birthday;
+    private Player player;
+
+    public Long getPlayer() {
+        if (player == null) {
+            return null;
+        }
+        return player.getId();
+    }
+
+    public Long getTableId() {
+        if (player == null) {
+            return null;
+        }
+        return player.getTable().getId();
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
     public String getJwt() {
         return jwt;

@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.OnFieldCardsGetDTO;
@@ -24,6 +25,15 @@ public class PlayerGetDTO {
     protected Player rightNeighbor;
     protected Hand hand;
     protected OnFieldCards onFieldCards;
+    protected PlayerTable table;
+
+    public Long getTable() {
+        return table.getId();
+    }
+
+    public void setTable(PlayerTable table) {
+        this.table = table;
+    }
 
     public HandGetDTO getHand() {
         return DTOMapper.INSTANCE.convertEntityToHandGetDTO(this.hand);
