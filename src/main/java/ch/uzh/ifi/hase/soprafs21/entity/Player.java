@@ -130,8 +130,8 @@ public class Player {
             if (hand.get(i).getColor() == "brown") { // to make sure no blue cards on hand are activated
                 isSafe = hand.get(i).onBang(this); // since hand is in order of priority this will check Missed before
                                                    // Beer
-                i++;
             }
+            i++;
         }
 
         if (!isSafe) {

@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 import javax.persistence.Entity;
@@ -38,7 +39,8 @@ public class Missed extends BrownCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
-        // can't really be placed
+        throw new GameLogicException(
+                "Can't be placed! This card will automatically be used once another player plays a Bang against the this cards owner!");
     }
 
 }

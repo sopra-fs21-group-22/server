@@ -232,6 +232,7 @@ public class PlayerTableService {
 
         // End current turn
         Player currPlayer = table.getPlayerOnTurn();
+        currPlayer.setStillPlayableBangsThisRound(currPlayer.getPlaybleBangsAnyRound());
         if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
             throw new GameLogicException(
                     "Too many cards in Hand! Discard until there are not more cards left than lives you have!");
@@ -275,7 +276,7 @@ public class PlayerTableService {
 
         // time runs out and it is not the 3rd strike
         // a strike gets added and the timer is reset
-        if (table.getTimeRemaining()<0L && table.getPlayerOnTurn().getStrikes()<2){ 
+        if (table.getTimeRemaining() < 0L && table.getPlayerOnTurn().getStrikes() < 2) {
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
             table.setTurnStart(System.currentTimeMillis());
         }
@@ -283,23 +284,24 @@ public class PlayerTableService {
         // time runs out and its the 3rd strike
         // a strike is added, all bullets, handcards and fieldcards are removed
         // the next player can start their turn
-        else if(table.getTimeRemaining()<0L) { 
+        else if (table.getTimeRemaining() < 0L) {
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
 
-            /* table.getPlayerOnTurn().setBullets(0);
-
-            List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
-            List<BlueCard> onFieldCards = table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();          // this kills the player after 3 strikes
-            for (PlayCard card : handCards) {
-                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
-            }
-            for (PlayCard card : onFieldCards) {
-                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
-            }
-            table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
-            table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
-
-            nextPlayersTurn(table); */
+            /*
+             * table.getPlayerOnTurn().setBullets(0);
+             * 
+             * List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
+             * List<BlueCard> onFieldCards =
+             * table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards(); // this kills
+             * the player after 3 strikes for (PlayCard card : handCards) {
+             * table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card); } for
+             * (PlayCard card : onFieldCards) {
+             * table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card); }
+             * table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
+             * table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
+             * 
+             * nextPlayersTurn(table);
+             */
         }
     }
 
