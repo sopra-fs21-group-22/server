@@ -107,12 +107,13 @@ public class Player {
         boolean isSafe = false;
 
         // see if character equals Jourdonnais
-        if (this.getCharacterCard().getName().equals("Jourdonnais")) {
-            PlayCard card = this.getTable().getDeck().drawCards(1).get(0); // Jourdonnais Ability
-            this.getTable().getDiscardPile().addCard(card);
-            isSafe = card.getSuit().equals(Suit.HEARTS);
+        // if (this.getCharacterCard().getName().equals("Jourdonnais")) {
+        // PlayCard card = this.getTable().getDeck().drawCards(1).get(0); // Jourdonnais
+        // Ability
+        // this.getTable().getDiscardPile().addCard(card);
+        // isSafe = card.getSuit().equals(Suit.HEARTS);
 
-        }
+        // }
 
         // first go through onFieldCards for the Barrel
         if (!isSafe) {
