@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,6 +19,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 /**
@@ -28,6 +30,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 public class Player {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column
@@ -54,7 +57,8 @@ public class Player {
     @Column
     Integer playableBangsAnyRound = 1;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -123,7 +127,12 @@ public class Player {
         }
     }
 
-    private void onDeath(Player killer) {
+    /**
+     * Handles death by another player
+     * 
+     * @param killer
+     */
+    public void onDeath(Player killer) {
         if (killer.getGameRole().equals(GameRole.SHERIFF) && this.getGameRole().equals(GameRole.DEPUTY)) {
             // punish sheriff
             List<PlayCard> handCards = killer.getHand().getPlayCards();
@@ -140,8 +149,25 @@ public class Player {
         } else if (this.getGameRole().equals(GameRole.OUTLAW)) {
             // killer draws three cards
             killer.getHand().addCards(killer.getTable().getDeck().drawCards(3));
-        } else if (this.getGameRole().equals(GameRole.SHERIFF) || killer.getTable().getAlivePlayers().size() == 1) {
-            // game over
+        }
+        onDeath();
+    }
+
+    /**
+     * Handles death not caused by a player
+     */
+    public void onDeath() {
+        Deck discardPile = table.getDiscardPile();
+        // remove hand cards
+        discardPile.addCards(hand.getPlayCards());
+        hand.setPlayCards(new ArrayList<>());
+        // remove onFieldCards
+        for (PlayCard card : onFieldCards.getOnFieldCards()) {
+            discardPile.addCard(card);
+        }
+        onFieldCards.setOnFieldCards(new ArrayList<>());
+
+        if (this.getGameRole() == GameRole.SHERIFF || this.getTable().getAlivePlayers().size() == 1) {
             this.table.setGameStatus(GameStatus.ENDED);
         }
     }

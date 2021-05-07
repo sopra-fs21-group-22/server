@@ -55,6 +55,9 @@ public class Hand {
 
     public List<PlayCard> getPlayCards() {
         List<PlayCard> inOrder = checkOrder(playCards);
+        if (inOrder == null) {
+            return new ArrayList<>();
+        }
         return inOrder;
     }
 
@@ -105,6 +108,9 @@ public class Hand {
     }
 
     public List<PlayCard> checkOrder(List<PlayCard> playCards) {
+        if (playCards == null) {
+            return new ArrayList<>();
+        }
         List<PlayCard> inOrder = new ArrayList<>();
         for (int i = 0; i < playCards.size(); i++) {
             playCards.get(i).addCardInOrder(inOrder);

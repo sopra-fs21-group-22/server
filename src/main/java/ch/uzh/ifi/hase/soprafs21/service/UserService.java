@@ -54,6 +54,18 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public User getDefaultUser() {
+        Optional<User> defaultUserOpt = this.userRepository.findById(2718L);
+        if (defaultUserOpt.isPresent()) {
+            return defaultUserOpt.get();
+        }
+        User defaultUser = new User();
+        defaultUser.setId(2718L);
+        defaultUser.setUsername("<left>");
+        defaultUser.setPassword("aj29308fjaöslkdfja9283fjölkjasdf9a28jflkdjaj293fjsdkl");
+        return createUser(defaultUser);
+    }
+
     public User getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
     }

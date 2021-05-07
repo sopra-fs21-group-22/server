@@ -1,15 +1,23 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import java.io.Serializable;
+import java.sql.Date;
+import java.util.Collection;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.sql.Date;
+import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 
 /**
  * Internal User Representation This class composes the internal representation
@@ -19,14 +27,16 @@ import java.sql.Date;
  * must be unqiue across the database -> composes the primary key
  */
 @Entity
-@Table(name = "USER")
-public class User implements Serializable, UserDetails {
+public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @OneToOne(mappedBy = "user")
+    private Player player;
 
     @Column(nullable = false)
     private Date creationDate;
@@ -44,6 +54,14 @@ public class User implements Serializable, UserDetails {
     private Date birthday;
 
     private String jwt;
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
     public Long getId() {
         return id;

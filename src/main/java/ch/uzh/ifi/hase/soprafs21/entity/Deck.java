@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 @Entity
 public class Deck {
@@ -39,6 +40,13 @@ public class Deck {
             this.playCards = new ArrayList<>();
         }
         this.playCards.add(0, card);
+    }
+
+    public void addCards(List<PlayCard> list) {
+        if (this.playCards == null) {
+            this.playCards = new ArrayList<>();
+        }
+        this.playCards.addAll(list);
     }
 
     public Deck getDiscardPile() {

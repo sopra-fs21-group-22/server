@@ -58,6 +58,9 @@ public class PlayerGetDTO {
     }
 
     public String getUser() {
+        if (user == null) {
+            return "<User left Game>";
+        }
         return user.getUsername();
     }
 

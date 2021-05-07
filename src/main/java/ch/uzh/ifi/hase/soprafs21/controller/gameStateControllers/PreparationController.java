@@ -21,7 +21,6 @@ import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.exceptions.IllegalGameStateException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
@@ -58,7 +57,8 @@ public class PreparationController {
             @RequestHeader("Authorization") String auth, @RequestBody ReadyPutDTO ready) {
         playerTableService.checkGameState(game_id, GameStatus.PREPARATION);
         userService.throwIfNotIdAndTokenMatch(player_id, auth);
-        playerTableService.setPlayerAsReady(game_id, player_id, ready.getStatus());
+        Player player = userService.getUserById(player_id).getPlayer();
+        playerTableService.setPlayerAsReady(game_id, player.getId(), ready.getStatus());
     }
 
     @GetMapping("/{game_id}/visiblecards")

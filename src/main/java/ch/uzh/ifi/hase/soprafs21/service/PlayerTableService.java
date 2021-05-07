@@ -68,51 +68,63 @@ public class PlayerTableService {
      * @param id user id
      */
     public PlayerTable addPlayer(Long id) {
-        // check if user is already in a game
-        if (playerRepository.existsById(id)) {
-            throw new IllegalArgumentException("User is already in a game!");
+
+        PlayerTable playerTable = null;
+        User user = userRepository.getOne(id);
+
+        if (user.getPlayer() != null) {
+            throw new GameLogicException("User is already in a game!");
+        }
+
+        List<PlayerTable> playerTables = playerTableRepository.findAll();
+        // find playerT able
+        for (PlayerTable table : playerTables) {
+            List<Player> players = table.getPlayers();
+            if (players.size() < 7 && table.getGameStatus() == GameStatus.PREPARATION) {
+                playerTable = table;
+            }
+        }
+        // create new playerTable if none has been found
+        if (playerTable == null) {
+            playerTable = createNewTable();
         }
 
         Player player = new Player();
         Hand hand = handService.createHand();
-        User user = userRepository.getOne(id);
-        player.setUser(user);
         player.setHand(hand);
-        player.setId(user.getId());
-        List<PlayerTable> playerTables = playerTableRepository.findAll();
-        // add user to existing playerTable
-        for (PlayerTable playerTable : playerTables) {
-            List<Player> players = playerTable.getPlayers();
-            if (players.size() < 7 && playerTable.getGameStatus() == GameStatus.PREPARATION) {
+        player.setTable(playerTable);
+        player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
 
-                players.add(player);
-                playerTable.setPlayers(players);
-                player.setTable(playerTable);
-                player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
-                playerTableRepository.save(playerTable);
-                playerTableRepository.flush();
+        playerTable.getPlayers().add(player);
 
-                return playerTable;
-            }
-        }
-        // create new playerTable
+        playerRepository.saveAndFlush(player);
+        playerTableRepository.save(playerTable);
+
+        user.setPlayer(player);
+        player.setUser(user);
+        userRepository.save(user);
+        userRepository.flush();
+
+        return playerTable;
+    }
+
+    private PlayerTable createNewTable() {
         PlayerTable playerTable = new PlayerTable();
+
         List<Player> players = new ArrayList<>();
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
         CharacterPile characterPile = characterCardService.createCharacterPile();
+
         deck.setDiscardPile(discardPile);
-        players.add(player);
-        player.setTable(playerTable);
+
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
         playerTable.setCharacterPile(characterPile);
-        playerTableRepository.save(playerTable);
-        player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
-        playerTableRepository.save(playerTable);
-        playerTableRepository.flush();
+
         return playerTable;
+
     }
 
     // public void removePlayer(PlayerTable table, Long playerId) {
@@ -216,10 +228,6 @@ public class PlayerTableService {
 
     public void nextPlayersTurn(PlayerTable table) {
 
-        if (table.getGameStatus() != GameStatus.ONGOING) {
-            throw new IllegalGameStateException(table.getGameStatus());
-        }
-
         // End current turn
         Player currPlayer = table.getPlayerOnTurn();
         if (currPlayer.getHand().getPlayCards().size() > currPlayer.getBullets()) {
@@ -236,7 +244,6 @@ public class PlayerTableService {
 
         // next player's turn starts
         startTurn(nextPlayer, table);
-
     }
 
     private void startTurn(Player nextPlayer, PlayerTable table) {
