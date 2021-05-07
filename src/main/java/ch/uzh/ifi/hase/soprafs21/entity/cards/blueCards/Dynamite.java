@@ -54,7 +54,7 @@ public class Dynamite extends BlueCard {
              */
         } else {
             Player leftNeighbor = affectedPlayer.getLeftNeighbor();
-            while (leftNeighbor.getBullets() == 0) {
+            while (leftNeighbor.getBullets() == 0 && !leftNeighbor.getId().equals(affectedPlayer.getId())) {
                 leftNeighbor = leftNeighbor.getLeftNeighbor();
             }
             leftNeighbor.getOnFieldCards().addOnFieldCard(this);
