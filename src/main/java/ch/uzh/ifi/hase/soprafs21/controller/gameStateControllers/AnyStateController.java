@@ -47,7 +47,9 @@ public class AnyStateController {
     public PlayerTableGetDTO getPlayerInformation(@RequestHeader("Authorization") String auth,
             @PathVariable Long game_id) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        playerTableService.updateTimer(playerTableService.getPlayerTableById(game_id));
+        if (table.getGameStatus()==GameStatus.ONGOING) {
+            playerTableService.updateTimer(playerTableService.getPlayerTableById(game_id));
+        }
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
     }
 
