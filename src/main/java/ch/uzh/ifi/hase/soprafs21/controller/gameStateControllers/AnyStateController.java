@@ -48,7 +48,7 @@ public class AnyStateController {
             @PathVariable Long game_id) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         if (table.getGameStatus()==GameStatus.ONGOING) {
-            playerTableService.updateTimer(playerTableService.getPlayerTableById(game_id));
+            playerTableService.updateTimer(table);
         }
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
     }
