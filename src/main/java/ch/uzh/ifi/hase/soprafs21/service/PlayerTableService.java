@@ -15,6 +15,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.CharacterPile;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Chat;
+import ch.uzh.ifi.hase.soprafs21.entity.Message;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -117,7 +118,7 @@ public class PlayerTableService {
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
         CharacterPile characterPile = characterCardService.createCharacterPile();
-        List<String> messages = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
         Chat chat = new Chat();
 
         chat.setMessages(messages);
@@ -312,9 +313,12 @@ public class PlayerTableService {
         }
     }
 
-    public void addMessage(PlayerTable table, String message) {
+    public void addMessage(PlayerTable table, String content, String name) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setName(name);
         table.getChat().addMessage(message);
         playerTableRepository.saveAndFlush(table);
     }
-
+ 
 }
