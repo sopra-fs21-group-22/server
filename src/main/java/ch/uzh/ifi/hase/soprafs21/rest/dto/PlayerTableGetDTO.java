@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Chat;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
@@ -15,6 +16,7 @@ public class PlayerTableGetDTO {
     private Player playerOnTurn;
     private List<Player> players;
     private Long timeRemaining;
+    private Chat chat;
 
     public GameStatus getGameStatus() {
         return gameStatus;
@@ -66,6 +68,14 @@ public class PlayerTableGetDTO {
 
     public void setTimeRemaining(Long timeRemaining) {
         this.timeRemaining = timeRemaining;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 
 }
