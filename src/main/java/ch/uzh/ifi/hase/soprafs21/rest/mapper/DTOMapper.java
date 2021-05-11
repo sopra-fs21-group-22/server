@@ -86,6 +86,7 @@ public interface DTOMapper {
     @Mapping(source = "hand", target = "hand")
     @Mapping(source = "onFieldCards", target = "onFieldCards")
     @Mapping(source = "table", target = "table")
+    @Mapping(source = "strikes", target = "strikes")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
     @Mapping(source = "id", target = "id")
@@ -96,6 +97,7 @@ public interface DTOMapper {
     @Mapping(source = "rightNeighbor", target = "rightNeighbor")
     @Mapping(source = "hand", target = "hand")
     @Mapping(source = "onFieldCards", target = "onFieldCards")
+    @Mapping(source = "strikes", target = "strikes")
     PlayerGetAuthDTO convertEntityToPlayerGetAuthDTO(Player player);
 
     @Mapping(source = "playCards", target = "playCards")
