@@ -307,4 +307,9 @@ public class PlayerTableService {
         }
     }
 
+    public void changeTimer(PlayerTable table, Long time) {
+        table.setTimeRemaining(time);
+        table.setMaxTime(time);
+    }  
+
 }

@@ -107,4 +107,11 @@ public class PreparationController {
         return DTOMapper.INSTANCE.convertEntityToCharacterCardGetDTO(characterCard);
     }
 
+    @PutMapping("/{game_id}/timelimits")
+    @ResponseStatus(HttpStatus.OK)
+    public void changeTimeLimit(@PathVariable Long game_id, @RequestBody Long time) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+       playerTableService.changeTimer(table, time);
+    }
+
 }
