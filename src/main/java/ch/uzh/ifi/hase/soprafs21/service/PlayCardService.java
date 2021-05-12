@@ -67,7 +67,7 @@ public class PlayCardService {
         cardList.add(new Bang(Rank.NINE, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.QUEEN, Suit.HEARTS));
         cardList.add(new Bang(Rank.SIX, Suit.CLUBS));
-        cardList.add(new Bang(Rank.NINE, Suit.CLUBS));
+        //cardList.add(new Bang(Rank.NINE, Suit.CLUBS));  //card doesnt exist in frontend
         cardList.add(new Bang(Rank.KING, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.FIVE, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.THREE, Suit.CLUBS));
@@ -112,7 +112,7 @@ public class PlayCardService {
         // cardList.add(new Indians(Rank.KING, Suit.DIAMONDS));
         cardList.add(new WellsFargo(Rank.THREE, Suit.HEARTS));
         cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
-        cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
+        cardList.add(new StageCoach(Rank.NINE, Suit.SPADES)); 
         // TODO fix general store and readd
         // cardList.add(new GeneralStore(Rank.NINE, Suit.CLUBS));
         // cardList.add(new GeneralStore(Rank.QUEEN, Suit.SPADES));
