@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.NotOnTurnException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
@@ -85,7 +86,8 @@ public class OngoingController {
             throw new NotOnTurnException();
         }
 
-        usingPlayer.getHand().removeCardById(card_id);
+        PlayCard removedCard = usingPlayer.getHand().removeCardById(card_id);
+        table.getDiscardPile().addCard(removedCard);
         playerTableRepository.saveAndFlush(table);
     }
 }
