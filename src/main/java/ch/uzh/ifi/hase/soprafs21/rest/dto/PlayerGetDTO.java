@@ -27,6 +27,15 @@ public class PlayerGetDTO {
     protected OnFieldCards onFieldCards;
     protected PlayerTable table;
     protected Integer strikes;
+    protected Integer stillPlayableBangsThisRound;
+
+    public Integer getstillPlayableBangsThisRound() {
+        return stillPlayableBangsThisRound;
+    }
+
+    public void setstillPlayableBangsThisRound(Integer stillPlayableBangsThisRound) {
+        this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
+    }
 
     public Long getTable() {
         return table.getId();
