@@ -11,7 +11,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Remington extends BlueCard {
+public class Remington extends Weapon {
 
     public Remington() {
 
@@ -25,7 +25,7 @@ public class Remington extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
-        usingPlayer.setRange(usingPlayer.getRange()+2);
+        usingPlayer.setRange(usingPlayer.getRange() + 2);
     }
 
     @Override

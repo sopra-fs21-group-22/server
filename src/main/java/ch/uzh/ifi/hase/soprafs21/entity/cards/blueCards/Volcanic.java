@@ -10,7 +10,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Volcanic extends BlueCard {
+public class Volcanic extends Weapon {
     public Volcanic() {
     }
 

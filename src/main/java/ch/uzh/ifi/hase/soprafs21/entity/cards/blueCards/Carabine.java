@@ -9,7 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Carabine extends BlueCard {
+public class Carabine extends Weapon {
     public Carabine() {
     }
 
@@ -21,7 +21,7 @@ public class Carabine extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player targetPlayer, PayLoadDTO payload) {
-        usingPlayer.setRange(usingPlayer.getRange()+3);
+        usingPlayer.setRange(usingPlayer.getRange() + 3);
     }
 
     @Override

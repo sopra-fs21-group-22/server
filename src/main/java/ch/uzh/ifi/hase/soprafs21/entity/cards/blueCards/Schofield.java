@@ -9,7 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Schofield extends BlueCard {
+public class Schofield extends Weapon {
 
     public Schofield() {
     }
@@ -22,7 +22,7 @@ public class Schofield extends BlueCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
-        usingPlayer.setRange(usingPlayer.getRange()+1);
+        usingPlayer.setRange(usingPlayer.getRange() + 1);
         usingPlayer.getOnFieldCards().addOnFieldCard(this);
     }
 
