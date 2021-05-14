@@ -121,6 +121,12 @@ public class PlayerTableService {
         List<Message> messages = new ArrayList<>();
         Chat chat = new Chat();
 
+        //this is for chat testing ONLY!
+        Message message = new Message();
+        message.setContent("Default Content");
+        message.setName("Default Name");
+        messages.add(message);
+
         chat.setMessages(messages);
         deck.setDiscardPile(discardPile);
 
