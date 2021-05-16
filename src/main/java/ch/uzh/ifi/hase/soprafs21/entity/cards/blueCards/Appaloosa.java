@@ -10,7 +10,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Appaloosa extends BlueCard {
+public class Appaloosa extends Horse {
 
     public Appaloosa() {
     }
