@@ -9,6 +9,7 @@ public class CharacterCardGetDTO {
     protected Long id;
     protected String name;
     protected Integer lifeAmount;
+    protected String description;
 
     public Long getId() {
         return id;
@@ -32,6 +33,14 @@ public class CharacterCardGetDTO {
 
     public void setLifeAmount(Integer lifeAmount) {
         this.lifeAmount = lifeAmount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
     

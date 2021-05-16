@@ -134,6 +134,7 @@ public interface DTOMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "lifeAmount", target = "lifeAmount")
+    @Mapping(source = "description", target = "description")
     CharacterCardGetDTO convertEntityToCharacterCardGetDTO(CharacterCard characterCard);
 
 }

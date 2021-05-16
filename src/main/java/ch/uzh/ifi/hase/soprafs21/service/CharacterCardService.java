@@ -51,18 +51,26 @@ public class CharacterCardService {
         CharacterCard characterCard7 = new CharacterCard();
         characterCard1.setLifeAmount(4);
         characterCard1.setName("Willy The Kid");
+        characterCard1.setDescription("You can use unlimited BANG! cards per round.");
         characterCard2.setLifeAmount(4);
         characterCard2.setName("Rose Doolan");
+        characterCard2.setDescription("Your range is permanently increased by one.");
         characterCard3.setLifeAmount(3);
         characterCard3.setName("Paul Regret");
+        characterCard3.setDescription("The range others need to hit you is permanently increased by one.");
         characterCard4.setLifeAmount(4);
         characterCard4.setName("Jourdonnais");
+        characterCard4.setDescription("PLACEHOLDER");
         characterCard5.setLifeAmount(4);
         characterCard5.setName("Bart Cassidy");
+        characterCard5.setDescription("PLACEHOLDER");
         characterCard6.setLifeAmount(4);
         characterCard6.setName("Suzy Lafayette");
+        characterCard6.setDescription("PLACEHOLDER");
         characterCard7.setLifeAmount(3);
         characterCard7.setName("El Gringo");
+        characterCard7.setDescription("PLACEHOLDER");
+
 
         characterCards.add(characterCard1);
         characterCards.add(characterCard2);

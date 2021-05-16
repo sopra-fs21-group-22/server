@@ -17,6 +17,9 @@ public class CharacterCard {
     @Column
     protected Integer lifeAmount;
 
+    @Column
+    protected String description;
+
   
 
     /* public CharacterCard(String name, Integer lifeAmount){ //this causes a major bug
@@ -46,6 +49,14 @@ public class CharacterCard {
 
     public void setLifeAmount(Integer lifeAmount) {
         this.lifeAmount = lifeAmount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
