@@ -156,6 +156,8 @@ public class PlayerTableService {
         for (int i = 0; i < table.getPlayers().size(); i++) {
             Player currPlayer = table.getPlayers().get(i);
             if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
+                currPlayer.setBullets(currPlayer.getBullets()+1);
+                currPlayer.setMaxBullets(currPlayer.getMaxBullets()+1);
                 table.setPlayerOnTurn(currPlayer);
                 table.setTurnStart(System.currentTimeMillis());
             }
