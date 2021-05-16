@@ -41,6 +41,9 @@ public class PlayerTable {
     @OneToOne(cascade = CascadeType.ALL)
     private CharacterPile characterPile;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Chat chat;
+
     @Column
     private GameStatus gameStatus = GameStatus.PREPARATION;
 
@@ -131,6 +134,14 @@ public class PlayerTable {
 
     public void setCharacterPile(CharacterPile characterPile) {
         this.characterPile = characterPile;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 
     public Optional<Player> getPlayerById(Long id) {

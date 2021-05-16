@@ -90,4 +90,15 @@ public class OngoingController {
         table.getDiscardPile().addCard(removedCard);
         playerTableRepository.saveAndFlush(table);
     }
+
+    @PostMapping("/{game_id}/players/{player_id}/chat")
+    @ResponseStatus(HttpStatus.OK)
+    public void pickACard(@RequestHeader("Authorization") String auth, @PathVariable Long game_id, 
+            @PathVariable Long player_id, @RequestBody String content, @RequestBody String name) {
+        playerTableService.checkGameState(game_id, GameStatus.ONGOING);
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        Player usingPlayer = playerRepository.getOne(player_id);
+        userService.throwIfNotIdAndTokenMatch(usingPlayer.getUser().getId(), auth);
+        playerTableService.addMessage(table, content, name);
+    } 
 }

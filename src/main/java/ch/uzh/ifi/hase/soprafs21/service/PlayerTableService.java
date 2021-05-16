@@ -14,6 +14,8 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.CharacterPile;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Chat;
+import ch.uzh.ifi.hase.soprafs21.entity.Message;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -116,13 +118,23 @@ public class PlayerTableService {
         Deck deck = deckService.createDeck();
         Deck discardPile = deckService.createDiscardPile();
         CharacterPile characterPile = characterCardService.createCharacterPile();
+        List<Message> messages = new ArrayList<>();
+        Chat chat = new Chat();
 
+        //this is for chat testing ONLY!
+        Message message = new Message();
+        message.setContent("Default Content");
+        message.setName("Default Name");
+        messages.add(message);
+
+        chat.setMessages(messages);
         deck.setDiscardPile(discardPile);
 
         playerTable.setPlayers(players);
         playerTable.setDeck(deck);
         playerTable.setDiscardPile(discardPile);
         playerTable.setCharacterPile(characterPile);
+        playerTable.setChat(chat);
 
         return playerTable;
 
@@ -308,7 +320,7 @@ public class PlayerTableService {
             
         }
     }
-
+  
     public void changeTimer(PlayerTable table, Long time) {
         table.setTimeRemaining(time);
         table.setMaxTime(time);
@@ -321,5 +333,4 @@ public class PlayerTableService {
         table.getChat().addMessage(message);
         playerTableRepository.saveAndFlush(table);
     }
-
 }
