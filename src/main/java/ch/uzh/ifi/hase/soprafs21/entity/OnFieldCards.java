@@ -1,14 +1,19 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Priority;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
-import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
-
-import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 @Entity
 public class OnFieldCards {
@@ -57,6 +62,7 @@ public class OnFieldCards {
     public void addOnFieldCard(BlueCard card) {
         // TODO depending on how many priorities there will be --> loop over priorities
         // instead of if else
+
         Priority cardPrio = card.getPriority();
         int index = (cards == null || cards.size() == 0) ? 0 : cards.size() - 1;
 
@@ -102,12 +108,6 @@ public class OnFieldCards {
     }
 
     public void removeAllCards() {
-        this.cards = new ArrayList();
+        this.cards = new ArrayList<>();
     }
-
-    // TODO check for duplicates (player playing a weapon card when one is already
-    // present)
-    // probably best to run card.undo() for old card and card.use() for new card
-    // (with function arguments obviously)
-
 }

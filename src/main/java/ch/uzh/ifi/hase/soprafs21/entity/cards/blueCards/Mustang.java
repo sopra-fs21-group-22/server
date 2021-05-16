@@ -9,7 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
-public class Mustang extends BlueCard {
+public class Mustang extends Horse {
     public Mustang() {
     }
 

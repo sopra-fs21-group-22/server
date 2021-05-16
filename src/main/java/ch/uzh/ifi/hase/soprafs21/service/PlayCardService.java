@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Appaloosa;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Barrel;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
@@ -67,7 +68,8 @@ public class PlayCardService {
         cardList.add(new Bang(Rank.NINE, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.QUEEN, Suit.HEARTS));
         cardList.add(new Bang(Rank.SIX, Suit.CLUBS));
-        cardList.add(new Bang(Rank.NINE, Suit.CLUBS));
+        // cardList.add(new Bang(Rank.NINE, Suit.CLUBS)); //card doesnt exist in
+        // frontend
         cardList.add(new Bang(Rank.KING, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.FIVE, Suit.DIAMONDS));
         cardList.add(new Bang(Rank.THREE, Suit.CLUBS));
@@ -108,8 +110,10 @@ public class PlayCardService {
         cardList.add(new Saloon(Rank.FIVE, Suit.HEARTS));
 
         cardList.add(new Gatling(Rank.TEN, Suit.HEARTS));
-        // cardList.add(new Indians(Rank.ACE, Suit.DIAMONDS));
-        // cardList.add(new Indians(Rank.KING, Suit.DIAMONDS));
+
+        cardList.add(new Indians(Rank.ACE, Suit.DIAMONDS));
+        cardList.add(new Indians(Rank.KING, Suit.DIAMONDS));
+
         cardList.add(new WellsFargo(Rank.THREE, Suit.HEARTS));
         cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
         cardList.add(new StageCoach(Rank.NINE, Suit.SPADES));
@@ -120,6 +124,9 @@ public class PlayCardService {
         cardList.add(new Jail(Rank.JACK, Suit.SPADES));
         cardList.add(new Jail(Rank.TEN, Suit.SPADES));
         cardList.add(new Jail(Rank.FOUR, Suit.HEARTS));
+
+        cardList.add(new Barrel(Rank.KING, Suit.SPADES));
+        cardList.add(new Barrel(Rank.QUEEN, Suit.SPADES));
 
         cardList.add(new Dynamite(Rank.TWO, Suit.HEARTS));
 

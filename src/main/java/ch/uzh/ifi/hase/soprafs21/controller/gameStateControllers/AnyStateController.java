@@ -47,7 +47,7 @@ public class AnyStateController {
     public PlayerTableGetDTO getPlayerInformation(@RequestHeader("Authorization") String auth,
             @PathVariable Long game_id) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        if (table.getGameStatus()==GameStatus.ONGOING) {
+        if (table.getGameStatus() == GameStatus.ONGOING) {
             playerTableService.updateTimer(table);
         }
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
@@ -88,12 +88,15 @@ public class AnyStateController {
         Player player = playerRepository.getOne(player_id);
         userService.throwIfNotIdAndTokenMatch(player.getUser().getId(), auth);
         player.setUser(null);
-        if (table.getGameStatus() != GameStatus.ENDED) {
+        if (table.getGameStatus() == GameStatus.ONGOING) {
             player.setBullets(0);
             player.onDeath();
             if (player.getTable().getPlayerOnTurn().getId().equals(player.getId())) {
                 playerTableService.nextPlayersTurn(player.getTable());
             }
+        } else if (table.getGameStatus() == GameStatus.PREPARATION) {
+
+            playerRepository.delete(player);
         }
 
         playerTableRepository.save(table);

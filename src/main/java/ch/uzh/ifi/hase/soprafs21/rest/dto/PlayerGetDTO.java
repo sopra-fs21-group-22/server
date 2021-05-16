@@ -26,6 +26,16 @@ public class PlayerGetDTO {
     protected Hand hand;
     protected OnFieldCards onFieldCards;
     protected PlayerTable table;
+    protected Integer strikes;
+    protected Integer stillPlayableBangsThisRound;
+
+    public Integer getstillPlayableBangsThisRound() {
+        return stillPlayableBangsThisRound;
+    }
+
+    public void setstillPlayableBangsThisRound(Integer stillPlayableBangsThisRound) {
+        this.stillPlayableBangsThisRound = stillPlayableBangsThisRound;
+    }
 
     public Long getTable() {
         return table.getId();
@@ -117,6 +127,14 @@ public class PlayerGetDTO {
 
     public void setRightNeighbor(Player rightNeighbor) {
         this.rightNeighbor = rightNeighbor;
+    }
+
+    public Integer getStrikes() {
+        return strikes;
+    }
+
+    public void setStrikes(Integer strikes) {
+        this.strikes = strikes;
     }
 
     /*

@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 
@@ -43,17 +45,18 @@ public class SchofieldTest {
 
     @Test
     public void testRange() {
-        Schofield card = new Schofield();
+        Schofield card = new Schofield(Rank.ACE, Suit.HEARTS);
         Player player = players.get(0);
         card.use(player, player, null);
-        assertEquals(player.getBaseRange()+1, player.getRange());    }
+        assertEquals(player.getBaseRange() + 1, player.getRange());
+    }
 
     @Test
     public void testUndo() {
-        Schofield card = new Schofield();
+        Schofield card = new Schofield(Rank.TWO, Suit.SPADES);
         Player player = players.get(0);
         card.use(player, player, null);
-        assertEquals(player.getBaseRange()+1, player.getRange());
+        assertEquals(player.getBaseRange() + 1, player.getRange());
         card.onRemoval(player);
         assertEquals(player.getBaseRange(), player.getRange());
     }

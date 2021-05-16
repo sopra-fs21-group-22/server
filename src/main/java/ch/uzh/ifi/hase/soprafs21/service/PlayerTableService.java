@@ -168,6 +168,8 @@ public class PlayerTableService {
         for (int i = 0; i < table.getPlayers().size(); i++) {
             Player currPlayer = table.getPlayers().get(i);
             if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
+                currPlayer.setBullets(currPlayer.getBullets()+1);
+                currPlayer.setMaxBullets(currPlayer.getMaxBullets()+1);
                 table.setPlayerOnTurn(currPlayer);
                 table.setTurnStart(System.currentTimeMillis());
             }
@@ -318,6 +320,11 @@ public class PlayerTableService {
             
         }
     }
+  
+    public void changeTimer(PlayerTable table, Long time) {
+        table.setTimeRemaining(time);
+        table.setMaxTime(time);
+    }  
 
     public void addMessage(PlayerTable table, String content, String name) {
         Message message = new Message();
@@ -326,5 +333,4 @@ public class PlayerTableService {
         table.getChat().addMessage(message);
         playerTableRepository.saveAndFlush(table);
     }
- 
 }

@@ -18,7 +18,7 @@ public abstract class BlueCard extends PlayCard {
     }
 
     @Override
-    public final void use(Player usingPlayer, Player target, PayLoadDTO payload) {
+    public void use(Player usingPlayer, Player target, PayLoadDTO payload) {
         super.use(usingPlayer, target, payload);
         Player targetPlayer = usingPlayer;
         targetPlayer.getOnFieldCards().addOnFieldCard(this);

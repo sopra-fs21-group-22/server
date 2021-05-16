@@ -80,7 +80,7 @@ public class Hand {
         return playCards.remove(idx);
     }
 
-    public void removeCardById(Long cardId) {
+    public PlayCard removeCardById(Long cardId) {
         PlayCard cardToRemove = null;
         for (PlayCard card : playCards) {
             if (card.getId().equals(cardId)) {
@@ -91,6 +91,7 @@ public class Hand {
             throw new GameLogicException("Card to be removed doesn't exist!");
         }
         playCards.remove(cardToRemove);
+        return cardToRemove;
     }
 
     public void addCards(List<PlayCard> newCards) {
