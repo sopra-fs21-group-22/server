@@ -314,4 +314,12 @@ public class PlayerTableService {
         table.setMaxTime(time);
     }  
 
+    public void addMessage(PlayerTable table, String content, String name) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setName(name);
+        table.getChat().addMessage(message);
+        playerTableRepository.saveAndFlush(table);
+    }
+
 }
