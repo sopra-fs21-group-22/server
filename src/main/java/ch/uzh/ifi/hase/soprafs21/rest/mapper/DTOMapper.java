@@ -105,6 +105,7 @@ public interface DTOMapper {
     @Mapping(source = "table", target = "table")
     @Mapping(source = "strikes", target = "strikes")
     @Mapping(source = "stillPlayableBangsThisRound", target = "stillPlayableBangsThisRound")
+    @Mapping(source = "maxBullets", target = "maxBullets")
     PlayerGetDTO convertEntityToPlayerGetDTO(Player player);
 
     @Mapping(source = "id", target = "id")

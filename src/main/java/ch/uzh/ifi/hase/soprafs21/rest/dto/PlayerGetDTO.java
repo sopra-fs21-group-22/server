@@ -28,6 +28,8 @@ public class PlayerGetDTO {
     protected PlayerTable table;
     protected Integer strikes;
     protected Integer stillPlayableBangsThisRound;
+    protected Integer maxBullets;
+
 
     public Integer getstillPlayableBangsThisRound() {
         return stillPlayableBangsThisRound;
@@ -135,6 +137,14 @@ public class PlayerGetDTO {
 
     public void setStrikes(Integer strikes) {
         this.strikes = strikes;
+    }
+
+    public Integer getMaxBullets() {
+        return maxBullets;
+    }
+
+    public void setMaxBullets(Integer maxBullets) {
+        this.maxBullets = maxBullets;
     }
 
     /*
