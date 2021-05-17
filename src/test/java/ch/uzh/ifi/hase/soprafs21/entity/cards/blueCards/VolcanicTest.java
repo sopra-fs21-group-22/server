@@ -2,63 +2,65 @@ package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 public class VolcanicTest {
 
     private Player player;
-    private List<Player> bangTargets;
     private List<Player> players;
-    private List<Player> volcanicTargets;
-    private Bang bang;
+    private Bang bang = new Bang(Rank.SEVEN, Suit.HEARTS);
     private Volcanic volcanic = new Volcanic(Rank.ACE, Suit.SPADES);
+    private PlayerTable table = new PlayerTable();
 
     @BeforeEach
     public void beforeEach() {
-        bang = new Bang(Rank.ACE, Suit.SPADES);
-        PlayerTable table = new PlayerTable();
         Deck deck = new Deck();
-        deck.setPlayCards(new ArrayList<>());
-        table.setDiscardPile(deck);
-        bangTargets = new ArrayList<>();
+        table.setDeck(deck);
+
+        // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();
-        Player oldPlayer = new Player();
-        player = oldPlayer;
-        oldPlayer.setId(15L);
-        players.add(oldPlayer);
-        oldPlayer.setTable(table);
-        oldPlayer.setOnFieldCards(new OnFieldCards());
-        Hand hand = new Hand();
-        hand.setPlayCards(new ArrayList<>());
-        oldPlayer.setHand(hand);
+        player = new Player();
+        User user = new User();
+        user.setUsername("Ada");
+        player.setUser(user);
+        player.setId(15L);
+        player.setTable(table);
+        table.setPlayerOnTurn(player); // players.get(0) onTurn
+        table.setDiscardPile(new Deck());
+        players.add(player);
+        player.setOnFieldCards(new OnFieldCards());
+        player.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
+            user = new User();
+            user.setUsername("Ada");
+            newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
-            newPlayer.setHand(hand);
+            newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
-            newPlayer.setRightNeighbor(oldPlayer);
-            oldPlayer.setLeftNeighbor(newPlayer);
-            oldPlayer = newPlayer;
+            newPlayer.setRightNeighbor(player);
+            player.setLeftNeighbor(newPlayer);
+            player = newPlayer;
         }
         Player firstPlayer = players.get(0);
         Player lastPlayer = players.get(players.size() - 1);
@@ -86,13 +88,14 @@ public class VolcanicTest {
         CharacterCard characterCard = new CharacterCard();
         characterCard.setLifeAmount(3);
         characterCard.setName("Paul Regret");
-        players.get(1).setCharacterCard(characterCard);
+        Player rightNeigbor = player.getRightNeighbor();
+        rightNeigbor.setCharacterCard(characterCard);
         volcanic.use(player, player, null);
         volcanic.onRemoval(player);
-        bang.use(player, players.get(1), null);
+        bang.use(player, rightNeigbor, null);
 
         assertThrows(GameLogicException.class, () -> {
-            bang.use(player, players.get(1), null);
+            bang.use(player, rightNeigbor, null);
         });
     }
 }

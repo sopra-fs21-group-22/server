@@ -33,6 +33,9 @@ public class DynamiteTest {
         // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();
         Player oldPlayer = new Player();
+        User user = new User();
+        user.setUsername("Ada");
+        oldPlayer.setUser(user);
         oldPlayer.setId(15L);
         oldPlayer.setTable(table);
         table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
@@ -42,6 +45,9 @@ public class DynamiteTest {
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
+            user = new User();
+            user.setUsername("Ada");
+            newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
             newPlayer.setHand(new Hand());
@@ -116,7 +122,6 @@ public class DynamiteTest {
         Player playerWithDynamite = players.get(0); // on turn
         playerWithDynamite.setCharacterCard(characterCard);
         playerWithDynamite.setBullets(3);
-        
 
         dynamite.use(playerWithDynamite, playerWithDynamite, null);
 

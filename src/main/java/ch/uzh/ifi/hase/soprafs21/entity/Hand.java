@@ -13,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 /**
@@ -30,7 +32,7 @@ public class Hand {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "hand_id")
-    private List<PlayCard> playCards;
+    private List<PlayCard> playCards = new ArrayList<>();
 
     public PlayCard get(int index) {
         return playCards.get(index);
@@ -58,9 +60,6 @@ public class Hand {
     }
 
     public List<PlayCard> getPlayCards() {
-        if (playCards == null) {
-            return new ArrayList<>();
-        }
         return playCards;
     }
 
@@ -99,7 +98,7 @@ public class Hand {
             playCards = new ArrayList<>();
         }
         for (PlayCard card : newCards) {
-            addCardInOrder(card); // makes sure cards are added in order of priority
+            addCard(card);
         }
     }
 

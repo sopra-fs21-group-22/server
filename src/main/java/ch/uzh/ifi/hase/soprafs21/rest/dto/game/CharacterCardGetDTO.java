@@ -43,4 +43,3 @@ public class CharacterCardGetDTO {
         this.description = description;
     }
 }
-    

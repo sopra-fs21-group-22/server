@@ -15,6 +15,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
 public class BarrelTest {
@@ -24,7 +25,10 @@ public class BarrelTest {
 
     @BeforeEach
     public void beforeEach() {
+        User user = new User();
+        user.setUsername("Ada");
         player = new Player();
+        player.setUser(user);
         PlayerTable table = new PlayerTable();
         player.setTable(table);
         Deck discardPile = new Deck();

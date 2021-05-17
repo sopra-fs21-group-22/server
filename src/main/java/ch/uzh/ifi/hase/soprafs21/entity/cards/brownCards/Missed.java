@@ -1,16 +1,16 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
+import javax.persistence.Entity;
+
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
-
-import javax.persistence.Entity;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Missed extends BrownCard {
@@ -27,6 +27,11 @@ public class Missed extends BrownCard {
 
     @Override
     public boolean onBang(Player affectedPlayer) {
+        String succMessage = String.format("MISSED card has absorbed the hit on %s!",
+                affectedPlayer.getUser().getUsername());
+        GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, succMessage);
+        affectedPlayer.getTable().addGameMove(succGameMove);
+
         affectedPlayer.getHand().removeCard(this);
         affectedPlayer.getTable().getDiscardPile().addCard(this);
         return true;

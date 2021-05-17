@@ -33,7 +33,7 @@ public class WellsFargo extends BrownCard {
 
     @Override
     protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
-        return true;
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 
 }

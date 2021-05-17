@@ -7,6 +7,8 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Chat;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.GameMoveGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class PlayerTableGetDTO {
@@ -17,6 +19,19 @@ public class PlayerTableGetDTO {
     private List<Player> players;
     private Long timeRemaining;
     private Chat chat;
+    private List<GameMove> gameMoves;
+
+    public List<GameMoveGetDTO> getGameMoves() {
+        List<GameMoveGetDTO> dtos = new ArrayList<>();
+        for (GameMove gameMove : gameMoves) {
+            dtos.add(DTOMapper.INSTANCE.convertEntityToGameMoveGetDTO(gameMove));
+        }
+        return dtos;
+    }
+
+    public void setGameMoves(List<GameMove> gameMoves) {
+        this.gameMoves = gameMoves;
+    }
 
     public GameStatus getGameStatus() {
         return gameStatus;

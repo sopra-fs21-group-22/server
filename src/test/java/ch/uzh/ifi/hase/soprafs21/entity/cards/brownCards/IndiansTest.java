@@ -16,42 +16,43 @@ import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
 
 public class IndiansTest {
 
     private Indians indians = new Indians(Rank.ACE, Suit.CLUBS);
     private List<Player> players;
-    private Player user;
+    private PlayerTable table = new PlayerTable();
 
     @BeforeEach
     public void beforeEach() {
-
-        players = new ArrayList<>();
-
         Deck deck = new Deck();
-        deck.setPlayCards(new ArrayList<>());
+        table.setDeck(deck);
 
-        PlayerTable table = new PlayerTable();
-        table.setDiscardPile(deck);
-        table.setPlayers(players);
-
+        // create a game with 7 players and their Hand & onField Cards
+        players = new ArrayList<>();
         Player oldPlayer = new Player();
+        User user = new User();
+        user.setUsername("Ada");
+        oldPlayer.setUser(user);
         oldPlayer.setId(15L);
         oldPlayer.setTable(table);
-        oldPlayer.setOnFieldCards(new OnFieldCards());
+        table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
+        table.setDiscardPile(new Deck());
+        table.setPlayers(players);
         players.add(oldPlayer);
-
-        Hand hand = new Hand();
-        hand.setPlayCards(new ArrayList<>());
-        oldPlayer.setHand(hand);
+        oldPlayer.setOnFieldCards(new OnFieldCards());
+        oldPlayer.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
+            user = new User();
+            user.setUsername("Ada");
+            newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
-            hand = new Hand();
-            hand.setPlayCards(new ArrayList<>());
-            newPlayer.setHand(hand);
+            newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
             newPlayer.setRightNeighbor(oldPlayer);
@@ -66,12 +67,13 @@ public class IndiansTest {
 
     @Test
     public void testTargetIsValid() {
-        assertTrue(indians.targetIsValid(null, null));
+        Player user = players.get(0);
+        assertTrue(indians.targetIsValid(user, user));
     }
 
     @Test
     public void bangHolderNoDMG() {
-        user = players.get(0);
+        Player user = players.get(0);
         Player targetWithBang = user.getRightNeighbor();
         targetWithBang.getHand().getPlayCards().add(new Bang(Rank.ACE, Suit.SPADES));
         int expectedLives = targetWithBang.getBullets();
@@ -82,7 +84,7 @@ public class IndiansTest {
 
     @Test
     public void noBangHolderTakesDMG() {
-        user = players.get(0);
+        Player user = players.get(0);
         Player targetWithoutBang = user.getLeftNeighbor();
         int expectedLives = targetWithoutBang.getBullets() - 1;
 
@@ -92,16 +94,18 @@ public class IndiansTest {
 
     @Test
     public void bangHolderLosesBang() {
-        user = players.get(0);
+        Player user = players.get(0);
         Player targetWithBang = user.getRightNeighbor();
         targetWithBang.getHand().getPlayCards().add(new Bang(Rank.ACE, Suit.SPADES));
+        targetWithBang.getHand().getPlayCards().add(new Schofield(Rank.ACE, Suit.SPADES));
+
         indians.use(user, user, null);
-        assertEquals(0, targetWithBang.getHand().getPlayCards().size());
+        assertEquals(1, targetWithBang.getHand().getPlayCards().size());
     }
 
     @Test
     public void doesntHitUser() {
-        user = players.get(0);
+        Player user = players.get(0);
         int expectedLives = user.getBullets();
 
         indians.use(user, user, null);

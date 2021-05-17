@@ -1,8 +1,5 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,11 +8,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
@@ -59,7 +57,15 @@ public abstract class PlayCard {
                     String.format("Target player is not valid for card %s.", this.card.toString()));
         }
 
+        String usingPlayerUsername = usingPlayer.getUser().getUsername();
+        String targetUsername = target.getUser().getUsername();
+        targetUsername = targetUsername.equals(usingPlayerUsername) ? "" : " on " + targetUsername;
+        String message = String.format("%s uses card %s%s!", usingPlayerUsername, card.toString(), targetUsername);
+        GameMove move = new GameMove(usingPlayer, target, this, GameMoveAction.USE, message);
+        usingPlayer.getTable().addGameMove(move);
+
         onPlacement(usingPlayer, target, payload);
+
     }
 
     /**

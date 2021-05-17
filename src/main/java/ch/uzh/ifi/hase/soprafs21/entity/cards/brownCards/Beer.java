@@ -45,6 +45,6 @@ public class Beer extends BrownCard {
         if (usingPlayer.getBullets().equals(usingPlayer.getMaxBullets())) {
             throw new GameLogicException("Player is already at max health!");
         }
-        return true;
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 }

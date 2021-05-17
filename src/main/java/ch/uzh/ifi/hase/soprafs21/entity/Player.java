@@ -223,6 +223,7 @@ public class Player {
                 + targetPlayer.getDistanceIncreaseForOthers() <= 0;
     }
 
+    /** returns distance while ignoring all modifiers */
     private int getDistanceToNeighbor(Player targetPlayer) {
         Player userRightNeighbor = this.getRightNeighbor();
         Player userLeftNeighbor = this.getLeftNeighbor();

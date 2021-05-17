@@ -1,18 +1,17 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
+import javax.persistence.Entity;
+
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
-import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
-import ch.uzh.ifi.hase.soprafs21.service.DeckService;
-
-import javax.persistence.Entity;
 
 @Entity
 public class Dynamite extends BlueCard {
@@ -45,6 +44,12 @@ public class Dynamite extends BlueCard {
         boolean dynamiteExplodes = correctNumberRange && (referenceCard.getSuit() == Suit.SPADES);
 
         if (dynamiteExplodes) {
+            String explosionMessage = String.format("DYNAMITE explodes and deals 3 damage to %s!",
+                    affectedPlayer.getUser().getUsername());
+            GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE,
+                    explosionMessage);
+            affectedPlayer.getTable().addGameMove(explosionGameMove);
+
             int lives = affectedPlayer.getBullets();
             affectedPlayer.setBullets(Math.max(lives - 3, 0));
             /*
@@ -53,6 +58,11 @@ public class Dynamite extends BlueCard {
              * deckservice.cassidyDraw(affectedPlayer); }
              */
         } else {
+            String explosionMessage = String.format("DYNAMITE doesn't explode and moves to the next player!");
+            GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE,
+                    explosionMessage);
+            affectedPlayer.getTable().addGameMove(explosionGameMove);
+
             Player leftNeighbor = affectedPlayer.getLeftNeighbor();
             while (leftNeighbor.getBullets() == 0 && !leftNeighbor.getId().equals(affectedPlayer.getId())) {
                 leftNeighbor = leftNeighbor.getLeftNeighbor();

@@ -1,21 +1,36 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
-import ch.uzh.ifi.hase.soprafs21.entity.*;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
+import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
+import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.DiscardPileGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.*;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.GameMoveGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetAuthDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.OnFieldCardsGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPutDTO;
-
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 /**
  * DTOMapper This class is responsible for generating classes that will
@@ -76,6 +91,7 @@ public interface DTOMapper {
     @Mapping(source = "gameStatus", target = "gameStatus")
     @Mapping(source = "timeRemaining", target = "timeRemaining")
     @Mapping(source = "chat", target = "chat")
+    @Mapping(source = "gameMoves", target = "gameMoves")
     PlayerTableGetDTO convertEntityToPlayerTableGetDTO(PlayerTable playerTable);
 
     @Mapping(source = "id", target = "id")
@@ -136,5 +152,12 @@ public interface DTOMapper {
     @Mapping(source = "lifeAmount", target = "lifeAmount")
     @Mapping(source = "description", target = "description")
     CharacterCardGetDTO convertEntityToCharacterCardGetDTO(CharacterCard characterCard);
+
+    @Mapping(source = "usingPlayer", target = "usingPlayer")
+    @Mapping(source = "targetPlayer", target = "targetPlayer")
+    @Mapping(source = "card", target = "card")
+    @Mapping(source = "action", target = "action")
+    @Mapping(source = "message", target = "message")
+    GameMoveGetDTO convertEntityToGameMoveGetDTO(GameMove gameMove);
 
 }

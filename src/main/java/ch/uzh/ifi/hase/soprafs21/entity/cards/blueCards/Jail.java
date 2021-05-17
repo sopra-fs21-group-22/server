@@ -1,14 +1,20 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards;
 
-import ch.uzh.ifi.hase.soprafs21.constant.*;
+import javax.persistence.Entity;
+
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
+import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
-
-import javax.persistence.Entity;
 
 @Entity
 public class Jail extends BlueCard {
@@ -38,7 +44,21 @@ public class Jail extends BlueCard {
         Deck deck = table.getDeck();
         PlayCard referenceCard = deck.drawCards(1).get(0);
         if (referenceCard.getSuit() != Suit.HEARTS) {
+            String failMessage = String.format("%s has to skip his move due to the JAIL card!",
+                    affectedPlayer.getUser().getUsername());
+            GameMove failGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, failMessage);
+            affectedPlayer.getTable().addGameMove(failGameMove);
+
+            String outMessage = String.format("%s has left the JAIL!", affectedPlayer.getUser().getUsername());
+            GameMove outGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, outMessage);
+            affectedPlayer.getTable().addGameMove(outGameMove);
+
             table.setPlayerOnTurn(affectedPlayer.getRightNeighbor());
+        } else {
+            String succMessage = String.format("%s managed to break out of JAIL!",
+                    affectedPlayer.getUser().getUsername());
+            GameMove successGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, succMessage);
+            affectedPlayer.getTable().addGameMove(successGameMove);
         }
         affectedPlayer.getOnFieldCards().removeOnFieldCard(this); // card is removed whether or not the player stays in
                                                                   // jail for current turn

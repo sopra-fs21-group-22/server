@@ -33,6 +33,6 @@ public class StageCoach extends BrownCard {
 
     @Override
     protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
-        return true;
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 }

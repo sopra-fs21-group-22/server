@@ -40,7 +40,7 @@ public class Indians extends BrownCard {
 
     @Override
     protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
-        return true;
+        return usingPlayer.getId().equals(targetPlayer.getId());
     }
 
     private boolean removeBang(Player player) {

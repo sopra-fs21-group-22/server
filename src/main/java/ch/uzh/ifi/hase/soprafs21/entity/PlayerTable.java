@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 
 @Entity
 @Table(name = "playertable")
@@ -43,6 +44,9 @@ public class PlayerTable {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Chat chat;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<GameMove> gameMoves = new ArrayList<>();
 
     @Column
     private GameStatus gameStatus = GameStatus.PREPARATION;
@@ -77,7 +81,20 @@ public class PlayerTable {
                 playersInRange.add(player);
             }
         }
+
         return playersInRange;
+    }
+
+    public void addGameMove(GameMove gameMove) {
+        this.gameMoves.add(0, gameMove);
+    }
+
+    public List<GameMove> getGameMoves() {
+        return gameMoves;
+    }
+
+    public void setGameMoves(List<GameMove> gameMoves) {
+        this.gameMoves = gameMoves;
     }
 
     public GameStatus getGameStatus() {

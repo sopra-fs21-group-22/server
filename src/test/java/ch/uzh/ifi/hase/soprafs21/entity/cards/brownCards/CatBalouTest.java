@@ -16,6 +16,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
@@ -23,33 +24,36 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 public class CatBalouTest {
 
     private List<Player> players;
-    private List<Player> targets;
     private CatBalou catBalou = new CatBalou(Rank.SEVEN, Suit.HEARTS);
+    private PlayerTable table = new PlayerTable();
 
     @BeforeEach
     public void beforeEach() {
-        PlayerTable table = new PlayerTable();
         Deck deck = new Deck();
-        deck.setPlayCards(new ArrayList<>());
-        table.setDiscardPile(deck);
-        targets = new ArrayList<>();
+        table.setDeck(deck);
+
+        // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();
         Player oldPlayer = new Player();
+        User user = new User();
+        user.setUsername("Ada");
+        oldPlayer.setUser(user);
         oldPlayer.setId(15L);
-        players.add(oldPlayer);
         oldPlayer.setTable(table);
+        table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
+        table.setDiscardPile(new Deck());
+        players.add(oldPlayer);
         oldPlayer.setOnFieldCards(new OnFieldCards());
-        Hand hand = new Hand();
-        hand.setPlayCards(new ArrayList<>());
-        oldPlayer.setHand(hand);
+        oldPlayer.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
+            user = new User();
+            user.setUsername("Ada");
+            newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
-            hand = new Hand();
-            hand.setPlayCards(new ArrayList<>());
-            newPlayer.setHand(hand);
+            newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
             newPlayer.setRightNeighbor(oldPlayer);
