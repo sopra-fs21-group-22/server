@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -100,5 +102,14 @@ public class AnyStateController {
         }
 
         playerTableRepository.save(table);
+    }
+
+    @GetMapping("/{game_id}/players/{player_id}/characters")
+    @ResponseStatus(HttpStatus.OK)
+    public CharacterCardGetDTO receiveACharacter(@PathVariable Long game_id, @PathVariable Long player_id) {
+        Player player = playerTableService.getPlayerById(player_id);
+        CharacterCard characterCard = player.getCharacterCard();
+
+        return DTOMapper.INSTANCE.convertEntityToCharacterCardGetDTO(characterCard);
     }
 }

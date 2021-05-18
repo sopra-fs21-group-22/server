@@ -97,16 +97,6 @@ public class PreparationController {
         playerTableRepository.saveAndFlush(table);
     }
 
-    @GetMapping("/{game_id}/players/{player_id}/characters")
-    @ResponseStatus(HttpStatus.OK)
-    public CharacterCardGetDTO receiveACharacter(@PathVariable Long game_id, @PathVariable Long player_id) {
-        playerTableService.checkGameState(game_id, GameStatus.PREPARATION);
-        Player player = playerTableService.getPlayerById(player_id);
-        CharacterCard characterCard = player.getCharacterCard();
-
-        return DTOMapper.INSTANCE.convertEntityToCharacterCardGetDTO(characterCard);
-    }
-
     @PutMapping("/{game_id}/timelimits")
     @ResponseStatus(HttpStatus.OK)
     public void changeTimeLimit(@PathVariable Long game_id, @RequestBody Long time) {
