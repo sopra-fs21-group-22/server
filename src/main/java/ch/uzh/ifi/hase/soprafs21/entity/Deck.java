@@ -23,16 +23,22 @@ public class Deck {
 
     public List<PlayCard> drawCards(int amount) {
         if (amount > this.playCards.size()) {
-            List<PlayCard> pileCards = discardPile.getPlayCards();
-            List<PlayCard> toBeAddedCards = pileCards.subList(1, pileCards.size());
-            Collections.shuffle(toBeAddedCards);
-            this.playCards.addAll(toBeAddedCards);
+            shuffle();
         }
         List<PlayCard> drawnCards = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             drawnCards.add(this.playCards.remove(0));
         }
         return drawnCards;
+    }
+
+    private void shuffle() {
+        List<PlayCard> pileCards = discardPile.getPlayCards();
+        List<PlayCard> toBeAddedCards = pileCards.subList(1, pileCards.size());
+        List<PlayCard> topCard = pileCards.subList(0, 1);
+        discardPile.setPlayCards(topCard);
+        Collections.shuffle(toBeAddedCards);
+        this.playCards.addAll(toBeAddedCards);
     }
 
     public void addCard(PlayCard card) {

@@ -31,7 +31,7 @@ import javax.transaction.Transactional;
 
 @SpringBootTest
 public class DeckServiceTest {
-    
+
     @Autowired
     DeckService deckService;
 
@@ -54,19 +54,18 @@ public class DeckServiceTest {
     @Test
     public void deckCreationSuccess() {
 
-        
         Deck deck = new Deck();
 
         deckService.fill(deck);
 
         List<PlayCard> testList = deck.getPlayCards();
 
-        for(int i = 0; i < testList.size(); i++) {   
+        for (int i = 0; i < testList.size(); i++) {
             System.out.print(testList.get(i));
-        }  
+        }
 
-        
     }
+
     @Transactional
     @Test
     public void deckShuffleSuccess() {
@@ -82,27 +81,26 @@ public class DeckServiceTest {
         table.setDiscardPile(discardPile);
         player.setHand(hand);
         table.setPlayers(players);
-    
 
         deckService.fill(table.getDiscardPile());
 
         List<PlayCard> testList = table.getDiscardPile().getPlayCards();
 
-        for(int i = 0; i < testList.size(); i++) {   
+        for (int i = 0; i < testList.size(); i++) {
             System.out.print(testList.get(i));
-        }  
+        }
 
         deckService.shuffle(table);
-        
+
         List<PlayCard> testList2 = table.getDiscardPile().getPlayCards();
 
-        for(int i = 0; i < testList2.size(); i++) {   
+        for (int i = 0; i < testList2.size(); i++) {
             System.out.print(testList2.get(i));
         }
 
         List<PlayCard> testList3 = table.getDeck().getPlayCards();
 
-        for(int i = 0; i < testList3.size(); i++) {   
+        for (int i = 0; i < testList3.size(); i++) {
             System.out.print(testList3.get(i));
         }
     }

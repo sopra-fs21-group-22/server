@@ -65,16 +65,15 @@ public class DeckService {
 
     public void shuffle(PlayerTable table) {
         List<PlayCard> discardCards = table.getDiscardPile().getPlayCards();
-        List<PlayCard> topCard = table.getDiscardPile().getPlayCards();
 
-        topCard = topCard.subList(0, 1);
-        discardCards = discardCards.subList(1, discardCards.size());
-        Collections.shuffle(discardCards);
+        List<PlayCard> toBeAddedCards = new ArrayList<>(discardCards);
+
+        List<PlayCard> topCard = new ArrayList<>(discardCards.subList(0, 1));
+
+        Collections.shuffle(toBeAddedCards);
 
         table.getDiscardPile().setPlayCards(topCard);
-        table.getDeck().setPlayCards(discardCards);
-        playerTableRepository.save(table);
-        playerTableRepository.flush();
+        table.getDeck().setPlayCards(toBeAddedCards);
 
     }
 
@@ -82,30 +81,27 @@ public class DeckService {
         for (int i = 0; i < n; i++) {
             if (table.getDeck().getPlayCards().size() < 1) {
                 this.shuffle(table);
-            } 
-                player.getHand().addCardInOrder(table.getDeck().getPlayCards().get(0));
-                table.getDeck().getPlayCards().remove(0);
+            }
+            player.getHand().addCardInOrder(table.getDeck().getPlayCards().get(0));
 
-                playerTableRepository.save(table);
-                playerTableRepository.flush();
-
-                playerRepository.save(player);
-                playerRepository.flush();           
+            table.getDeck().getPlayCards().remove(0);
         }
+        playerTableRepository.save(table);
+        playerTableRepository.flush();
     }
 
     public void gringoDraw(Player player, Player attacker) {
 
         PlayerTable table = player.getTable();
 
-        if(attacker.getHand().getPlayCards().size()>0) {
+        if (attacker.getHand().getPlayCards().size() > 0) {
             PlayCard playCard = attacker.getHand().getPlayCards().get(0);
             attacker.getHand().getPlayCards().remove(0);
             player.getHand().addCardInOrder(playCard);
-            if(attacker.getHand().getPlayCards().size()<1) {
-                if(attacker.getCharacterCard().getName().equals("Suzy Lafayette")){     //Lafayette Ability
+            if (attacker.getHand().getPlayCards().size() < 1) {
+                if (attacker.getCharacterCard().getName().equals("Suzy Lafayette")) { // Lafayette Ability
                     this.drawCards(table, attacker, 1);
-                }            
+                }
             }
 
             playerTableRepository.save(table);
