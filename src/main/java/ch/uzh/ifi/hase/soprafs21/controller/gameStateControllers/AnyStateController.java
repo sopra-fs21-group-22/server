@@ -104,12 +104,4 @@ public class AnyStateController {
         playerTableRepository.save(table);
     }
 
-    @GetMapping("/{game_id}/players/{player_id}/characters")
-    @ResponseStatus(HttpStatus.OK)
-    public CharacterCardGetDTO receiveACharacter(@PathVariable Long game_id, @PathVariable Long player_id) {
-        Player player = playerTableService.getPlayerById(player_id);
-        CharacterCard characterCard = player.getCharacterCard();
-
-        return DTOMapper.INSTANCE.convertEntityToCharacterCardGetDTO(characterCard);
-    }
 }
