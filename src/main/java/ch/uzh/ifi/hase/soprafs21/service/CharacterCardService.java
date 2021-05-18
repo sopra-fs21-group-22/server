@@ -50,25 +50,25 @@ public class CharacterCardService {
         CharacterCard characterCard6 = new CharacterCard();
         CharacterCard characterCard7 = new CharacterCard();
         characterCard1.setLifeAmount(4);
-        characterCard1.setName("Willy The Kid");
+        characterCard1.setName("willythekid");
         characterCard1.setDescription("You can use unlimited BANG! cards per round. You start with 4 Bullets");
         characterCard2.setLifeAmount(4);
-        characterCard2.setName("Rose Doolan");
+        characterCard2.setName("rosedoolan");
         characterCard2.setDescription("Your range is permanently increased by one. You start with 4 Bullets");
         characterCard3.setLifeAmount(3);
-        characterCard3.setName("Paul Regret");
+        characterCard3.setName("paulregret");
         characterCard3.setDescription("The range others need to hit you is permanently increased by one. You start with 3 Bullets");
         characterCard4.setLifeAmount(4);
-        characterCard4.setName("Jourdonnais");
+        characterCard4.setName("jourdonnais");
         characterCard4.setDescription("PLACEHOLDER. You start with 4 Bullets");
         characterCard5.setLifeAmount(4);
-        characterCard5.setName("Bart Cassidy");
+        characterCard5.setName("bartcassidy");
         characterCard5.setDescription("PLACEHOLDER. You start with 4 Bullets");
         characterCard6.setLifeAmount(4);
-        characterCard6.setName("Suzy Lafayette");
+        characterCard6.setName("suzylafayette");
         characterCard6.setDescription("PLACEHOLDER. You start with 4 Bullets");
         characterCard7.setLifeAmount(3);
-        characterCard7.setName("El Gringo");
+        characterCard7.setName("elgringo");
         characterCard7.setDescription("PLACEHOLDER. You start with 3 Bullets");
 
 
