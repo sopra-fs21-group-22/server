@@ -15,6 +15,9 @@ public class CharacterCard {
     protected String name;
 
     @Column
+    protected String display;
+
+    @Column
     protected Integer lifeAmount;
 
     @Column
@@ -41,6 +44,14 @@ public class CharacterCard {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 
     public Integer getLifeAmount() {
