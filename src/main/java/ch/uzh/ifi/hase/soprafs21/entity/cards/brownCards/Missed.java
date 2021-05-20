@@ -19,7 +19,7 @@ public class Missed extends BrownCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.MISSED;
-        this.priority = Priority.SECOND;
+        this.priority = Priority.THIRD;
     }
 
     public Missed() {

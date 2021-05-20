@@ -96,7 +96,8 @@ public class PlayerTableService {
         Hand hand = handService.createHand();
         player.setHand(hand);
         player.setTable(playerTable);
-        player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
+        //player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
+        playerTableRepository.save(playerTable);
 
         playerTable.getPlayers().add(player);
 
@@ -167,6 +168,7 @@ public class PlayerTableService {
 
         for (int i = 0; i < table.getPlayers().size(); i++) {
             Player currPlayer = table.getPlayers().get(i);
+            currPlayer.setCharacterCard(characterCardService.pickCharacter(currPlayer, table));
             if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
                 currPlayer.setBullets(currPlayer.getBullets()+1);
                 currPlayer.setMaxBullets(currPlayer.getMaxBullets()+1);

@@ -1,8 +1,5 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto.game;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Card;
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 
 public class CharacterCardGetDTO {
 
@@ -10,6 +7,7 @@ public class CharacterCardGetDTO {
     protected String name;
     protected Integer lifeAmount;
     protected String description;
+    protected String display;
 
     public Long getId() {
         return id;
@@ -41,5 +39,13 @@ public class CharacterCardGetDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 }

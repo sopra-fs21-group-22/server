@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Message;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.NotOnTurnException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 
@@ -91,14 +96,25 @@ public class OngoingController {
         playerTableRepository.saveAndFlush(table);
     }
 
-    @PostMapping("/{game_id}/players/{player_id}/chat")
+    @PutMapping("/{game_id}/players/{player_id}/chat")
     @ResponseStatus(HttpStatus.OK)
-    public void pickACard(@RequestHeader("Authorization") String auth, @PathVariable Long game_id, 
-            @PathVariable Long player_id, @RequestBody String content, @RequestBody String name) {
+    public void writeInChat(@RequestHeader("Authorization") String auth, @PathVariable Long game_id, 
+            @PathVariable Long player_id, @RequestBody Message message) {
         playerTableService.checkGameState(game_id, GameStatus.ONGOING);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player usingPlayer = playerRepository.getOne(player_id);
         userService.throwIfNotIdAndTokenMatch(usingPlayer.getUser().getId(), auth);
-        playerTableService.addMessage(table, content, name);
+        playerTableService.addMessage(table, message.getContent(), message.getName());
+        playerTableRepository.saveAndFlush(table);
     } 
+
+    @GetMapping("/{game_id}/players/{player_id}/characters")
+    @ResponseStatus(HttpStatus.OK)
+    public CharacterCardGetDTO receiveACharacter(@PathVariable Long game_id, @PathVariable Long player_id) {
+        playerTableService.checkGameState(game_id, GameStatus.ONGOING);
+        Player player = playerTableService.getPlayerById(player_id);
+        CharacterCard characterCard = player.getCharacterCard();
+
+        return DTOMapper.INSTANCE.convertEntityToCharacterCardGetDTO(characterCard);
+    }
 }
