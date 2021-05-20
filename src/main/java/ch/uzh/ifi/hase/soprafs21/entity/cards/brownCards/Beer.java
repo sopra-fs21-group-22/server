@@ -20,7 +20,7 @@ public class Beer extends BrownCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.BEER;
-        this.priority = Priority.THIRD;
+        this.priority = Priority.FOURTH;
     }
 
     public Beer() {

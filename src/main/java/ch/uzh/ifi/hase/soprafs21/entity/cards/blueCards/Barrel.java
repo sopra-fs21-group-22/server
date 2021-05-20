@@ -4,10 +4,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Card;
-import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
+import ch.uzh.ifi.hase.soprafs21.constant.*;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
@@ -22,6 +19,7 @@ public class Barrel extends BlueCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.BARREL;
+        this.priority = Priority.FIFTH;
     }
 
     @Override

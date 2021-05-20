@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
@@ -22,6 +23,7 @@ public class WellsFargo extends BrownCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.WELLSFARGO;
+        this.priority = Priority.THIRTEENTH;
     }
 
     @Override

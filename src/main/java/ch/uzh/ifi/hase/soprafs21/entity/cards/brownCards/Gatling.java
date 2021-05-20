@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -20,6 +21,8 @@ public class Gatling extends BrownCard {
         this.rank = rank;
         this.suit = suit;
         this.card = Card.GATLING;
+        this.priority = Priority.TENTH;
+
     }
 
     @Override

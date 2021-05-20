@@ -65,6 +65,7 @@ public class Hand {
 
     public void setPlayCards(List<PlayCard> playCards) {
         this.playCards = playCards;
+        this.playCards.sort(new SortByPriority());
     }
 
     public void removeCard(PlayCard card) {
@@ -100,6 +101,7 @@ public class Hand {
         for (PlayCard card : newCards) {
             addCard(card);
         }
+        playCards.sort(new SortByPriority());
     }
 
     public void addCard(PlayCard newCard) {
@@ -109,8 +111,17 @@ public class Hand {
         addCardInOrder(newCard);
     }
 
-    private class SortByPriority implements Comparator<PlayCard> {
+    /*
+        in case anyone cares the order of all the cards is:
+        Dynamite, Jail, Missed, Beer, Barrel, Bang, GeneralStore, CatBalou, Panic, Gatling, Indians,
+        StageCoach, WellsFargo, Appaloosa, Mustang, Volcanic, Schofield, Remington, Carabine, and Winchester
+     */
+    private static class SortByPriority implements Comparator<PlayCard> {
 
+        /**
+            Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
+            So if you compare a Bang with priority Five and a Dynamite with priority One it will return -4 meaning Bang is less than dynamite.
+         */
         @Override
         public int compare(PlayCard o1, PlayCard o2) {
             List<Priority> priorities = Arrays.asList(Priority.values());
@@ -123,13 +134,11 @@ public class Hand {
      * priority. The first card (index 0) has the highest priority and the last card
      * the lowest. The cards with the same priority are in arbitrary order.
      *
-     * @param PlayCard
+     * @param
      */
 
     public void addCardInOrder(PlayCard card) {
-        // TODO depending on how many priorities there will be --> loop over priorities
-        // instead of if else
         playCards.add(card);
-        Collections.sort(playCards, new SortByPriority());
+        playCards.sort(new SortByPriority());
     }
 }
