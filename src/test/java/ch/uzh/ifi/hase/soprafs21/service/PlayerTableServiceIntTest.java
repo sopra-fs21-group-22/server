@@ -200,7 +200,6 @@ public class PlayerTableServiceIntTest {
         }
         assertEquals(1, table.getPlayers().size());
     }
-
     /*
      * @Test
      * 

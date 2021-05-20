@@ -76,7 +76,7 @@ public class PlayerTable {
         }
         Player rootPlayer = playerOpt.get();
         List<Player> playersInRange = new ArrayList<>();
-        for (Player player : players) {
+        for (Player player : getAlivePlayers()) {
             if (rootPlayer.reachesWithWeapon(player)) {
                 playersInRange.add(player);
             }
