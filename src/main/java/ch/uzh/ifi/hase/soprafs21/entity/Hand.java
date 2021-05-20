@@ -64,6 +64,7 @@ public class Hand {
     }
 
     public void setPlayCards(List<PlayCard> playCards) {
+        playCards.sort(new SortByPriority());
         this.playCards = playCards;
         this.playCards.sort(new SortByPriority());
     }
@@ -116,7 +117,7 @@ public class Hand {
         Dynamite, Jail, Missed, Beer, Barrel, Bang, GeneralStore, CatBalou, Panic, Gatling, Indians,
         StageCoach, WellsFargo, Appaloosa, Mustang, Volcanic, Schofield, Remington, Carabine, and Winchester
      */
-    private static class SortByPriority implements Comparator<PlayCard> {
+    public static class SortByPriority implements Comparator<PlayCard> {
 
         /**
             Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
