@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Message;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
@@ -95,15 +96,16 @@ public class OngoingController {
         playerTableRepository.saveAndFlush(table);
     }
 
-    @PostMapping("/{game_id}/players/{player_id}/chat")
+    @PutMapping("/{game_id}/players/{player_id}/chat")
     @ResponseStatus(HttpStatus.OK)
-    public void pickACard(@RequestHeader("Authorization") String auth, @PathVariable Long game_id, 
-            @PathVariable Long player_id, @RequestBody String content, @RequestBody String name) {
+    public void writeInChat(@RequestHeader("Authorization") String auth, @PathVariable Long game_id, 
+            @PathVariable Long player_id, @RequestBody Message message) {
         playerTableService.checkGameState(game_id, GameStatus.ONGOING);
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player usingPlayer = playerRepository.getOne(player_id);
         userService.throwIfNotIdAndTokenMatch(usingPlayer.getUser().getId(), auth);
-        playerTableService.addMessage(table, content, name);
+        playerTableService.addMessage(table, message.getContent(), message.getName());
+        playerTableRepository.saveAndFlush(table);
     } 
 
     @GetMapping("/{game_id}/players/{player_id}/characters")
