@@ -88,7 +88,7 @@ public class Player {
     @Column
     private Integer strikes = 0;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private OnFieldCards onFieldCards;
 
     public OnFieldCards getOnFieldCards() {
@@ -128,7 +128,7 @@ public class Player {
         // then go through Hand cards for Missed & Beer
         int i = 0;
         while (!isSafe && i < hand.getLength()) {
-            if (hand.get(i).getColor() == "brown") { // to make sure no blue cards on hand are activated
+            if (hand.get(i).getColor().equals("brown")) { // to make sure no blue cards on hand are activated
                 isSafe = hand.get(i).onBang(this); // since hand is in order of priority this will check Missed before
                                                    // Beer
             }
