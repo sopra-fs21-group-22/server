@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
@@ -21,6 +23,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
@@ -200,11 +203,42 @@ public class Player {
         for (PlayCard card : onFieldCards.getOnFieldCards()) {
             discardPile.addCard(card);
         }
-        onFieldCards.setOnFieldCards(new ArrayList<>());
 
-        if (this.getGameRole() == GameRole.SHERIFF || this.getTable().getAlivePlayers().size() == 1) {
-            this.table.setGameStatus(GameStatus.ENDED);
+        onFieldCards.setOnFieldCards(new ArrayList<>());
+        determineWinner();
+    }
+
+    private void determineWinner() {
+        List<GameRole> gameRoles = new ArrayList<>();
+        List<Player> players = table.getAlivePlayers();
+        String winnerMessage = "";
+
+        for (Player player : players) {
+            gameRoles.add(player.getGameRole());
         }
+
+        Boolean sheriffAlive = gameRoles.contains(GameRole.SHERIFF);
+        Boolean outlawAlive = gameRoles.contains(GameRole.OUTLAW);
+        Boolean renegadeAlive = gameRoles.contains(GameRole.RENEGADE);
+
+        // game is not over
+        if (sheriffAlive && outlawAlive) {
+            return;
+        }
+        if (sheriffAlive && !renegadeAlive) {
+            winnerMessage = "The sheriff and his deputies won the game!";
+        } else {
+            if (players.size() > 1) {
+                winnerMessage = "The outlaws won the game!";
+            } else {
+                winnerMessage = "The renegade won the game!";
+            }
+        }
+
+        GameMove gameMove = new GameMove(null, null, null, GameMoveAction.WIN, winnerMessage);
+        this.table.addGameMove(gameMove);
+
+        this.table.setGameStatus(GameStatus.ENDED);
     }
 
     public void playCard(Long cardId, Player target, PayLoadDTO payload) {
@@ -221,6 +255,12 @@ public class Player {
     public boolean reachesWithWeapon(Player targetPlayer) {
         return this.getDistanceToNeighbor(targetPlayer) - this.getRange() - this.getDistanceDecreaseToOthers()
                 + targetPlayer.getDistanceIncreaseForOthers() <= 0;
+    }
+
+    public void pickACard(PlayCard card) {
+        List<PlayCard> cards = new ArrayList<>();
+        cards.add(card);
+        hand.addCards(cards);
     }
 
     /** returns distance while ignoring all modifiers */
@@ -397,12 +437,6 @@ public class Player {
 
     public void setPlayableBangsAnyRound(Integer playableBangsAnyRound) {
         this.playableBangsAnyRound = playableBangsAnyRound;
-    }
-
-    public void pickACard(PlayCard card) {
-        List<PlayCard> cards = new ArrayList<>();
-        cards.add(card);
-        hand.addCards(cards);
     }
 
     public Integer getStrikes() {

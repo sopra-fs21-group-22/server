@@ -161,6 +161,13 @@ public class PlayerTable {
         this.chat = chat;
     }
 
+    public GameMove getNewestGameMove() {
+        if (gameMoves == null) {
+            return null;
+        }
+        return gameMoves.get(gameMoves.size() - 1);
+    }
+
     public Optional<Player> getPlayerById(Long id) {
         for (Player player : players) {
             if (id.equals(player.getId())) {

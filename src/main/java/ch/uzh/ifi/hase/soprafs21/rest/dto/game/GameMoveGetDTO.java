@@ -21,6 +21,9 @@ public class GameMoveGetDTO {
     }
 
     public Long getUsingPlayer() {
+        if (usingPlayer == null) {
+            return null;
+        }
         return usingPlayer.getId();
     }
 
@@ -40,6 +43,9 @@ public class GameMoveGetDTO {
     }
 
     public String getCard() {
+        if (card == null) {
+            return null;
+        }
         return card.getCard().toString();
     }
 

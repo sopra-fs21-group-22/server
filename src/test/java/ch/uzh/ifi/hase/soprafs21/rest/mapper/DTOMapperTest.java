@@ -118,6 +118,7 @@ public class DTOMapperTest {
         player1.setRightNeighbor(player3);
         player1.setHand(hand);
         player1.setOnFieldCards(cards);
+        player1.setTable(new PlayerTable());
 
         // Mapping
         PlayerGetDTO playerGetDTO = DTOMapper.INSTANCE.convertEntityToPlayerGetDTO(player1);

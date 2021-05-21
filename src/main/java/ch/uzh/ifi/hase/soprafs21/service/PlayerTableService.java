@@ -96,7 +96,8 @@ public class PlayerTableService {
         Hand hand = handService.createHand();
         player.setHand(hand);
         player.setTable(playerTable);
-        //player.setCharacterCard(characterCardService.pickCharacter(player, playerTable));
+        // player.setCharacterCard(characterCardService.pickCharacter(player,
+        // playerTable));
         playerTableRepository.save(playerTable);
 
         playerTable.getPlayers().add(player);
@@ -122,7 +123,7 @@ public class PlayerTableService {
         List<Message> messages = new ArrayList<>();
         Chat chat = new Chat();
 
-        //this is for chat testing ONLY!
+        // this is for chat testing ONLY!
         Message message = new Message();
         message.setContent("Default Content");
         message.setName("Default Name");
@@ -170,9 +171,10 @@ public class PlayerTableService {
             Player currPlayer = table.getPlayers().get(i);
             currPlayer.setCharacterCard(characterCardService.pickCharacter(currPlayer, table));
             if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
-                currPlayer.setBullets(currPlayer.getBullets()+1);
-                currPlayer.setMaxBullets(currPlayer.getMaxBullets()+1);
+                currPlayer.setBullets(currPlayer.getBullets() + 1);
+                currPlayer.setMaxBullets(currPlayer.getMaxBullets() + 1);
                 table.setPlayerOnTurn(currPlayer);
+                startTurn(currPlayer, table);
                 table.setTurnStart(System.currentTimeMillis());
             }
             deckService.drawCards(table, currPlayer, currPlayer.getBullets());
@@ -303,30 +305,29 @@ public class PlayerTableService {
         else if (table.getTimeRemaining() < 0L) {
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
 
-            
             table.getPlayerOnTurn().setBullets(0);
-              
+
             List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
-            List<BlueCard> onFieldCards =table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards(); 
+            List<BlueCard> onFieldCards = table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();
 
             for (PlayCard card : handCards) {
-                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card); 
-            } 
-            for(PlayCard card : onFieldCards) {
-                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card); 
+                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
+            }
+            for (PlayCard card : onFieldCards) {
+                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
             }
             table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
             table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
-            
+
             nextPlayersTurn(table);
-            
+
         }
     }
-  
+
     public void changeTimer(PlayerTable table, Long time) {
         table.setTimeRemaining(time);
         table.setMaxTime(time);
-    }  
+    }
 
     public void addMessage(PlayerTable table, String content, String name) {
         Message message = new Message();

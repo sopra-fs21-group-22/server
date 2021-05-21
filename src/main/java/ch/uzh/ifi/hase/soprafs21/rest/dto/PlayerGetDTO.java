@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
@@ -29,7 +30,6 @@ public class PlayerGetDTO {
     protected Integer strikes;
     protected Integer stillPlayableBangsThisRound;
     protected Integer maxBullets;
-
 
     public Integer getstillPlayableBangsThisRound() {
         return stillPlayableBangsThisRound;
@@ -91,7 +91,7 @@ public class PlayerGetDTO {
     }
 
     public GameRole getGameRole() {
-        if (gameRole.equals(GameRole.SHERIFF) || bullets.equals(0)) {
+        if (table.getGameStatus() == GameStatus.ENDED || gameRole.equals(GameRole.SHERIFF) || bullets.equals(0)) {
             return gameRole;
         }
         return GameRole.HIDDEN;

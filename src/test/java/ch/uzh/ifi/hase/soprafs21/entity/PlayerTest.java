@@ -14,19 +14,28 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Barrel;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 
 public class PlayerTest {
 
     private List<Player> players;
+    private List<GameRole> gameRoles = new ArrayList<>();
 
     @BeforeEach
     public void beforeEach() {
+        gameRoles.add(GameRole.SHERIFF);
+        gameRoles.add(GameRole.OUTLAW);
+        gameRoles.add(GameRole.OUTLAW);
+        gameRoles.add(GameRole.RENEGADE);
+        gameRoles.add(GameRole.DEPUTY);
+        gameRoles.add(GameRole.OUTLAW);
+        gameRoles.add(GameRole.DEPUTY);
+
         PlayerTable table = new PlayerTable();
         Deck deck = new Deck();
         Deck discardPile = new Deck();
@@ -41,11 +50,13 @@ public class PlayerTest {
         oldPlayer.setId(15L);
         players.add(oldPlayer);
         oldPlayer.setOnFieldCards(new OnFieldCards());
+        oldPlayer.setGameRole(gameRoles.get(0));
         oldPlayer.setHand(new Hand());
         oldPlayer.setTable(table);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
+            newPlayer.setGameRole(gameRoles.get(i + 1));
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
             newPlayer.setHand(new Hand());
@@ -79,9 +90,8 @@ public class PlayerTest {
     @Test
     public void testWeaponRange_changedRange_outOfRange() {
         Player player = players.get(0);
-        player.setRange(3);
-        assertFalse(player
-                .reachesWithWeapon(player.getLeftNeighbor().getLeftNeighbor().getLeftNeighbor().getLeftNeighbor()));
+        player.setRange(2);
+        assertFalse(player.reachesWithWeapon(player.getLeftNeighbor().getLeftNeighbor().getLeftNeighbor()));
     }
 
     @Test
@@ -96,7 +106,7 @@ public class PlayerTest {
     public void testWeaponRange_distanceToOthers_outOfRange() {
         Player player = players.get(0);
         player.setRange(1);
-        player.setDistanceDecreaseToOthers(2);
+        player.setDistanceDecreaseToOthers(1);
         Player target = player.getRightNeighbor().getRightNeighbor().getRightNeighbor().getRightNeighbor();
         assertFalse(player.reachesWithWeapon(target));
     }
@@ -159,6 +169,30 @@ public class PlayerTest {
     }
 
     @Test
+    public void testOnDeath_OutlawsWin() {
+        Player sheriff = players.get(0);
+        sheriff.setBullets(0);
+        sheriff.onDeath();
+        assertEquals(GameStatus.ENDED, sheriff.getTable().getGameStatus());
+        GameMove winnerDeclaration = sheriff.getTable().getNewestGameMove();
+        assertTrue(winnerDeclaration.getMessage().toLowerCase().contains("outlaw"));
+    }
+
+    @Test
+    public void testOnDeath_renegadeWins() {
+        for (int i = 0; i < 7; i++) {
+            players.get(i).setBullets(0);
+        }
+        Player renegade = players.get(3);
+        renegade.setBullets(1);
+        Player sheriff = players.get(0);
+        sheriff.onDeath();
+        GameMove winnerDeclaration = sheriff.getTable().getNewestGameMove();
+        assertTrue(winnerDeclaration.getMessage().toLowerCase().contains("renegade"));
+
+    }
+
+    @Test
     public void testOnDeath_DeputyBySheriff() {
         CharacterCard characterCard = new CharacterCard();
         characterCard.setLifeAmount(3);
@@ -201,7 +235,6 @@ public class PlayerTest {
         target.takeHit(killer);
 
         assertEquals(GameStatus.ENDED, killer.getTable().getGameStatus());
-
     }
 
 }
