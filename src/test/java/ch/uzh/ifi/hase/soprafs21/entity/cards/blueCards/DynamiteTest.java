@@ -29,6 +29,7 @@ public class DynamiteTest {
         // create a table with a deck and a discard pile
         Deck deck = new Deck();
         table.setDeck(deck);
+        table.setDiscardPile(new Deck());
 
         // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();

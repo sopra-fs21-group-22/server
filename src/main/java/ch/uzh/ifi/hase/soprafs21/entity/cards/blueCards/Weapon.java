@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
@@ -21,6 +22,7 @@ public abstract class Weapon extends BlueCard {
         weapons.add(Card.SCHOFIELD);
         weapons.add(Card.CARABINE);
         weapons.add(Card.VOLCANIC);
+        PlayerTable table = usingPlayer.getTable();
         List<BlueCard> fieldCards = usingPlayer.getOnFieldCards().getOnFieldCards();
         for (BlueCard card : fieldCards) {
             if (card.getCard() == this.getCard()) {
@@ -28,6 +30,7 @@ public abstract class Weapon extends BlueCard {
             }
             if (weapons.contains(card.getCard())) {
                 fieldCards.remove(card);
+                table.getDiscardPile().addCard(card);
                 break;
             }
         }

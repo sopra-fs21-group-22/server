@@ -34,6 +34,7 @@ public class Dynamite extends BlueCard {
     public void onTurnStart(Player affectedPlayer) {
         PlayerTable table = affectedPlayer.getTable();
         PlayCard referenceCard = table.getDeck().drawCards(1).get(0);
+        table.getDiscardPile().addCard(referenceCard);
         boolean correctNumberRange = false;
         for (int i = 1; i < 9; i++) {
             if (referenceCard.getRank() == Rank.values()[i]) {
@@ -49,6 +50,7 @@ public class Dynamite extends BlueCard {
             GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE,
                     explosionMessage);
             affectedPlayer.getTable().addGameMove(explosionGameMove);
+            table.getDiscardPile().addCard(this);
 
             int lives = affectedPlayer.getBullets();
             affectedPlayer.setBullets(Math.max(lives - 3, 0));
