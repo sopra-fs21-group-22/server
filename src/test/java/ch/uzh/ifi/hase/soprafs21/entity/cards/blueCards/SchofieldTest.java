@@ -19,7 +19,9 @@ import ch.uzh.ifi.hase.soprafs21.entity.User;
 
 public class SchofieldTest {
 
+    private Player player;
     private List<Player> players;
+    private Schofield schofield = new Schofield(Rank.ACE, Suit.SPADES);
     private PlayerTable table = new PlayerTable();
 
     @BeforeEach
@@ -29,16 +31,17 @@ public class SchofieldTest {
 
         // create a game with 7 players and their Hand & onField Cards
         players = new ArrayList<>();
-        Player oldPlayer = new Player();
+        player = new Player();
         User user = new User();
         user.setUsername("Ada");
-        oldPlayer.setUser(user);
-        oldPlayer.setId(15L);
-        oldPlayer.setTable(table);
-        table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
-        players.add(oldPlayer);
-        oldPlayer.setOnFieldCards(new OnFieldCards());
-        oldPlayer.setHand(new Hand());
+        player.setUser(user);
+        player.setId(15L);
+        player.setTable(table);
+        table.setPlayerOnTurn(player); // players.get(0) onTurn
+        table.setDiscardPile(new Deck());
+        players.add(player);
+        player.setOnFieldCards(new OnFieldCards());
+        player.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
@@ -50,9 +53,9 @@ public class SchofieldTest {
             newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
-            newPlayer.setRightNeighbor(oldPlayer);
-            oldPlayer.setLeftNeighbor(newPlayer);
-            oldPlayer = newPlayer;
+            newPlayer.setRightNeighbor(player);
+            player.setLeftNeighbor(newPlayer);
+            player = newPlayer;
         }
         Player firstPlayer = players.get(0);
         Player lastPlayer = players.get(players.size() - 1);
@@ -62,19 +65,17 @@ public class SchofieldTest {
 
     @Test
     public void testRange() {
-        Schofield card = new Schofield(Rank.ACE, Suit.HEARTS);
         Player player = players.get(0);
-        card.use(player, player, null);
+        schofield.use(player, player, null);
         assertEquals(player.getBaseRange() + 1, player.getRange());
     }
 
     @Test
     public void testUndo() {
-        Schofield card = new Schofield(Rank.TWO, Suit.SPADES);
-        Player player = players.get(0);
-        card.use(player, player, null);
+        Player player = players.get(1);
+        schofield.use(player, player, null);
         assertEquals(player.getBaseRange() + 1, player.getRange());
-        card.onRemoval(player);
+        schofield.onRemoval(player);
         assertEquals(player.getBaseRange(), player.getRange());
     }
 }

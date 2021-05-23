@@ -41,7 +41,7 @@ public class Deck {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "deck_id")
-    private List<PlayCard> playCards;
+    private List<PlayCard> playCards = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private Deck discardPile;

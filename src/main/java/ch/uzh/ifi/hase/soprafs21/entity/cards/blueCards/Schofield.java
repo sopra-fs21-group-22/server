@@ -25,7 +25,6 @@ public class Schofield extends Weapon {
     @Override
     protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
         usingPlayer.setRange(usingPlayer.getRange() + 1);
-        usingPlayer.getOnFieldCards().addOnFieldCard(this);
     }
 
     @Override
