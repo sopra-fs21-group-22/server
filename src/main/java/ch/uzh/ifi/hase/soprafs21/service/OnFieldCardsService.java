@@ -38,8 +38,7 @@ public class OnFieldCardsService {
         onFieldCardsRepository.save(onFieldCards);
 
         List<PlayCard> discardPileCards = discardPile.getPlayCards();
-        discardPileCards.add(0, cardToDiscard);
-        discardPile.setPlayCards(discardPileCards);
+        discardPile.addCard(cardToDiscard);
         deckRepository.save(discardPile);
     }
 

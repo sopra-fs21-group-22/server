@@ -9,6 +9,7 @@ import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class DiscardPileGetDTO {
     private List<PlayCard> playCards;
+    private PlayCard topCard;
 
     // public List<PlayCard> getPlayCards() {
     // return playCards;
@@ -19,10 +20,11 @@ public class DiscardPileGetDTO {
     }
 
     public PlayCardAuthGetDTO getTopCard() {
-        if (playCards.isEmpty()) {
-            return null;
-        }
-        return DTOMapper.INSTANCE.convertEntityToPlayCardGetAuthDTO(this.playCards.get(this.playCards.size() - 1));
+        return DTOMapper.INSTANCE.convertEntityToPlayCardGetAuthDTO(this.topCard);
+    }
+
+    public void setTopCard(PlayCard topCard) {
+        this.topCard = topCard;
     }
 
     public int getAmountCards() {

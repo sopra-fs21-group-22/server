@@ -1,11 +1,25 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
-import java.util.*;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Transient;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.CreatedDate;
 
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 
 @Entity
 public class Deck {
@@ -14,12 +28,26 @@ public class Deck {
     @GeneratedValue
     private Long id;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private PlayCard topCard;
+
+    public PlayCard getTopCard() {
+        return topCard;
+    }
+
+    public void setTopCard(PlayCard topCard) {
+        this.topCard = topCard;
+    }
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "deck_id")
     private List<PlayCard> playCards;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Deck discardPile;
+
+    @Transient
+    private final Logger logger = LoggerFactory.getLogger(Deck.class);
 
     public List<PlayCard> drawCards(int amount) {
         if (amount > this.playCards.size()) {
@@ -45,14 +73,18 @@ public class Deck {
         if (this.playCards == null) {
             this.playCards = new ArrayList<>();
         }
+        logger.info(String.format("Card %s added to Deck/Discard Pile.", card.getCard()));
         this.playCards.add(0, card);
+        this.topCard = card;
     }
 
-    public void addCards(List<PlayCard> list) {
+    public void addCards(List<PlayCard> cards) {
         if (this.playCards == null) {
             this.playCards = new ArrayList<>();
         }
-        this.playCards.addAll(list);
+        for (PlayCard card : cards) {
+            addCard(card);
+        }
     }
 
     public Deck getDiscardPile() {

@@ -146,6 +146,7 @@ public interface DTOMapper {
     PlayCardAuthGetDTO convertEntityToPlayCardGetAuthDTO(PlayCard playCard);
 
     @Mapping(source = "playCards", target = "playCards")
+    @Mapping(source = "topCard", target = "topCard")
     DiscardPileGetDTO convertEntityTDiscardPileGetDTO(Deck discardPile);
 
     @Mapping(source = "id", target = "id")

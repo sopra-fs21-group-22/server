@@ -1,13 +1,15 @@
 package ch.uzh.ifi.hase.soprafs21.entity.gameMoves;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import ch.qos.logback.core.joran.action.Action;
+import org.springframework.data.annotation.CreatedDate;
+
 import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
@@ -33,6 +35,10 @@ public class GameMove {
 
     @Column
     private String message;
+
+    @CreatedDate
+    @Column
+    private Date createdDate;
 
     public GameMove() {
     }

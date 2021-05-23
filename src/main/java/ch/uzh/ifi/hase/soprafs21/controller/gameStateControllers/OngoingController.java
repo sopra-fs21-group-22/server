@@ -3,9 +3,9 @@ package ch.uzh.ifi.hase.soprafs21.controller.gameStateControllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,18 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Message;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.exceptions.NotOnTurnException;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 
@@ -109,7 +111,13 @@ public class OngoingController {
 
         PlayCard removedCard = usingPlayer.getHand().removeCardById(card_id);
         table.getDiscardPile().addCard(removedCard);
+
+        String message = String.format("%s discarded card %s.", usingPlayer.getUser().getUsername(),
+                removedCard.getCard());
+        table.addGameMove(new GameMove(usingPlayer, null, removedCard, GameMoveAction.DISCARD, message));
+
         playerTableRepository.saveAndFlush(table);
+
     }
 
     @PutMapping("/{game_id}/players/{player_id}/chat")

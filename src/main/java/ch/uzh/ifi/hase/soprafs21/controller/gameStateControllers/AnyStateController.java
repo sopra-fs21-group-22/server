@@ -100,7 +100,6 @@ public class AnyStateController {
 
             playerRepository.delete(player);
         }
-
         playerTableRepository.save(table);
     }
 
