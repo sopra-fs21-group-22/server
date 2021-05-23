@@ -60,8 +60,8 @@ public class Jail extends BlueCard {
             GameMove successGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, succMessage);
             affectedPlayer.getTable().addGameMove(successGameMove);
         }
-        affectedPlayer.getOnFieldCards().removeOnFieldCard(this); // card is removed whether or not the player stays in
-                                                                  // jail for current turn
+        affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
+        table.getDiscardPile().addCard(this);
     }
 
     @Override
