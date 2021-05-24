@@ -1,12 +1,8 @@
 package ch.uzh.ifi.hase.soprafs21.controller.gameStateControllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,14 +15,9 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.ReadyPutDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;

@@ -24,7 +24,6 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.OnFieldCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserAuthPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;

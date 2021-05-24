@@ -18,7 +18,6 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.VisibleCardsGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.users.UserPostDTO;
 import org.junit.jupiter.api.Test;
@@ -230,5 +229,4 @@ public class DTOMapperTest {
         assertEquals(card.getId(), playCardAuthGetDTO.getId());
 
     }
-
 }
