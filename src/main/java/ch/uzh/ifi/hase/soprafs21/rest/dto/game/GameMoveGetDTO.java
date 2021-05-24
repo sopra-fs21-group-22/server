@@ -6,6 +6,9 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 
 public class GameMoveGetDTO {
+
+    private Long id;
+
     private Player usingPlayer;
 
     private Player targetPlayer;
@@ -15,6 +18,14 @@ public class GameMoveGetDTO {
     private GameMoveAction action;
 
     private String message;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setMessage(String message) {
         this.message = message;

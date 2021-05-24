@@ -151,11 +151,11 @@ public interface DTOMapper {
     @Mapping(source = "display", target = "display")
     CharacterCardGetDTO convertEntityToCharacterCardGetDTO(CharacterCard characterCard);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "usingPlayer", target = "usingPlayer")
     @Mapping(source = "targetPlayer", target = "targetPlayer")
     @Mapping(source = "card", target = "card")
     @Mapping(source = "action", target = "action")
     @Mapping(source = "message", target = "message")
     GameMoveGetDTO convertEntityToGameMoveGetDTO(GameMove gameMove);
-
 }

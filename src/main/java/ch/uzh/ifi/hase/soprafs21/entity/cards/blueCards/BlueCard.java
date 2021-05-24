@@ -22,7 +22,7 @@ public abstract class BlueCard extends PlayCard {
         super.use(usingPlayer, target, payload);
         Player targetPlayer = usingPlayer;
 
-        List<BlueCard> fieldCards = usingPlayer.getOnFieldCards().getOnFieldCards();
+        List<BlueCard> fieldCards = targetPlayer.getOnFieldCards().getOnFieldCards();
         for (BlueCard card : fieldCards) {
             if (card.getCard() == this.card) {
                 throw new GameLogicException("A card with the same name is already on the field!");

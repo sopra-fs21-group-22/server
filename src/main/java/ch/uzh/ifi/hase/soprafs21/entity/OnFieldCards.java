@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
