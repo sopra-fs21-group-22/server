@@ -43,6 +43,7 @@ public class Jail extends BlueCard {
         PlayerTable table = affectedPlayer.getTable();
         Deck deck = table.getDeck();
         PlayCard referenceCard = deck.drawCards(1).get(0);
+        table.getDiscardPile().addCard(referenceCard);
         if (referenceCard.getSuit() != Suit.HEARTS) {
             String failMessage = String.format("%s has to skip his move due to the JAIL card!",
                     affectedPlayer.getUser().getUsername());
