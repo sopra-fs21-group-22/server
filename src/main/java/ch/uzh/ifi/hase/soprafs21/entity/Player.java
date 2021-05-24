@@ -24,6 +24,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
 import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
@@ -220,19 +221,18 @@ public class Player {
         Boolean sheriffAlive = gameRoles.contains(GameRole.SHERIFF);
         Boolean outlawAlive = gameRoles.contains(GameRole.OUTLAW);
         Boolean renegadeAlive = gameRoles.contains(GameRole.RENEGADE);
+        Boolean deputyAlive = gameRoles.contains(GameRole.DEPUTY);
 
         // game is not over
-        if (sheriffAlive && outlawAlive) {
+        if (sheriffAlive && (outlawAlive || renegadeAlive)) {
             return;
         }
-        if (sheriffAlive && !renegadeAlive) {
+        if (sheriffAlive) {
             winnerMessage = "The sheriff and his deputies won the game!";
-        } else {
-            if (players.size() > 1) {
-                winnerMessage = "The outlaws won the game!";
-            } else {
-                winnerMessage = "The renegade won the game!";
-            }
+        } else if (outlawAlive || deputyAlive) {
+            winnerMessage = "The outlaws won the game!";
+        } else if (renegadeAlive) {
+            winnerMessage = "The renegade won the game!";
         }
 
         GameMove gameMove = new GameMove(null, null, null, GameMoveAction.WIN, winnerMessage);
@@ -328,8 +328,11 @@ public class Player {
         return bullets;
     }
 
-    public void setBullets(Integer bullets) {
-        this.bullets = bullets;
+    public void setBullets(Integer newBullets) {
+        this.bullets = newBullets;
+        if (newBullets.equals(0)) {
+            this.onDeath();
+        }
     }
 
     public Integer getMaxBullets() {

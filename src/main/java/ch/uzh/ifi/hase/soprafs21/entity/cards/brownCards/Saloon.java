@@ -24,7 +24,11 @@ public class Saloon extends BrownCard {
 
     @Override
     protected void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload) {
-        usingPlayer.setBullets(usingPlayer.getBullets() + 1);
+        List<Player> players = usingPlayer.getTable().getAlivePlayers();
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            player.setBullets(player.getBullets() + 1);
+        }
     }
 
     @Override

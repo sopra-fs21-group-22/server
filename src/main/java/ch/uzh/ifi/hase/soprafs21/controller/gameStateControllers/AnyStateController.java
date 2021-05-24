@@ -92,7 +92,6 @@ public class AnyStateController {
         player.setUser(null);
         if (table.getGameStatus() == GameStatus.ONGOING) {
             player.setBullets(0);
-            player.onDeath();
             if (player.getTable().getPlayerOnTurn().getId().equals(player.getId())) {
                 playerTableService.nextPlayersTurn(player.getTable());
             }

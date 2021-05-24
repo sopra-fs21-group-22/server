@@ -306,20 +306,19 @@ public class PlayerTableService {
             table.getPlayerOnTurn().setStrikes(table.getPlayerOnTurn().getStrikes() + 1);
 
             table.getPlayerOnTurn().setBullets(0);
-
-            table.getPlayerOnTurn().onDeath();
-            /* List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
-            List<BlueCard> onFieldCards = table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();
-
-            for (PlayCard card : handCards) {
-                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
-            }
-            for (PlayCard card : onFieldCards) {
-                table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
-            }
-            table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
-            table.getPlayerOnTurn().getOnFieldCards().removeAllCards(); */
-            if (table.getGameStatus() == GameStatus.ONGOING){
+            /*
+             * List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
+             * List<BlueCard> onFieldCards =
+             * table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();
+             * 
+             * for (PlayCard card : handCards) {
+             * table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card); } for
+             * (PlayCard card : onFieldCards) {
+             * table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card); }
+             * table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
+             * table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
+             */
+            if (table.getGameStatus() == GameStatus.ONGOING) {
                 nextPlayersTurn(table);
             }
         }

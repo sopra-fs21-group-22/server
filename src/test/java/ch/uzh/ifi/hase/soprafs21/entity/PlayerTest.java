@@ -172,7 +172,6 @@ public class PlayerTest {
     public void testOnDeath_OutlawsWin() {
         Player sheriff = players.get(0);
         sheriff.setBullets(0);
-        sheriff.onDeath();
         assertEquals(GameStatus.ENDED, sheriff.getTable().getGameStatus());
         GameMove winnerDeclaration = sheriff.getTable().getNewestGameMove();
         assertTrue(winnerDeclaration.getMessage().toLowerCase().contains("outlaw"));
@@ -181,12 +180,15 @@ public class PlayerTest {
     @Test
     public void testOnDeath_renegadeWins() {
         for (int i = 0; i < 7; i++) {
-            players.get(i).setBullets(0);
+            Player player = players.get(i);
+            if (player.getGameRole().equals(GameRole.SHERIFF) || player.getGameRole().equals(GameRole.RENEGADE)) {
+                continue;
+            }
+            player.setBullets(0);
         }
-        Player renegade = players.get(3);
-        renegade.setBullets(1);
+
         Player sheriff = players.get(0);
-        sheriff.onDeath();
+        sheriff.setBullets(0);
         GameMove winnerDeclaration = sheriff.getTable().getNewestGameMove();
         assertTrue(winnerDeclaration.getMessage().toLowerCase().contains("renegade"));
 
