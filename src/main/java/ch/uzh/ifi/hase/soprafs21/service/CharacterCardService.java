@@ -28,19 +28,19 @@ public class CharacterCardService {
     @Autowired
     PlayerRepository playerRepository;
 
-    @Autowired
-    VisibleCardsService visibleCardsService;
- 
     public CharacterPile createCharacterPile() {
         CharacterPile characterPile = new CharacterPile();
         List<CharacterCard> characterCards = new ArrayList<CharacterCard>();
-        /* CharacterCard characterCard1 = new CharacterCard("Willy The Kid", 4);
-        CharacterCard characterCard2 = new CharacterCard("Rose Doolan", 4);
-        CharacterCard characterCard3 = new CharacterCard("Paul Regret", 3);
-        CharacterCard characterCard4 = new CharacterCard("Jourdonnais", 4);   // for use with buggy constructor version of charactercard class
-        CharacterCard characterCard5 = new CharacterCard("Bart Cassidy", 4);    // do not enable
-        CharacterCard characterCard6 = new CharacterCard("Suzy Lafayette", 4);
-        CharacterCard characterCard7 = new CharacterCard("El Gringo", 3); */
+        /*
+         * CharacterCard characterCard1 = new CharacterCard("Willy The Kid", 4);
+         * CharacterCard characterCard2 = new CharacterCard("Rose Doolan", 4);
+         * CharacterCard characterCard3 = new CharacterCard("Paul Regret", 3);
+         * CharacterCard characterCard4 = new CharacterCard("Jourdonnais", 4); // for
+         * use with buggy constructor version of charactercard class CharacterCard
+         * characterCard5 = new CharacterCard("Bart Cassidy", 4); // do not enable
+         * CharacterCard characterCard6 = new CharacterCard("Suzy Lafayette", 4);
+         * CharacterCard characterCard7 = new CharacterCard("El Gringo", 3);
+         */
 
         CharacterCard characterCard1 = new CharacterCard();
         CharacterCard characterCard2 = new CharacterCard();
@@ -60,7 +60,8 @@ public class CharacterCardService {
         characterCard3.setLifeAmount(3);
         characterCard3.setName("paulregret");
         characterCard3.setDisplay("Paul Regret");
-        characterCard3.setDescription("The range others need to hit you is permanently increased by one. You start with 3 Bullets");
+        characterCard3.setDescription(
+                "The range others need to hit you is permanently increased by one. You start with 3 Bullets");
         characterCard4.setLifeAmount(4);
         characterCard4.setName("jourdonnais");
         characterCard4.setDisplay("Jourdonnais");
@@ -78,7 +79,6 @@ public class CharacterCardService {
         characterCard7.setDisplay("El Gringo");
         characterCard7.setDescription("PLACEHOLDER. You start with 3 Bullets");
 
-
         characterCards.add(characterCard1);
         characterCards.add(characterCard2);
         characterCards.add(characterCard3);
@@ -88,7 +88,7 @@ public class CharacterCardService {
         characterCards.add(characterCard7);
 
         characterPile.setCharacterCards(characterCards);
-               
+
         characterCardPileRepository.save(characterPile);
         characterCardPileRepository.flush();
         return characterPile;
@@ -97,13 +97,13 @@ public class CharacterCardService {
 
     public CharacterCard pickCharacter(Player player, PlayerTable table) {
         List<CharacterCard> characterCards = table.getCharacterPile().getCharacterCards();
-        Collections.shuffle(characterCards);      //randomizes character cards
+        Collections.shuffle(characterCards); // randomizes character cards
         CharacterCard card = characterCards.get(0);
         characterCards.remove(0); // removes already chosen card
         player.setCharacterCard(card);
         player.setMaxBullets(player.getCharacterCard().getLifeAmount());
         player.setBullets(player.getCharacterCard().getLifeAmount());
-        table.getCharacterPile().setCharacterCards(characterCards); 
+        table.getCharacterPile().setCharacterCards(characterCards);
         playerTableRepository.save(table);
 
         if (player.getCharacterCard().getName().equals("Willy The Kid")) {
@@ -111,17 +111,17 @@ public class CharacterCardService {
             player.setStillPlayableBangsThisRound(255);
         }
 
-        if (player.getCharacterCard().getName().equals("Rose Doolan")) {        //special abilities
+        if (player.getCharacterCard().getName().equals("Rose Doolan")) { // special abilities
             player.setBaseRange(2);
             player.setRange(2);
         }
 
         if (player.getCharacterCard().getName().equals("Paul Regret")) {
             player.setDistanceIncreaseForOthers(1);
-        } 
+        }
 
         playerTableRepository.save(table);
-        
+
         return card;
     }
 }

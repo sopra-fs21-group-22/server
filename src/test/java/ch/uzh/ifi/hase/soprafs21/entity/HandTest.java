@@ -9,7 +9,6 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.GeneralStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +58,7 @@ public class HandTest {
     }
 
     @Test
-    public void test_addCardInOrder(){
+    public void test_addCardInOrder() {
         Player player = players.get(0);
         PlayCard bang = new Bang(Rank.SEVEN, Suit.SPADES);
         player.getHand().addCardInOrder(bang);
@@ -73,7 +72,7 @@ public class HandTest {
     }
 
     @Test
-    public void test_addCard(){
+    public void test_addCard() {
         Player player = players.get(0);
         PlayCard bang = new Bang(Rank.SEVEN, Suit.SPADES);
         player.getHand().addCard(bang);
@@ -87,12 +86,11 @@ public class HandTest {
     }
 
     @Test
-    public void test_addCards(){
+    public void test_addCards() {
         Player player = players.get(0);
         List<PlayCard> cards = new ArrayList<>();
         cards.add(new Bang(Rank.TEN, Suit.SPADES));
         cards.add(new Carabine(Rank.SEVEN, Suit.CLUBS));
-        cards.add(new GeneralStore(Rank.EIGHT, Suit.SPADES));
         cards.add(new Dynamite(Rank.ACE, Suit.HEARTS));
         cards.add(new Bang(Rank.KING, Suit.SPADES));
         player.getHand().addCards(cards);
@@ -100,8 +98,7 @@ public class HandTest {
         assertEquals(player.getHand().get(0).getCard(), Card.DYNAMITE);
         assertEquals(player.getHand().get(1).getCard(), Card.BANG);
         assertEquals(player.getHand().get(2).getCard(), Card.BANG);
-        assertEquals(player.getHand().get(3).getCard(), Card.GENERALSTORE);
-        assertEquals(player.getHand().get(4).getCard(), Card.CARABINE);
+        assertEquals(player.getHand().get(3).getCard(), Card.CARABINE);
     }
 
 }

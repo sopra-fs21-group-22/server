@@ -19,7 +19,6 @@ import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.entity.VisibleCards;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
@@ -69,39 +68,11 @@ public class PreparationController {
         playerTableService.setPlayerAsReady(game_id, player.getId(), ready.getStatus());
     }
 
-    @GetMapping("/{game_id}/visiblecards")
-    @ResponseStatus(HttpStatus.OK)
-    public VisibleCardsGetDTO getVisibleCards(@PathVariable Long game_id) {
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        VisibleCards visibleCards = table.getVisibleCards();
-
-        return DTOMapper.INSTANCE.convertEntityToVisibleCardsGetDTO(visibleCards);
-    }
-
-    @PostMapping("/{game_id}/visiblecards")
-    @ResponseStatus(HttpStatus.OK)
-    public void pickACard(@PathVariable Long game_id, @RequestBody List<Long> playersAndCards) {
-        // playersAndCards = [player_id, card_id, player_id, card_id, etc.]
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        int number_of_players = table.getPlayers().size();
-        VisibleCards visibleCards = table.getVisibleCards();
-
-        // for each player: tell the visible cards which card to remove and the player
-        // which card to add to his*her hand card
-        for (int i = 0; i < number_of_players; i = i + 2) {
-            Player currPlayer = table.getPlayerByPlayerID(playersAndCards.get(i));
-            PlayCard card = visibleCards.getCardByID(playersAndCards.get(i + 1));
-            currPlayer.pickACard(card);
-            visibleCards.removeACard(card);
-        }
-        playerTableRepository.saveAndFlush(table);
-    }
-
     @PutMapping("/{game_id}/timelimits")
     @ResponseStatus(HttpStatus.OK)
     public void changeTimeLimit(@PathVariable Long game_id, @RequestBody Long time) {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
-       playerTableService.changeTimer(table, time);
+        playerTableService.changeTimer(table, time);
     }
 
 }

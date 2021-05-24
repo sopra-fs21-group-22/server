@@ -36,9 +36,6 @@ public class PlayerTable {
     @OneToOne(cascade = CascadeType.ALL)
     private Deck discardPile;
 
-    @OneToOne
-    private VisibleCards visibleCards;
-
     @OneToOne(cascade = CascadeType.ALL)
     private CharacterPile characterPile;
 
@@ -184,14 +181,6 @@ public class PlayerTable {
             }
         }
         return null;
-    }
-
-    public VisibleCards getVisibleCards() {
-        return visibleCards;
-    }
-
-    public void setVisibleCards(VisibleCards visibleCards) {
-        this.visibleCards = visibleCards;
     }
 
     public List<Player> getAlivePlayers() {
