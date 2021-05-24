@@ -257,12 +257,6 @@ public class Player {
                 + targetPlayer.getDistanceIncreaseForOthers() <= 0;
     }
 
-    public void pickACard(PlayCard card) {
-        List<PlayCard> cards = new ArrayList<>();
-        cards.add(card);
-        hand.addCards(cards);
-    }
-
     /** returns distance while ignoring all modifiers */
     private int getDistanceToNeighbor(Player targetPlayer) {
         Player userRightNeighbor = this.getRightNeighbor();

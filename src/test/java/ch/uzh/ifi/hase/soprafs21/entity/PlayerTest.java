@@ -47,6 +47,9 @@ public class PlayerTest {
 
         players = new ArrayList<>();
         Player oldPlayer = new Player();
+        User user = new User();
+        user.setUsername("Ada");
+        oldPlayer.setUser(user);
         oldPlayer.setId(15L);
         players.add(oldPlayer);
         oldPlayer.setOnFieldCards(new OnFieldCards());
@@ -56,6 +59,9 @@ public class PlayerTest {
 
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
+            user = new User();
+            user.setUsername("Ada");
+            newPlayer.setUser(user);
             newPlayer.setGameRole(gameRoles.get(i + 1));
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
@@ -237,6 +243,16 @@ public class PlayerTest {
         target.takeHit(killer);
 
         assertEquals(GameStatus.ENDED, killer.getTable().getGameStatus());
+    }
+
+    @Test
+    public void testPlayCard() {
+        Player player = players.get(0);
+        PlayCard card = new Bang(Rank.SEVEN, Suit.SPADES);
+        card.setId(1212512L);
+        player.getHand().addCard(card);
+        player.playCard(card.getId(), player.getLeftNeighbor(), null);
+        assertEquals(0, player.getHand().getLength());
     }
 
 }
