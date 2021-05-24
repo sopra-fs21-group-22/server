@@ -307,7 +307,8 @@ public class PlayerTableService {
 
             table.getPlayerOnTurn().setBullets(0);
 
-            List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
+            table.getPlayerOnTurn().onDeath();
+            /* List<PlayCard> handCards = table.getPlayerOnTurn().getHand().getPlayCards();
             List<BlueCard> onFieldCards = table.getPlayerOnTurn().getOnFieldCards().getOnFieldCards();
 
             for (PlayCard card : handCards) {
@@ -317,10 +318,10 @@ public class PlayerTableService {
                 table.getPlayerOnTurn().getTable().getDiscardPile().addCard(card);
             }
             table.getPlayerOnTurn().getHand().setPlayCards(new ArrayList<>());
-            table.getPlayerOnTurn().getOnFieldCards().removeAllCards();
-
-            nextPlayersTurn(table);
-
+            table.getPlayerOnTurn().getOnFieldCards().removeAllCards(); */
+            if (table.getGameStatus() == GameStatus.ONGOING){
+                nextPlayersTurn(table);
+            }
         }
     }
 
