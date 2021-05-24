@@ -63,9 +63,6 @@ public abstract class PlayCard {
         String message = String.format("%s uses card %s%s!", usingPlayerUsername, card.toString(), targetUsername);
         GameMove move = new GameMove(usingPlayer, target, this, GameMoveAction.USE, message);
         usingPlayer.getTable().addGameMove(move);
-
-        onPlacement(usingPlayer, target, payload);
-
     }
 
     /**

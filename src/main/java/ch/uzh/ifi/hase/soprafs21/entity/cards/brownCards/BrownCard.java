@@ -24,6 +24,7 @@ public abstract class BrownCard extends PlayCard {
     public final void use(Player usingPlayer, Player target, PayLoadDTO payload) {
         super.use(usingPlayer, target, payload);
         usingPlayer.getTable().getDiscardPile().addCard(this);
+        onPlacement(usingPlayer, target, payload);
     }
 
     protected abstract void onPlacement(Player usingPlayer, Player target, PayLoadDTO payload);

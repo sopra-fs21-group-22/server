@@ -29,6 +29,7 @@ public abstract class BlueCard extends PlayCard {
             }
         }
         targetPlayer.getOnFieldCards().addOnFieldCard(this);
+        onPlacement(usingPlayer, target, payload);
     }
 
     /**
