@@ -326,6 +326,9 @@ public class Player {
     }
 
     public void setBullets(Integer newBullets) {
+        if(newBullets > maxBullets){
+            return;
+        }
         this.bullets = newBullets;
         if (newBullets.equals(0)) {
             this.onDeath();
@@ -408,7 +411,14 @@ public class Player {
     }
 
     public Player getLeftNeighbor() {
-        return leftNeighbor;
+        Player aliveLeftPlayer = leftNeighbor;
+        while(aliveLeftPlayer.getBullets() == 0){
+            aliveLeftPlayer = aliveLeftPlayer.getLeftNeighbor();
+            if(aliveLeftPlayer.getId().equals(id)){
+                return null;
+            }
+        }
+        return aliveLeftPlayer;
     }
 
     public void setLeftNeighbor(Player leftNeighbor) {
@@ -416,7 +426,14 @@ public class Player {
     }
 
     public Player getRightNeighbor() {
-        return rightNeighbor;
+        Player aliveRightNeighbor = rightNeighbor;
+        while(aliveRightNeighbor.getBullets() == 0){
+            aliveRightNeighbor = aliveRightNeighbor.getLeftNeighbor();
+            if(aliveRightNeighbor.getId().equals(id)){
+                return null;
+            }
+        }
+        return aliveRightNeighbor;
     }
 
     public void setRightNeighbor(Player rightNeighbor) {

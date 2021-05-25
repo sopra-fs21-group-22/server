@@ -47,7 +47,7 @@ public class Jail extends BlueCard {
         if (referenceCard.getSuit() != Suit.HEARTS) {
             String failMessage = String.format("%s has to skip his move due to the JAIL card!",
                     affectedPlayer.getUser().getUsername());
-            GameMove failGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, failMessage);
+            GameMove failGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.FAIL, failMessage);
             affectedPlayer.getTable().addGameMove(failGameMove);
 
             String outMessage = String.format("%s has left the JAIL!", affectedPlayer.getUser().getUsername());
@@ -58,7 +58,7 @@ public class Jail extends BlueCard {
         } else {
             String succMessage = String.format("%s managed to break out of JAIL!",
                     affectedPlayer.getUser().getUsername());
-            GameMove successGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, succMessage);
+            GameMove successGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, succMessage);
             affectedPlayer.getTable().addGameMove(successGameMove);
         }
         affectedPlayer.getOnFieldCards().removeOnFieldCard(this);
