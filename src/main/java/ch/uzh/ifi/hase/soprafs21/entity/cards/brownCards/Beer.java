@@ -1,15 +1,14 @@
 package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
@@ -34,6 +33,10 @@ public class Beer extends BrownCard {
     @Override
     public boolean onBang(Player affectedPlayer) {
         if (affectedPlayer.getBullets() == 0) {
+            String beerMessage = String.format("BEER card has absorbed the hit on %s!",
+                    affectedPlayer.getUser().getUsername());
+            GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, beerMessage);
+            affectedPlayer.getTable().addGameMove(succGameMove);
             onPlacement(affectedPlayer, affectedPlayer, null);
             return true;
         }
