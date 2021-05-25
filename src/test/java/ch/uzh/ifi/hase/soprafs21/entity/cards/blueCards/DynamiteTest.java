@@ -7,6 +7,8 @@ import ch.uzh.ifi.hase.soprafs21.entity.*;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import jdk.jfr.Timestamp;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +30,7 @@ public class DynamiteTest {
 
         // create a table with a deck and a discard pile
         Deck deck = new Deck();
+        deck.addCard(new Bang(Rank.ACE, Suit.SPADES));
         table.setDeck(deck);
         table.setDiscardPile(new Deck());
 
@@ -139,6 +142,23 @@ public class DynamiteTest {
         assertEquals(0, playerWithDynamite.getBullets());
         assertFalse(playerWithDynamite.getOnFieldCards().contains(dynamite));
         assertFalse(playerWithDynamite.getLeftNeighbor().getOnFieldCards().contains(dynamite));
+    }
+
+    @Test
+    public void testDynamiteMovesCorrectly(){
+        Player player = players.get(0);
+        dynamite.use(player, player, null);
+        dynamite.onTurnStart(player);
+        assertTrue(player.getLeftNeighbor().getOnFieldCards().getOnFieldCards().contains(dynamite));
+    }
+
+    @Test
+    public void testDynamiteMove_skipsCorpses(){
+        Player player = players.get(0);
+        player.getLeftNeighbor().setBullets(0);
+        dynamite.use(player, player, null);
+        dynamite.onTurnStart(player);
+        assertTrue(player.getLeftNeighbor().getLeftNeighbor().getOnFieldCards().getOnFieldCards().contains(dynamite));
     }
 
 }

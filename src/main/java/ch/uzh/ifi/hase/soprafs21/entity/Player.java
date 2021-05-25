@@ -411,14 +411,7 @@ public class Player {
     }
 
     public Player getLeftNeighbor() {
-        Player aliveLeftPlayer = leftNeighbor;
-        while(aliveLeftPlayer.getBullets() == 0){
-            aliveLeftPlayer = aliveLeftPlayer.getLeftNeighbor();
-            if(aliveLeftPlayer.getId().equals(id)){
-                return null;
-            }
-        }
-        return aliveLeftPlayer;
+        return leftNeighbor;
     }
 
     public void setLeftNeighbor(Player leftNeighbor) {
@@ -426,14 +419,7 @@ public class Player {
     }
 
     public Player getRightNeighbor() {
-        Player aliveRightNeighbor = rightNeighbor;
-        while(aliveRightNeighbor.getBullets() == 0){
-            aliveRightNeighbor = aliveRightNeighbor.getLeftNeighbor();
-            if(aliveRightNeighbor.getId().equals(id)){
-                return null;
-            }
-        }
-        return aliveRightNeighbor;
+        return rightNeighbor;
     }
 
     public void setRightNeighbor(Player rightNeighbor) {
