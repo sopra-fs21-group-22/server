@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
@@ -36,7 +37,17 @@ public class Indians extends BrownCard {
                 continue;
             }
             if (!removeBang(currPlayer)) {
+                String succMessage = String.format("%s discarded a BANG card to avoid taking damage!",
+                affectedPlayer.getUser().getUsername());
+                GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, succMessage);
+                affectedPlayer.getTable().addGameMove(succGameMove);
+
                 currPlayer.takeUnblockableHit(usingPlayer);
+            }else{
+                String succMessage = String.format("%s couldn't avoid taking damage!",
+                affectedPlayer.getUser().getUsername());
+                GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.FAIL, succMessage);
+                affectedPlayer.getTable().addGameMove(succGameMove);
             }
         }
     }
