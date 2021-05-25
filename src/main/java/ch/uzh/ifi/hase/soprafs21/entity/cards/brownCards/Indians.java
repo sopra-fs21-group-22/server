@@ -12,6 +12,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
 @Entity
@@ -38,16 +39,16 @@ public class Indians extends BrownCard {
             }
             if (!removeBang(currPlayer)) {
                 String succMessage = String.format("%s discarded a BANG card to avoid taking damage!",
-                affectedPlayer.getUser().getUsername());
-                GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, succMessage);
-                affectedPlayer.getTable().addGameMove(succGameMove);
+                        usingPlayer.getUser().getUsername());
+                GameMove succGameMove = new GameMove(usingPlayer, null, this, GameMoveAction.SUCCESS, succMessage);
+                usingPlayer.getTable().addGameMove(succGameMove);
 
                 currPlayer.takeUnblockableHit(usingPlayer);
-            }else{
+            } else {
                 String succMessage = String.format("%s couldn't avoid taking damage!",
-                affectedPlayer.getUser().getUsername());
-                GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.FAIL, succMessage);
-                affectedPlayer.getTable().addGameMove(succGameMove);
+                        usingPlayer.getUser().getUsername());
+                GameMove succGameMove = new GameMove(usingPlayer, null, this, GameMoveAction.FAIL, succMessage);
+                usingPlayer.getTable().addGameMove(succGameMove);
             }
         }
     }
