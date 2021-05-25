@@ -47,7 +47,7 @@ public class Dynamite extends BlueCard {
         if (dynamiteExplodes) {
             String explosionMessage = String.format("DYNAMITE explodes and deals 3 damage to %s!",
                     affectedPlayer.getUser().getUsername());
-            GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE,
+            GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS,
                     explosionMessage);
             affectedPlayer.getTable().addGameMove(explosionGameMove);
             table.getDiscardPile().addCard(this);
@@ -61,7 +61,7 @@ public class Dynamite extends BlueCard {
              */
         } else {
             String explosionMessage = String.format("DYNAMITE doesn't explode and moves to the next player!");
-            GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE,
+            GameMove explosionGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.FAIL,
                     explosionMessage);
             affectedPlayer.getTable().addGameMove(explosionGameMove);
 
