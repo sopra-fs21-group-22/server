@@ -33,7 +33,7 @@ public class Gatling extends BrownCard {
             if (target.getId().equals(usingPlayer.getId())) {
                 continue;
             }
-            target.takeHit(usingPlayer);
+            target.takeHit(usingPlayer, this);
             /*
              * if (target.getCharacterCard().getName().equals("Bart Cassidy")){ // Bart
              * Cassidy Ability DeckService deckservice = new DeckService();

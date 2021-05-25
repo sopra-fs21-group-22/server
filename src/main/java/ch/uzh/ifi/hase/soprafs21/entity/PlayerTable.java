@@ -153,7 +153,7 @@ public class PlayerTable {
         if (gameMoves == null) {
             return null;
         }
-        return gameMoves.get(gameMoves.size() - 1);
+        return gameMoves.get(0);
     }
 
     public Optional<Player> getPlayerById(Long id) {

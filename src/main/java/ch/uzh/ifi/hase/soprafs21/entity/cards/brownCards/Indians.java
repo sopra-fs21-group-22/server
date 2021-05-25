@@ -43,12 +43,7 @@ public class Indians extends BrownCard {
                 GameMove failGameMove = new GameMove(usingPlayer, currPlayer, this, GameMoveAction.FAIL, failMessage);
                 usingPlayer.getTable().addGameMove(failGameMove);
 
-                currPlayer.takeUnblockableHit(usingPlayer);
-            } else {
-                String succMessage = String.format("%s couldn't avoid taking damage!",
-                        currPlayer.getUser().getUsername());
-                GameMove succGameMove = new GameMove(usingPlayer, currPlayer, this, GameMoveAction.SUCCESS, succMessage);
-                usingPlayer.getTable().addGameMove(succGameMove);
+                currPlayer.takeUnblockableHit(usingPlayer, this);
             }
         }
     }

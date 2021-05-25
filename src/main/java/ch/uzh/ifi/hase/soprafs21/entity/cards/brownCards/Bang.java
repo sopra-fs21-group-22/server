@@ -32,7 +32,7 @@ public class Bang extends BrownCard {
         if (usingPlayer.getStillPlayableBangsThisRound() <= 0) {
             throw new GameLogicException("Can't play more BANG cards this round!");
         }
-        target.takeHit(usingPlayer);
+        target.takeHit(usingPlayer, this);
         /* if (target.getCharacterCard().getName().equals("Bart Cassidy")){         // Bart Cassidy Ability
             DeckService deckservice = new DeckService();
             deckservice.cassidyDraw(target); 

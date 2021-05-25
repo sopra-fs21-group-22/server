@@ -150,7 +150,7 @@ public class PlayerTest {
         int currAmountHandCards = killer.getHand().getLength();
         int expectedAmountHandCards = currAmountHandCards + 3;
 
-        outlaw.takeHit(killer);
+        outlaw.takeHit(killer, null);
 
         assertEquals(expectedAmountHandCards, killer.getHand().getLength());
     }
@@ -169,7 +169,7 @@ public class PlayerTest {
 
         sheriff.setBullets(1);
 
-        sheriff.takeHit(outlaw);
+        sheriff.takeHit(outlaw, null);
 
         assertEquals(GameStatus.ENDED, sheriff.getTable().getGameStatus());
     }
@@ -221,7 +221,7 @@ public class PlayerTest {
         sheriff.getHand().addCards(cards);
 
         deputy.setBullets(1);
-        deputy.takeHit(sheriff);
+        deputy.takeHit(sheriff, null);
 
         assertEquals(0, sheriff.getHand().getLength());
         assertEquals(0, sheriff.getOnFieldCards().getOnFieldCards().size());
@@ -240,7 +240,7 @@ public class PlayerTest {
         target.setCharacterCard(characterCard);
         target.setBullets(1);
 
-        target.takeHit(killer);
+        target.takeHit(killer, null);
 
         assertEquals(GameStatus.ENDED, killer.getTable().getGameStatus());
     }

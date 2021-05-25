@@ -107,7 +107,7 @@ public class Player {
         this.onFieldCards = cards;
     }
 
-    public void takeHit(Player attacker) {
+    public void takeHit(Player attacker, PlayCard card) {
         boolean isSafe = false;
 
         // see if character equals Jourdonnais
@@ -140,7 +140,7 @@ public class Player {
         }
 
         if (!isSafe) {
-            takeUnblockableHit(attacker);
+            takeUnblockableHit(attacker, card);
             if (this.bullets > 0) {
                 // TODO use instead something like this
 
@@ -162,7 +162,10 @@ public class Player {
         }
     }
 
-    public void takeUnblockableHit(Player attacker) {
+    public void takeUnblockableHit(Player attacker, PlayCard card) {
+        String message = String.format("%s got hit and lost a bullet!", user.getUsername());
+        GameMove gameMove = new GameMove(attacker, this, card, GameMoveAction.HOLED, message); 
+        table.addGameMove(gameMove);
         bullets--;
         if (bullets == 0) {
             onDeath(attacker);
@@ -199,6 +202,10 @@ public class Player {
      * Handles death not caused by a player
      */
     public void onDeath() {
+        String message = String.format("%s died!", user.getUsername());
+        GameMove gameMove = new GameMove(this, null, null, GameMoveAction.DEATH, message); 
+        table.addGameMove(gameMove);
+
         Deck discardPile = table.getDiscardPile();
         // remove hand cards
         discardPile.addCards(hand.getPlayCards());
