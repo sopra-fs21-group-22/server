@@ -76,4 +76,12 @@ public class SaloonTest {
 
         assertEquals(expectedBullets, actualBullets);
     }
+
+    @Test
+    public void testSaloonOverheals(){
+        Player player = players.get(0);
+        player.setBullets(player.getMaxBullets());
+        saloon.use(players.get(1), players.get(1), null);
+        assertEquals(player.getBullets(), player.getMaxBullets());
+    }
 }
