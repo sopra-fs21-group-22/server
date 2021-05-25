@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
@@ -10,11 +11,15 @@ import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetAuthDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.game.GameMoveGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.HandGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardAuthGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PlayCardGetDTO;
@@ -227,6 +232,51 @@ public class DTOMapperTest {
         assertEquals(card.getRank(), playCardAuthGetDTO.getRank());
         assertEquals(card.getSuit(), playCardAuthGetDTO.getSuit());
         assertEquals(card.getId(), playCardAuthGetDTO.getId());
+
+    }
+
+    @Test
+    public void test_characterCard_to_characterCardGetDTO_success() {
+
+        // create Card
+        CharacterCard card = new CharacterCard();
+        card.setDescription("description");
+        card.setName("name");
+        card.setId(1L);
+        card.setDisplay("display");
+        card.setLifeAmount(1);
+        // Mapping
+        CharacterCardGetDTO characterCardGetDTO = DTOMapper.INSTANCE.convertEntityToCharacterCardGetDTO(card);
+
+        // check
+        assertEquals(card.getDescription(), characterCardGetDTO.getDescription());
+        assertEquals(card.getName(), characterCardGetDTO.getName());
+        assertEquals(card.getId(), characterCardGetDTO.getId());
+        assertEquals(card.getDisplay(), characterCardGetDTO.getDisplay());
+        assertEquals(card.getLifeAmount(), characterCardGetDTO.getLifeAmount());
+
+    }
+
+    @Test
+    public void test_GameMove_to_GameMoveGetDTO_success() {
+
+        // create GameMove
+        GameMove move = new GameMove();
+        move.setAction(GameMoveAction.ACTIVATE);
+        move.setId(1L);
+        move.setMessage("message");
+        
+        // Mapping
+        GameMoveGetDTO gameMoveGetDTO = DTOMapper.INSTANCE.convertEntityToGameMoveGetDTO(move);
+
+        // check
+        assertEquals(move.getAction(), gameMoveGetDTO.getAction());
+        assertEquals(move.getMessage(), gameMoveGetDTO.getMessage());
+        assertEquals(move.getId(), gameMoveGetDTO.getId());
+        assertEquals(move.getCard(), gameMoveGetDTO.getCard());
+        assertEquals(move.getUsingPlayer(), gameMoveGetDTO.getUsingPlayer());
+        assertEquals(move.getTargetPlayer(), gameMoveGetDTO.getTargetPlayer());
+
 
     }
 }
