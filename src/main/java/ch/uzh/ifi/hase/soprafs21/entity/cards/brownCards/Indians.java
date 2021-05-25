@@ -36,7 +36,7 @@ public class Indians extends BrownCard {
                 continue;
             }
             if (!removeBang(currPlayer)) {
-                currPlayer.takeHit(usingPlayer);
+                currPlayer.takeUnblockableHit(usingPlayer);
             }
         }
     }

@@ -140,7 +140,7 @@ public class Player {
         }
 
         if (!isSafe) {
-            this.bullets -= 1;
+            takeUnblockableHit(attacker);
             if (this.bullets > 0) {
                 // TODO use instead something like this
 
@@ -160,7 +160,10 @@ public class Player {
                 // }
             }
         }
+    }
 
+    public void takeUnblockableHit(Player attacker) {
+        bullets--;
         if (bullets == 0) {
             onDeath(attacker);
         }
