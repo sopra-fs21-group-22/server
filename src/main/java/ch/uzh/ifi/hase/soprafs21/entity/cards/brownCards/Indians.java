@@ -38,16 +38,16 @@ public class Indians extends BrownCard {
                 continue;
             }
             if (!removeBang(currPlayer)) {
-                String succMessage = String.format("%s discarded a BANG card to avoid taking damage!",
-                        usingPlayer.getUser().getUsername());
-                GameMove succGameMove = new GameMove(usingPlayer, null, this, GameMoveAction.SUCCESS, succMessage);
-                usingPlayer.getTable().addGameMove(succGameMove);
+                String failMessage = String.format("%s discarded a BANG card to avoid taking damage!",
+                        currPlayer.getUser().getUsername());
+                GameMove failGameMove = new GameMove(usingPlayer, currPlayer, this, GameMoveAction.FAIL, failMessage);
+                usingPlayer.getTable().addGameMove(failGameMove);
 
                 currPlayer.takeUnblockableHit(usingPlayer);
             } else {
                 String succMessage = String.format("%s couldn't avoid taking damage!",
-                        usingPlayer.getUser().getUsername());
-                GameMove succGameMove = new GameMove(usingPlayer, null, this, GameMoveAction.FAIL, succMessage);
+                        currPlayer.getUser().getUsername());
+                GameMove succGameMove = new GameMove(usingPlayer, currPlayer, this, GameMoveAction.SUCCESS, succMessage);
                 usingPlayer.getTable().addGameMove(succGameMove);
             }
         }
