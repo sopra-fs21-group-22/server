@@ -60,24 +60,23 @@ public class CharacterCardService {
         characterCard3.setLifeAmount(3);
         characterCard3.setName("paulregret");
         characterCard3.setDisplay("Paul Regret");
-        characterCard3.setDescription(
-                "The range others need to hit you is permanently increased by one. You start with 3 Bullets");
+        characterCard3.setDescription("The range others need to hit you is permanently increased by one. You start with 3 Bullets");
         characterCard4.setLifeAmount(4);
         characterCard4.setName("jourdonnais");
         characterCard4.setDisplay("Jourdonnais");
-        characterCard4.setDescription("PLACEHOLDER. You start with 4 Bullets");
+        characterCard4.setDescription("You can use unlimited BANG! cards per round. You start with 4 Bullets");
         characterCard5.setLifeAmount(4);
         characterCard5.setName("bartcassidy");
         characterCard5.setDisplay("Bart Cassidy");
-        characterCard5.setDescription("PLACEHOLDER. You start with 4 Bullets");
+        characterCard5.setDescription("You can use unlimited BANG! cards per round. You start with 4 Bullets");
         characterCard6.setLifeAmount(4);
         characterCard6.setName("suzylafayette");
         characterCard6.setDisplay("Suzy Lafayette");
-        characterCard6.setDescription("PLACEHOLDER. You start with 4 Bullets");
+        characterCard6.setDescription("Your range is permanently increased by one. You start with 4 Bullets");
         characterCard7.setLifeAmount(3);
         characterCard7.setName("elgringo");
         characterCard7.setDisplay("El Gringo");
-        characterCard7.setDescription("PLACEHOLDER. You start with 3 Bullets");
+        characterCard7.setDescription("The range others need to hit you is permanently increased by one. You start with 3 Bullets");
 
         characterCards.add(characterCard1);
         characterCards.add(characterCard2);
@@ -106,18 +105,37 @@ public class CharacterCardService {
         table.getCharacterPile().setCharacterCards(characterCards);
         playerTableRepository.save(table);
 
-        if (player.getCharacterCard().getName().equals("Willy The Kid")) {
+        if (player.getCharacterCard().getDisplay().equals("Willy The Kid")) {
             player.setPlayableBangsAnyRound(255);
             player.setStillPlayableBangsThisRound(255);
         }
 
-        if (player.getCharacterCard().getName().equals("Rose Doolan")) { // special abilities
+        if (player.getCharacterCard().getDisplay().equals("Rose Doolan")) { // special abilities
             player.setBaseRange(2);
             player.setRange(2);
         }
 
-        if (player.getCharacterCard().getName().equals("Paul Regret")) {
+        if (player.getCharacterCard().getDisplay().equals("Paul Regret")) {
             player.setDistanceIncreaseForOthers(1);
+        }
+
+        if (player.getCharacterCard().getDisplay().equals("Jourdonnais")) {
+            player.setPlayableBangsAnyRound(255);
+            player.setStillPlayableBangsThisRound(255);
+        }
+
+        if (player.getCharacterCard().getDisplay().equals("Suzy Lafayette")) { 
+            player.setBaseRange(2);
+            player.setRange(2);
+        }
+
+        if (player.getCharacterCard().getDisplay().equals("El Gringo")) {
+            player.setDistanceIncreaseForOthers(1);
+        }
+
+        if (player.getCharacterCard().getDisplay().equals("Bart Cassidy")) {
+            player.setPlayableBangsAnyRound(255);
+            player.setStillPlayableBangsThisRound(255);
         }
 
         playerTableRepository.save(table);

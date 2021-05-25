@@ -22,10 +22,12 @@ import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
+import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+import ch.uzh.ifi.hase.soprafs21.exceptions.IllegalGameStateException;
 import ch.uzh.ifi.hase.soprafs21.repository.HandRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
@@ -200,6 +202,38 @@ public class PlayerTableServiceIntTest {
         }
         assertEquals(1, table.getPlayers().size());
     }
+
+    @Transactional
+    @Test
+    public void addingMessageToChat() {
+        PlayerTable table = playerTableService.addPlayer(users.get(9).getId());
+        playerTableService.addMessage(table, "test_content", "test_name");
+        assertEquals(table.getChat().getMessages().get(1).getContent(), "test_content");
+        assertEquals(table.getChat().getMessages().get(1).getName(), "test_name");
+
+    }
+
+    @Transactional
+    @Test
+    public void changingTimer() {
+        PlayerTable table = playerTableService.addPlayer(users.get(9).getId());
+        assertEquals(table.getMaxTime(), 120000L);
+        playerTableService.changeTimer(table, 10000L);
+        assertEquals(table.getMaxTime(), 10000L);
+
+    }
+
+    @Transactional
+    @Test
+    public void checkWrongGameStateFailure() {
+        PlayerTable table = playerTableService.addPlayer(users.get(9).getId());
+        table.setGameStatus(GameStatus.ONGOING);
+        assertThrows(IllegalGameStateException.class, () -> {
+            playerTableService.checkGameState(table.getId(), GameStatus.ENDED);
+        });
+
+    }
+
     /*
      * @Test
      * 
