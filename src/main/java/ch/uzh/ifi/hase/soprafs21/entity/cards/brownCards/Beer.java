@@ -32,7 +32,7 @@ public class Beer extends BrownCard {
 
     @Override
     public boolean onBang(Player affectedPlayer) {
-        if (affectedPlayer.getBullets() == 0) {
+        if (affectedPlayer.getBullets() == 1) {
             String beerMessage = String.format("BEER card has absorbed the hit on %s!",
                     affectedPlayer.getUser().getUsername());
             GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, beerMessage);
