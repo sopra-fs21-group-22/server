@@ -89,7 +89,7 @@ public class AnyStateController {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player player = playerRepository.getOne(player_id);
         userService.throwIfNotIdAndTokenMatch(player.getUser().getId(), auth);
-        if (table.getGameStatus() == GameStatus.ONGOING) {
+        if (table.getGameStatus() != GameStatus.PREPARATION) {
             player.setBullets(0);
             player.setUser(null);
         } else if (table.getGameStatus() == GameStatus.PREPARATION) {
