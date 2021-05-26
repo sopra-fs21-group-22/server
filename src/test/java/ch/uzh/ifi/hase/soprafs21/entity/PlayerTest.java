@@ -57,6 +57,8 @@ public class PlayerTest {
         oldPlayer.setHand(new Hand());
         oldPlayer.setTable(table);
 
+        table.setPlayerOnTurn(players.get(0));
+
         for (int i = 0; i < 6; i++) {
             Player newPlayer = new Player();
             user = new User();

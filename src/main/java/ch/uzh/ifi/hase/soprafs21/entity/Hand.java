@@ -95,6 +95,10 @@ public class Hand {
         return cardToRemove;
     }
 
+    public void removeAllCards(){
+        this.playCards = new ArrayList();
+    }
+
     public void addCards(List<PlayCard> newCards) {
         if (playCards == null) {
             playCards = new ArrayList<>();

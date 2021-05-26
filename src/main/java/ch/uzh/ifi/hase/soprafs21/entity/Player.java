@@ -217,7 +217,16 @@ public class Player {
 
         onFieldCards.setOnFieldCards(new ArrayList<>());
         determineWinner();
+        if(table.getGameStatus() != GameStatus.ENDED && table.getPlayerOnTurn().getId().equals(this.id)){
+            Player nextPlayer = rightNeighbor;
+            while(rightNeighbor.getBullets() == 0){
+                nextPlayer = nextPlayer.getRightNeighbor();
+      
+            }
+            table.setPlayerOnTurn(nextPlayer);
+        }
     }
+
 
     private void determineWinner() {
         List<GameRole> gameRoles = new ArrayList<>();
