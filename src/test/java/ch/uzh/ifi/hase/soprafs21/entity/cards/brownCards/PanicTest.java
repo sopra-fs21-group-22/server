@@ -74,11 +74,19 @@ public class PanicTest {
         assertTrue(panic.targetIsValid(user, user.getRightNeighbor().getRightNeighbor()));
     }
 
+    // correct test considering original rules
+    // @Test
+    // public void testInvalidTarget() {
+    //     Player user = players.get(0);
+    //     user.setRange(3);
+    //     assertFalse(panic.targetIsValid(user, user.getLeftNeighbor().getLeftNeighbor()));
+    // }
+
     @Test
-    public void testInvalidTarget() {
+    public void testValidTargetThroughRange() {
         Player user = players.get(0);
         user.setRange(3);
-        assertFalse(panic.targetIsValid(user, user.getLeftNeighbor().getLeftNeighbor()));
+        assertTrue(panic.targetIsValid(user, user.getLeftNeighbor().getLeftNeighbor()));
     }
 
     @Test

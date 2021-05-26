@@ -45,7 +45,7 @@ public class Panic extends BrownCard {
 
     @Override
     protected boolean targetIsValid(Player usingPlayer, Player targetPlayer) {
-        return usingPlayer.reachesWithDistance(targetPlayer, 1) && !usingPlayer.getId().equals(targetPlayer.getId());
+        return usingPlayer.reachesWithWeapon(targetPlayer) && !usingPlayer.getId().equals(targetPlayer.getId());
     }
 
 }
