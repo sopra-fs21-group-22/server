@@ -89,11 +89,10 @@ public class AnyStateController {
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player player = playerRepository.getOne(player_id);
         userService.throwIfNotIdAndTokenMatch(player.getUser().getId(), auth);
-        player.setUser(null);
         if (table.getGameStatus() == GameStatus.ONGOING) {
-            player.onDeath();
+            player.setBullets(0);
+            player.setUser(null);
         } else if (table.getGameStatus() == GameStatus.PREPARATION) {
-
             playerRepository.delete(player);
         }
         playerTableRepository.save(table);
