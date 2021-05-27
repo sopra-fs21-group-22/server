@@ -279,7 +279,7 @@ public class PlayerTableService {
         }
 
         // TODO change to dynamic amount of cards
-        deckService.drawCards(table, nextPlayer, 2);
+        deckService.drawCards(table, table.getPlayerOnTurn(), 2);
     }
 
     public void checkGameState(Long gameId, GameStatus status) {
