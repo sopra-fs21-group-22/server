@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
+import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
@@ -18,6 +20,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
+import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
 
 public class IndiansTest {
 
@@ -110,6 +113,28 @@ public class IndiansTest {
 
         indians.use(user, user, null);
         assertEquals(expectedLives, user.getBullets());
+    }
+
+    @Test
+    public void gameMovesAdded() {
+        Player user = players.get(0);
+        Player targetWithBang = user.getRightNeighbor();
+        targetWithBang.getHand().getPlayCards().add(new Bang(Rank.ACE, Suit.SPADES));
+        targetWithBang.getHand().getPlayCards().add(new Schofield(Rank.ACE, Suit.SPADES));
+
+        indians.use(user, user, null);
+        List<GameMove> moves = user.getTable().getGameMoves().subList(0, 6);
+
+        GameMove moveWithTarget = new GameMove();
+
+        for (GameMove move : moves) {
+            if (move.getTargetPlayer().getId().equals(targetWithBang.getId())) {
+                moveWithTarget = move;
+            }
+        }
+        assertEquals(GameMoveAction.FAIL, moveWithTarget.getAction());
+        assertEquals(targetWithBang.getId(), moveWithTarget.getTargetPlayer().getId());
+        assertEquals(Card.INDIANS, moveWithTarget.getCard().getCard());
     }
 
 }

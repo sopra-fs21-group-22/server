@@ -38,12 +38,12 @@ public class Indians extends BrownCard {
                 continue;
             }
             if (!removeBang(currPlayer)) {
+                currPlayer.takeUnblockableHit(usingPlayer, this);
+            } else {
                 String failMessage = String.format("%s discarded a BANG card to avoid taking damage!",
                         currPlayer.getUser().getUsername());
                 GameMove failGameMove = new GameMove(usingPlayer, currPlayer, this, GameMoveAction.FAIL, failMessage);
                 usingPlayer.getTable().addGameMove(failGameMove);
-
-                currPlayer.takeUnblockableHit(usingPlayer, this);
             }
         }
     }
