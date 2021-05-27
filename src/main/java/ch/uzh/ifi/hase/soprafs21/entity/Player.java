@@ -164,7 +164,7 @@ public class Player {
 
     public void takeUnblockableHit(Player attacker, PlayCard card) {
         String message = String.format("%s got hit and lost a bullet!", user.getUsername());
-        GameMove gameMove = new GameMove(attacker, this, card, GameMoveAction.HOLED, message); 
+        GameMove gameMove = new GameMove(attacker, this, card, GameMoveAction.HOLED, message);
         table.addGameMove(gameMove);
         bullets--;
         if (bullets == 0) {
@@ -203,7 +203,7 @@ public class Player {
      */
     public void onDeath() {
         String message = String.format("%s died!", user.getUsername());
-        GameMove gameMove = new GameMove(this, null, null, GameMoveAction.DEATH, message); 
+        GameMove gameMove = new GameMove(this, null, null, GameMoveAction.DEATH, message);
         table.addGameMove(gameMove);
 
         Deck discardPile = table.getDiscardPile();
@@ -217,16 +217,15 @@ public class Player {
 
         onFieldCards.setOnFieldCards(new ArrayList<>());
         determineWinner();
-        if(table.getGameStatus() != GameStatus.ENDED && table.getPlayerOnTurn().getId().equals(this.id)){
+        if (table.getPlayerOnTurn().getId().equals(this.id)) {
             Player nextPlayer = rightNeighbor;
-            while(rightNeighbor.getBullets() == 0){
+            while (nextPlayer.getBullets() == 0 && !nextPlayer.getId().equals(id)) {
                 nextPlayer = nextPlayer.getRightNeighbor();
-      
+
             }
             table.setPlayerOnTurn(nextPlayer);
         }
     }
-
 
     private void determineWinner() {
         List<GameRole> gameRoles = new ArrayList<>();
@@ -342,7 +341,7 @@ public class Player {
     }
 
     public void setBullets(Integer newBullets) {
-        if(newBullets > maxBullets){
+        if (newBullets > maxBullets) {
             return;
         }
         this.bullets = newBullets;

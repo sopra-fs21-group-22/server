@@ -92,10 +92,15 @@ public class AnyStateController {
         if (table.getGameStatus() != GameStatus.PREPARATION) {
             player.setBullets(0);
             player.setUser(null);
-        } else if (table.getGameStatus() == GameStatus.PREPARATION) {
+        } else {
             playerRepository.delete(player);
         }
-        playerTableRepository.save(table);
+        if (table.getPlayers().size() > 0) {
+            playerTableRepository.save(table);
+        } else {
+            playerTableRepository.delete(table);
+        }
+
     }
 
 }

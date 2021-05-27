@@ -64,6 +64,12 @@ public class OnFieldCards {
         // TODO depending on how many priorities there will be --> loop over priorities
         // instead of if else
 
+        for (BlueCard existingCard : cards) {
+            if (existingCard.getCard().equals(card.getCard())) {
+                throw new GameLogicException(String.format("Player already has a %s on his field!", card.getCard()));
+            }
+        }
+
         Priority cardPrio = card.getPriority();
         int index = (cards == null || cards.size() == 0) ? 0 : cards.size() - 1;
 

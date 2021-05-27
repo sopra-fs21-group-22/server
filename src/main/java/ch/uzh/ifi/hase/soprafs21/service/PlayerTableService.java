@@ -277,9 +277,13 @@ public class PlayerTableService {
             BlueCard currCard = onFieldCards.get(i);
             currCard.onTurnStart(nextPlayer);
         }
+        if (!nextPlayer.getId().equals(table.getPlayerOnTurn().getId())) {
+            startTurn(table.getPlayerOnTurn(), table);
+            return;
+        }
 
         // TODO change to dynamic amount of cards
-        deckService.drawCards(table, table.getPlayerOnTurn(), 2);
+        deckService.drawCards(table, nextPlayer, 2);
     }
 
     public void checkGameState(Long gameId, GameStatus status) {

@@ -53,7 +53,8 @@ public class Dynamite extends BlueCard {
             table.getDiscardPile().addCard(this);
 
             int lives = affectedPlayer.getBullets();
-            affectedPlayer.setBullets(Math.max(lives - 3, 0));
+            int newLives = Math.max(lives - 3, 0);
+            affectedPlayer.setBullets(newLives);
             /*
              * if (affectedPlayer.getCharacterCard().getName().equals("Bart Cassidy")){ //
              * Bart Cassidy Ability DeckService deckservice = new DeckService();
