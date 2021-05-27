@@ -171,8 +171,8 @@ public class PlayerTableService {
             Player currPlayer = table.getPlayers().get(i);
             currPlayer.setCharacterCard(characterCardService.pickCharacter(currPlayer, table));
             if (currPlayer.getGameRole().equals(GameRole.SHERIFF)) {
-                currPlayer.setBullets(currPlayer.getBullets() + 1);
-                currPlayer.setMaxBullets(currPlayer.getMaxBullets() + 1);
+                currPlayer.setMaxBullets(currPlayer.getCharacterCard().getLifeAmount() + 1);
+                currPlayer.setBullets(currPlayer.getCharacterCard().getLifeAmount() + 1);
                 table.setPlayerOnTurn(currPlayer);
                 startTurn(currPlayer, table);
                 table.setTurnStart(System.currentTimeMillis());
