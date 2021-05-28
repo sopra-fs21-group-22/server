@@ -123,6 +123,11 @@ public class PlayerTableService {
         List<Message> messages = new ArrayList<>();
         Chat chat = new Chat();
 
+        Message message = new Message();
+        message.setContent("Welcome to the Game!");
+        message.setName("BANG!");
+        messages.add(message);
+
         chat.setMessages(messages);
         deck.setDiscardPile(discardPile);
 
