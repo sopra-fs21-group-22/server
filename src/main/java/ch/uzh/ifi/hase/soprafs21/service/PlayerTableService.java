@@ -123,10 +123,9 @@ public class PlayerTableService {
         List<Message> messages = new ArrayList<>();
         Chat chat = new Chat();
 
-        // this is for chat testing ONLY!
         Message message = new Message();
-        message.setContent("Default Content");
-        message.setName("Default Name");
+        message.setContent("Welcome to the Game!");
+        message.setName("BANG!");
         messages.add(message);
 
         chat.setMessages(messages);
