@@ -191,11 +191,11 @@ public class Player {
             // punish sheriff
             consequenceMessage = String.format(" %s has to discard all his cards!", killer.getUser().getUsername());
             List<PlayCard> handCards = killer.getHand().getPlayCards();
-            List<BlueCard> onFieldCards = killer.getOnFieldCards().getOnFieldCards();
+            List<BlueCard> killerOnFieldCards = killer.getOnFieldCards().getOnFieldCards();
             for (PlayCard card : handCards) {
                 killer.getTable().getDiscardPile().addCard(card);
             }
-            for (PlayCard card : onFieldCards) {
+            for (PlayCard card : killerOnFieldCards) {
                 killer.getTable().getDiscardPile().addCard(card);
             }
             killer.getHand().setPlayCards(new ArrayList<>());

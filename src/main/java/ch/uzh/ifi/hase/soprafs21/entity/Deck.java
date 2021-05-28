@@ -73,7 +73,6 @@ public class Deck {
         if (this.playCards == null) {
             this.playCards = new ArrayList<>();
         }
-        logger.info(String.format("Card %s added to Deck/Discard Pile.", card.getCard()));
         this.playCards.add(0, card);
         this.topCard = card;
     }

@@ -20,15 +20,14 @@ public abstract class BlueCard extends PlayCard {
     @Override
     public void use(Player usingPlayer, Player target, PayLoadDTO payload) {
         super.use(usingPlayer, target, payload);
-        Player targetPlayer = usingPlayer;
 
-        List<BlueCard> fieldCards = targetPlayer.getOnFieldCards().getOnFieldCards();
+        List<BlueCard> fieldCards = target.getOnFieldCards().getOnFieldCards();
         for (BlueCard card : fieldCards) {
             if (card.getCard() == this.card) {
                 throw new GameLogicException("A card with the same name is already on the field!");
             }
         }
-        targetPlayer.getOnFieldCards().addOnFieldCard(this);
+        target.getOnFieldCards().addOnFieldCard(this);
         onPlacement(usingPlayer, target, payload);
     }
 
