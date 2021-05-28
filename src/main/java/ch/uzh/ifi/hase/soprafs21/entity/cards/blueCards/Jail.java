@@ -54,7 +54,7 @@ public class Jail extends BlueCard {
             GameMove outGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.ACTIVATE, outMessage);
             affectedPlayer.getTable().addGameMove(outGameMove);
 
-            table.setPlayerOnTurn(affectedPlayer.getRightNeighbor());
+            table.setPlayerOnTurn(affectedPlayer.getAliveRightNeighbor());
         } else {
             String succMessage = String.format("%s managed to break out of JAIL!",
                     affectedPlayer.getUser().getUsername());

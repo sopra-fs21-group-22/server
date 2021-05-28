@@ -39,6 +39,7 @@ public class MustangTest {
         oldPlayer.setId(15L);
         oldPlayer.setTable(table);
         table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
+        table.setDiscardPile(new Deck());
         players.add(oldPlayer);
         oldPlayer.setOnFieldCards(new OnFieldCards());
         oldPlayer.setHand(new Hand());

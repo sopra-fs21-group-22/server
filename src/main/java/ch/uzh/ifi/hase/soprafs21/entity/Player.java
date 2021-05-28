@@ -172,6 +172,14 @@ public class Player {
         }
     }
 
+    public Player getAliveRightNeighbor() {
+        Player nextPlayer = rightNeighbor;
+        while (nextPlayer.getBullets() == 0 && !nextPlayer.getId().equals(id)) {
+            nextPlayer = nextPlayer.getRightNeighbor();
+        }
+        return nextPlayer;
+    }
+
     /**
      * Handles death by another player
      * 

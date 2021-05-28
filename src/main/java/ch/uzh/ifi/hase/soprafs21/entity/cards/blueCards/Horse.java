@@ -21,6 +21,7 @@ public abstract class Horse extends BlueCard {
             }
             if (horses.contains(card.getCard())) {
                 fieldCards.remove(card);
+                usingPlayer.getTable().getDiscardPile().addCard(card);
                 break;
             }
         }
