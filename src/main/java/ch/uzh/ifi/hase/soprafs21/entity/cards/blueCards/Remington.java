@@ -33,7 +33,7 @@ public class Remington extends Weapon {
 
     @Override
     public void onRemoval(Player affectedPlayer) {
-        affectedPlayer.setRange(affectedPlayer.getBaseRange());
+        affectedPlayer.setRange(affectedPlayer.getRange() - 2);
     }
 
     @Override

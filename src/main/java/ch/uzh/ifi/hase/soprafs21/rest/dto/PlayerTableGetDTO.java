@@ -12,14 +12,14 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.game.GameMoveGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 
 public class PlayerTableGetDTO {
-    private Long id;
-    private GameStatus gameStatus;
-    private Deck discardPile;
-    private Player playerOnTurn;
-    private List<Player> players;
-    private Long timeRemaining;
-    private Chat chat;
-    private List<GameMove> gameMoves;
+    protected Long id;
+    protected GameStatus gameStatus;
+    protected Deck discardPile;
+    protected Player playerOnTurn;
+    protected List<Player> players;
+    protected Long timeRemaining;
+    protected Chat chat;
+    protected List<GameMove> gameMoves;
 
     public List<GameMoveGetDTO> getGameMoves() {
         List<GameMoveGetDTO> dtos = new ArrayList<>();

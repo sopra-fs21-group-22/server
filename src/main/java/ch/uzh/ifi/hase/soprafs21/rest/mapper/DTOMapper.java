@@ -93,6 +93,15 @@ public interface DTOMapper {
     PlayerTableGetDTO convertEntityToPlayerTableGetDTO(PlayerTable playerTable);
 
     @Mapping(source = "id", target = "id")
+    @Mapping(source = "playerOnTurn", target = "playerOnTurn")
+    @Mapping(source = "players", target = "players")
+    @Mapping(source = "gameStatus", target = "gameStatus")
+    @Mapping(source = "timeRemaining", target = "timeRemaining")
+    @Mapping(source = "chat", target = "chat")
+    @Mapping(source = "gameMoves", target = "gameMoves")
+    PlayerTableGetDTO convertEntityToPrivPlayerTableGetDTO(PlayerTable playerTable);
+
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "user", target = "user")
     @Mapping(source = "gameRole", target = "gameRole")
     @Mapping(source = "ready", target = "ready")

@@ -218,8 +218,8 @@ public class PlayerTest {
         for (int i = 0; i < 4; i++) {
             cards.add(new Bang(Rank.SEVEN, Suit.SPADES));
         }
-        sheriff.getOnFieldCards().addOnFieldCard(new Schofield());
-        sheriff.getOnFieldCards().addOnFieldCard(new Barrel());
+        sheriff.getOnFieldCards().addOnFieldCard(new Schofield(Rank.SEVEN, Suit.SPADES));
+        sheriff.getOnFieldCards().addOnFieldCard(new Barrel(Rank.SEVEN, Suit.HEARTS));
         sheriff.getHand().addCards(cards);
 
         deputy.setBullets(1);

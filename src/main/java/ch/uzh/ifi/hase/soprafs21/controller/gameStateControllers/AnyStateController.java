@@ -55,6 +55,19 @@ public class AnyStateController {
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
     }
 
+    // TODO debug route, remove before release
+    @GetMapping("/private/{game_id}/players")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public PlayerTableGetDTO getPlayerPrivateInformation(@RequestHeader("Authorization") String auth,
+            @PathVariable Long game_id) {
+        PlayerTable table = playerTableService.getPlayerTableById(game_id);
+        if (table.getGameStatus() == GameStatus.ONGOING) {
+            playerTableService.updateTimer(table);
+        }
+        return DTOMapper.INSTANCE.convertEntityToPrivPlayerTableGetDTO(table);
+    }
+
     @GetMapping("/{game_id}/players/{player_id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
