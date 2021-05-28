@@ -186,8 +186,10 @@ public class Player {
      * @param killer
      */
     public void onDeath(Player killer) {
+        String consequenceMessage = "";
         if (killer.getGameRole().equals(GameRole.SHERIFF) && this.getGameRole().equals(GameRole.DEPUTY)) {
             // punish sheriff
+            consequenceMessage = String.format(" %s has to discard all his cards!", killer.getUser().getUsername());
             List<PlayCard> handCards = killer.getHand().getPlayCards();
             List<BlueCard> onFieldCards = killer.getOnFieldCards().getOnFieldCards();
             for (PlayCard card : handCards) {
@@ -201,8 +203,15 @@ public class Player {
 
         } else if (this.getGameRole().equals(GameRole.OUTLAW)) {
             // killer draws three cards
+            consequenceMessage = String.format(" The %s can draw three cards!", killer.getUser().getUsername());
             killer.getHand().addCards(killer.getTable().getDeck().drawCards(3));
         }
+
+        String message = String.format("%s killed %s %s!%s", killer.getUser().getUsername(), gameRole,
+                user.getUsername(), consequenceMessage);
+        GameMove gameMove = new GameMove(killer, this, null, GameMoveAction.KILL, message);
+        table.addGameMove(gameMove);
+
         onDeath();
     }
 
