@@ -37,7 +37,7 @@ public class Beer extends BrownCard {
                     affectedPlayer.getUser().getUsername());
             GameMove succGameMove = new GameMove(affectedPlayer, null, this, GameMoveAction.SUCCESS, beerMessage);
             affectedPlayer.getTable().addGameMove(succGameMove);
-            onPlacement(affectedPlayer, affectedPlayer, null);
+            affectedPlayer.getHand().removeCard(this);
             return true;
         }
         return false;

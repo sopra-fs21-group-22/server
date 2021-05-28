@@ -76,6 +76,7 @@ public class PlayerTableServiceIntTest {
         playerRepository.flush();
         userRepository.deleteAll();
         playerTableRepository.deleteAll();
+
         playerTableRepository.flush();
         userRepository.flush();
     }

@@ -16,6 +16,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Appaloosa;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Barrel;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
@@ -255,6 +256,34 @@ public class PlayerTest {
         player.getHand().addCard(card);
         player.playCard(card.getId(), player.getLeftNeighbor(), null);
         assertEquals(0, player.getHand().getLength());
+    }
+
+    @Test
+    public void testSetBulletsZero_removesPlayerCards() {
+        Player player = players.get(0);
+        for (int i = 0; i < 3; i++) {
+            player.getHand().addCard(new Bang(Rank.NINE, Suit.DIAMONDS));
+        }
+        player.getOnFieldCards().addOnFieldCard(new Schofield(Rank.TEN, Suit.CLUBS));
+        player.getOnFieldCards().addOnFieldCard(new Appaloosa(Rank.TEN, Suit.CLUBS));
+        player.getOnFieldCards().addOnFieldCard(new Barrel(Rank.TEN, Suit.CLUBS));
+        player.setBullets(0);
+        assertEquals(0, player.getOnFieldCards().getOnFieldCards().size());
+        assertEquals(0, player.getHand().getPlayCards().size());
+    }
+
+    @Test
+    public void testOnDeath_removesPlayerCards() {
+        Player player = players.get(0);
+        for (int i = 0; i < 3; i++) {
+            player.getHand().addCard(new Bang(Rank.NINE, Suit.DIAMONDS));
+        }
+        player.getOnFieldCards().addOnFieldCard(new Schofield(Rank.TEN, Suit.CLUBS));
+        player.getOnFieldCards().addOnFieldCard(new Appaloosa(Rank.TEN, Suit.CLUBS));
+        player.getOnFieldCards().addOnFieldCard(new Barrel(Rank.TEN, Suit.CLUBS));
+        player.onDeath();
+        assertEquals(0, player.getOnFieldCards().getOnFieldCards().size());
+        assertEquals(0, player.getHand().getPlayCards().size());
     }
 
 }

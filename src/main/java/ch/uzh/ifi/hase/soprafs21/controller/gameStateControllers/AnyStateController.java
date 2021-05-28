@@ -17,12 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.PlayerTableRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.PlayerTableGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.CharacterCardGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.PrivPlayerTableGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.PlayerTableService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -53,19 +52,6 @@ public class AnyStateController {
             playerTableService.updateTimer(table);
         }
         return DTOMapper.INSTANCE.convertEntityToPlayerTableGetDTO(table);
-    }
-
-    // TODO debug route, remove before release
-    @GetMapping("/private/{game_id}/players")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public PlayerTableGetDTO getPlayerPrivateInformation(@RequestHeader("Authorization") String auth,
-            @PathVariable Long game_id) {
-        PlayerTable table = playerTableService.getPlayerTableById(game_id);
-        if (table.getGameStatus() == GameStatus.ONGOING) {
-            playerTableService.updateTimer(table);
-        }
-        return DTOMapper.INSTANCE.convertEntityToPrivPlayerTableGetDTO(table);
     }
 
     @GetMapping("/{game_id}/players/{player_id}")

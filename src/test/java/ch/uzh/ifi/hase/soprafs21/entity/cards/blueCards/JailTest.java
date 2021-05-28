@@ -85,6 +85,14 @@ public class JailTest {
     }
 
     @Test
+    public void testEnterPrisonTwice() {
+        Player playerWithJail = players.get(1);
+        Player playerInJail = players.get(0);
+        jail.use(playerWithJail, playerInJail, null);
+        assertThrows(GameLogicException.class, () -> jail.use(playerWithJail, playerInJail, null));
+    }
+
+    @Test
     public void testOnTurnStartWithHearts() {
         Player player = players.get(0); // on turn
         Player playerInJail = players.get(1);

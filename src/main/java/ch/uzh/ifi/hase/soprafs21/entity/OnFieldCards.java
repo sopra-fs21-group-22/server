@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -26,8 +27,20 @@ public class OnFieldCards {
     @JoinColumn(name = "onFieldCards_id")
     private List<BlueCard> cards = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id")
+    private Player player;
+
     public BlueCard get(int index) {
         return cards.get(index);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public Long getId() {
@@ -103,12 +116,15 @@ public class OnFieldCards {
 
     public void removeOnFieldCard(BlueCard card) {
         cards.remove(card);
+        card.onRemoval(player);
     }
 
     public BlueCard removeOnFieldCard(Long id) {
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getId().equals(id)) {
-                return cards.remove(i);
+                BlueCard card = cards.get(i);
+                removeOnFieldCard(cards.get(i));
+                return card;
             }
         }
         throw new GameLogicException(String.format("Player doesn't have a card with id %s on his field.", id));

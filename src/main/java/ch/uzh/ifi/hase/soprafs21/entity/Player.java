@@ -92,7 +92,7 @@ public class Player {
     @Column
     private Integer strikes = 0;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private OnFieldCards onFieldCards;
 
     public OnFieldCards getOnFieldCards() {
@@ -209,13 +209,13 @@ public class Player {
         Deck discardPile = table.getDiscardPile();
         // remove hand cards
         discardPile.addCards(hand.getPlayCards());
-        hand.setPlayCards(new ArrayList<>());
+        hand.removeAllCards();
         // remove onFieldCards
         for (PlayCard card : onFieldCards.getOnFieldCards()) {
             discardPile.addCard(card);
         }
 
-        onFieldCards.setOnFieldCards(new ArrayList<>());
+        onFieldCards.removeAllCards();
         determineWinner();
         if (table.getPlayerOnTurn().getId().equals(this.id)) {
             Player nextPlayer = rightNeighbor;
@@ -345,7 +345,7 @@ public class Player {
             return;
         }
         this.bullets = newBullets;
-        if (newBullets.equals(0)) {
+        if (newBullets == 0) {
             this.onDeath();
         }
     }

@@ -24,9 +24,9 @@ public class OnFieldCardsService {
     @Autowired
     DeckRepository deckRepository;
 
-    public OnFieldCards createOnFieldCards() {
+    public OnFieldCards createOnFieldCards(Player player) {
         OnFieldCards onFieldCards = new OnFieldCards();
-
+        onFieldCards.setPlayer(player);
         onFieldCardsRepository.save(onFieldCards);
 
         return onFieldCards;

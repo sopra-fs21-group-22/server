@@ -179,7 +179,7 @@ public class PlayerTableService {
             }
             deckService.drawCards(table, currPlayer, currPlayer.getBullets());
 
-            currPlayer.setOnFieldCards(onFieldCardsService.createOnFieldCards());
+            currPlayer.setOnFieldCards(onFieldCardsService.createOnFieldCards(currPlayer));
         }
         playerTableRepository.saveAndFlush(table);
     }

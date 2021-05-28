@@ -145,7 +145,7 @@ public class DynamiteTest {
     }
 
     @Test
-    public void testDynamiteMovesCorrectly(){
+    public void testDynamiteMovesCorrectly() {
         Player player = players.get(0);
         dynamite.use(player, player, null);
         dynamite.onTurnStart(player);
@@ -153,12 +153,30 @@ public class DynamiteTest {
     }
 
     @Test
-    public void testDynamiteMove_skipsCorpses(){
+    public void testDynamiteMove_skipsCorpses() {
         Player player = players.get(0);
         player.getLeftNeighbor().setBullets(0);
         dynamite.use(player, player, null);
         dynamite.onTurnStart(player);
         assertTrue(player.getLeftNeighbor().getLeftNeighbor().getOnFieldCards().getOnFieldCards().contains(dynamite));
+    }
+
+    @Test
+    public void dynamiteDeath_removesAllCards() {
+        Player player = players.get(0);
+        player.setBullets(3);
+        player.getHand().addCard(new Bang(Rank.TWO, Suit.SPADES));
+        player.getOnFieldCards().addOnFieldCard(new Schofield(Rank.SIX, Suit.DIAMONDS));
+
+        ArrayList<PlayCard> playCards = new ArrayList<>();
+        Bang bang = new Bang(Rank.THREE, Suit.SPADES);
+        playCards.add(bang);
+        table.getDeck().setPlayCards(playCards);
+
+        dynamite.onTurnStart(player);
+        assertEquals(0, player.getBullets());
+        assertEquals(0, player.getOnFieldCards().getOnFieldCards().size());
+        assertEquals(0, player.getHand().getPlayCards().size());
     }
 
 }

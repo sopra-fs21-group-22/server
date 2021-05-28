@@ -44,7 +44,9 @@ public class PanicTest {
         table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
         table.setDiscardPile(new Deck());
         players.add(oldPlayer);
-        oldPlayer.setOnFieldCards(new OnFieldCards());
+        OnFieldCards onfieldCards = new OnFieldCards();
+        oldPlayer.setOnFieldCards(onfieldCards);
+        onfieldCards.setPlayer(oldPlayer);
         oldPlayer.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
@@ -53,7 +55,9 @@ public class PanicTest {
             user.setUsername("Ada");
             newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
-            newPlayer.setOnFieldCards(new OnFieldCards());
+            onfieldCards = new OnFieldCards();
+            newPlayer.setOnFieldCards(onfieldCards);
+            onfieldCards.setPlayer(newPlayer);
             newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
@@ -77,9 +81,10 @@ public class PanicTest {
     // correct test considering original rules
     // @Test
     // public void testInvalidTarget() {
-    //     Player user = players.get(0);
-    //     user.setRange(3);
-    //     assertFalse(panic.targetIsValid(user, user.getLeftNeighbor().getLeftNeighbor()));
+    // Player user = players.get(0);
+    // user.setRange(3);
+    // assertFalse(panic.targetIsValid(user,
+    // user.getLeftNeighbor().getLeftNeighbor()));
     // }
 
     @Test

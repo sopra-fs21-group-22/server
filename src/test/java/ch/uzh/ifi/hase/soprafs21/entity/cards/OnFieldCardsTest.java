@@ -1,7 +1,6 @@
-package ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards;
+package ch.uzh.ifi.hase.soprafs21.entity.cards;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +16,13 @@ import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Schofield;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
 
-public class CatBalouTest {
+public class OnFieldCardsTest {
 
-    private List<Player> players;
-    private CatBalou catBalou = new CatBalou(Rank.SEVEN, Suit.HEARTS);
-    private PlayerTable table = new PlayerTable();
+    private Schofield schofield = new Schofield(Rank.ACE, Suit.HEARTS);
+    PlayerTable table = new PlayerTable();
+    List<Player> players;
 
     @BeforeEach
     public void beforeEach() {
@@ -44,8 +41,9 @@ public class CatBalouTest {
         table.setDiscardPile(new Deck());
         players.add(oldPlayer);
         OnFieldCards onfieldCards = new OnFieldCards();
-        oldPlayer.setOnFieldCards(onfieldCards);
         onfieldCards.setPlayer(oldPlayer);
+        oldPlayer.setOnFieldCards(onfieldCards);
+
         oldPlayer.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
@@ -55,8 +53,8 @@ public class CatBalouTest {
             newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
             onfieldCards = new OnFieldCards();
-            onfieldCards.setPlayer(newPlayer);
             newPlayer.setOnFieldCards(onfieldCards);
+            onfieldCards.setPlayer(newPlayer);
             newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
@@ -71,44 +69,16 @@ public class CatBalouTest {
     }
 
     @Test
-    public void testValidTarget() {
-        Player user = players.get(0);
-        assertTrue(catBalou.targetIsValid(user, user.getRightNeighbor().getRightNeighbor().getRightNeighbor()));
-    }
+    public void removeOnFieldCard_revertsEffects() {
+        Player player = players.get(0);
+        OnFieldCards onFieldCards = player.getOnFieldCards();
+        int intitialRange = player.getRange();
+        int expectedRange = intitialRange + 1;
 
-    @Test
-    public void testInvalidTarget() {
-        Player user = players.get(0);
-        user.setRange(3);
-        assertFalse(catBalou.targetIsValid(user, user));
-    }
+        schofield.use(player, player, null);
+        assertEquals(expectedRange, player.getRange());
 
-    @Test
-    public void testStealFieldCard() {
-        PayLoadDTO payload = new PayLoadDTO();
-        Player user = players.get(0);
-        Player target = user.getRightNeighbor();
-        BlueCard toBeDiscardedCard = new Schofield(Rank.ACE, Suit.SPADES);
-        toBeDiscardedCard.setId(100L);
-        target.getOnFieldCards().addOnFieldCard(toBeDiscardedCard);
-        payload.setTargetCardId(100L);
-
-        catBalou.use(user, target, payload);
-        assertTrue(user.getTable().getDiscardPile().getPlayCards().contains(toBeDiscardedCard));
-        assertFalse(target.getOnFieldCards().contains(toBeDiscardedCard));
-    }
-
-    @Test
-    public void testStealHandCard() {
-        PayLoadDTO payload = new PayLoadDTO();
-        Player user = players.get(0);
-        Player target = user.getRightNeighbor();
-        BlueCard toBeDiscardedCard = new Schofield(Rank.ACE, Suit.SPADES);
-        target.getHand().addCard(toBeDiscardedCard);
-
-        catBalou.use(user, target, payload);
-
-        assertTrue(user.getTable().getDiscardPile().getPlayCards().contains(toBeDiscardedCard));
-        assertFalse(target.getHand().getPlayCards().contains(toBeDiscardedCard));
+        onFieldCards.removeOnFieldCard(schofield);
+        assertEquals(intitialRange, player.getRange());
     }
 }
