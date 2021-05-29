@@ -6,24 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.uzh.ifi.hase.soprafs21.constant.Rank;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
-import ch.uzh.ifi.hase.soprafs21.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ch.uzh.ifi.hase.soprafs21.constant.Rank;
+import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.Deck;
+import ch.uzh.ifi.hase.soprafs21.entity.Hand;
 import ch.uzh.ifi.hase.soprafs21.entity.OnFieldCards;
 import ch.uzh.ifi.hase.soprafs21.entity.Player;
 import ch.uzh.ifi.hase.soprafs21.entity.PlayerTable;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
-public class BangTest {
-
+public class MissedTest {
     private List<Player> players;
-    private List<Player> targets;
-    private Bang bang = new Bang(Rank.SEVEN, Suit.HEARTS);
+    private Missed missed = new Missed(Rank.SEVEN, Suit.HEARTS);
     private PlayerTable table = new PlayerTable();
 
     @BeforeEach
@@ -43,7 +41,9 @@ public class BangTest {
         table.setDiscardPile(new Deck());
         table.setPlayers(players);
         players.add(oldPlayer);
-        oldPlayer.setOnFieldCards(new OnFieldCards());
+        OnFieldCards onfieldCards = new OnFieldCards();
+        oldPlayer.setOnFieldCards(onfieldCards);
+        onfieldCards.setPlayer(oldPlayer);
         oldPlayer.setHand(new Hand());
 
         for (int i = 0; i < 6; i++) {
@@ -52,7 +52,9 @@ public class BangTest {
             user.setUsername("Ada");
             newPlayer.setUser(user);
             newPlayer.setId(Long.valueOf(i));
-            newPlayer.setOnFieldCards(new OnFieldCards());
+            onfieldCards = new OnFieldCards();
+            onfieldCards.setPlayer(newPlayer);
+            newPlayer.setOnFieldCards(onfieldCards);
             newPlayer.setHand(new Hand());
             newPlayer.setTable(table);
             players.add(newPlayer);
@@ -67,48 +69,18 @@ public class BangTest {
     }
 
     @Test
-    public void testBang_reducesLives() {
-        CharacterCard characterCard = new CharacterCard();
-        characterCard.setLifeAmount(3);
-        characterCard.setName("Paul Regret");
-        Player user = players.get(0);
-        Player target = user.getRightNeighbor();
-        target.setCharacterCard(characterCard);
-        int expectedLives = target.getBullets() - 1;
+    public void testMissedAvoidsHit() {
+        Player player = players.get(0);
+        player.getHand().addCard(missed);
+        int expectedBullets = player.getBullets();
 
-        bang.use(user, target, null);
+        player.takeHit(players.get(1), new Bang(Rank.SEVEN, Suit.SPADES));
 
-        assertEquals(expectedLives, target.getBullets());
+        assertEquals(expectedBullets, player.getBullets());
     }
 
     @Test
-    public void cantUseBangOnYourself() {
-        Player user = players.get(0);
-        assertThrows(GameLogicException.class, () -> {
-            bang.use(user, user, null);
-        });
-    }
-
-    @Test
-    public void cantPlayMoreBangCards() {
-        CharacterCard characterCard = new CharacterCard();
-        characterCard.setLifeAmount(3);
-        characterCard.setName("Paul Regret");
-        Player user = players.get(0);
-        Player target = user.getRightNeighbor();
-        target.setCharacterCard(characterCard);
-        bang.use(user, target, null);
-        assertThrows(GameLogicException.class, () -> {
-            bang.use(user, target, null);
-        });
-    }
-
-    @Test
-    public void outOfRange_CantAttack() {
-        Player user = players.get(0);
-        Player target = user.getRightNeighbor().getRightNeighbor();
-        assertThrows(GameLogicException.class, () -> {
-            bang.use(user, target, null);
-        });
+    public void testCantBePlacedWillingly() {
+        assertThrows(GameLogicException.class, () -> missed.onPlacement(players.get(0), players.get(1), null));
     }
 }

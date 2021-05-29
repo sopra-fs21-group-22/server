@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
@@ -9,6 +10,8 @@ import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
+import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -99,6 +102,32 @@ public class HandTest {
         assertEquals(player.getHand().get(1).getCard(), Card.BANG);
         assertEquals(player.getHand().get(2).getCard(), Card.BANG);
         assertEquals(player.getHand().get(3).getCard(), Card.CARABINE);
+    }
+
+    @Test
+    public void removeCardById() {
+        Player player = players.get(0);
+        List<PlayCard> cards = new ArrayList<>();
+        PlayCard bang = new Bang(Rank.SEVEN, Suit.HEARTS);
+        bang.setId(12L);
+        cards.add(bang);
+        PlayCard carab = new Carabine(Rank.SEVEN, Suit.CLUBS);
+        carab.setId(13L);
+        cards.add(carab);
+        PlayCard dyna = new Dynamite(Rank.SIX, Suit.SPADES);
+        dyna.setId(14L);
+        cards.add(dyna);
+
+        player.getHand().addCards(cards);
+
+        PlayCard card = player.getHand().getCardById(12L);
+        assertEquals(bang, card);
+    }
+
+    @Test
+    public void removeRandomCard_noHandCards_throws() {
+        Player player = players.get(0);
+        assertThrows(GameLogicException.class, () -> player.getHand().removeRandomCard());
     }
 
 }
