@@ -31,6 +31,10 @@ public class DynamiteTest {
         // create a table with a deck and a discard pile
         Deck deck = new Deck();
         deck.addCard(new Bang(Rank.ACE, Suit.SPADES));
+        deck.addCard(new Bang(Rank.ACE, Suit.SPADES));
+        deck.addCard(new Bang(Rank.ACE, Suit.SPADES));
+        deck.addCard(new Bang(Rank.ACE, Suit.SPADES));
+
         table.setDeck(deck);
         table.setDiscardPile(new Deck());
 
@@ -43,6 +47,7 @@ public class DynamiteTest {
         oldPlayer.setUser(user);
         oldPlayer.setId(15L);
         oldPlayer.setTable(table);
+        table.setDiscardPile(new Deck());
         table.setPlayerOnTurn(oldPlayer); // players.get(0) onTurn
         players.add(oldPlayer);
         oldPlayer.setOnFieldCards(new OnFieldCards());
@@ -177,6 +182,26 @@ public class DynamiteTest {
         assertEquals(0, player.getBullets());
         assertEquals(0, player.getOnFieldCards().getOnFieldCards().size());
         assertEquals(0, player.getHand().getPlayCards().size());
+    }
+
+    @Test
+    public void testDynamiteAndJail() {
+        Player player = players.get(0);
+        player.setBullets(3);
+        player.getHand().addCard(new Bang(Rank.TWO, Suit.SPADES));
+        OnFieldCards onFieldCards = player.getOnFieldCards();
+        onFieldCards.addOnFieldCard(new Dynamite(Rank.SIX, Suit.DIAMONDS));
+        onFieldCards.addOnFieldCard(new Jail(Rank.SIX, Suit.DIAMONDS));
+
+        int numCards = onFieldCards.getLength();
+        for (int i = 0; i < onFieldCards.getLength(); i++) {
+            BlueCard currCard = onFieldCards.get(i);
+            currCard.onTurnStart(player);
+            if (onFieldCards.getLength() != numCards) {
+                i -= (numCards - onFieldCards.getLength());
+                numCards = onFieldCards.getLength();
+            }
+        }
     }
 
 }

@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -12,11 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
-import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
+import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Priority;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
-import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
 import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 
 /**
@@ -33,6 +33,10 @@ public class Hand {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "hand_id")
     private List<PlayCard> playCards = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
 
     public PlayCard get(int index) {
         return playCards.get(index);
@@ -95,8 +99,8 @@ public class Hand {
         return cardToRemove;
     }
 
-    public void removeAllCards(){
-        this.playCards = new ArrayList();
+    public void removeAllCards() {
+        this.playCards = new ArrayList<>();
     }
 
     public void addCards(List<PlayCard> newCards) {
@@ -117,15 +121,18 @@ public class Hand {
     }
 
     /*
-        in case anyone cares the order of all the cards is:
-        Dynamite, Jail, Missed, Beer, Barrel, Bang, GeneralStore, CatBalou, Panic, Gatling, Indians,
-        StageCoach, WellsFargo, Appaloosa, Mustang, Volcanic, Schofield, Remington, Carabine, and Winchester
+     * in case anyone cares the order of all the cards is: Dynamite, Jail, Missed,
+     * Beer, Barrel, Bang, GeneralStore, CatBalou, Panic, Gatling, Indians,
+     * StageCoach, WellsFargo, Appaloosa, Mustang, Volcanic, Schofield, Remington,
+     * Carabine, and Winchester
      */
     public static class SortByPriority implements Comparator<PlayCard> {
 
         /**
-            Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
-            So if you compare a Bang with priority Five and a Dynamite with priority One it will return -4 meaning Bang is less than dynamite.
+         * Returns a negative integer, zero, or a positive integer as the first argument
+         * is less than, equal to, or greater than the second. So if you compare a Bang
+         * with priority Five and a Dynamite with priority One it will return -4 meaning
+         * Bang is less than dynamite.
          */
         @Override
         public int compare(PlayCard o1, PlayCard o2) {
@@ -143,7 +150,20 @@ public class Hand {
      */
 
     public void addCardInOrder(PlayCard card) {
-        playCards.add(card);
-        playCards.sort(new SortByPriority());
+        if (card.getCard().equals(Card.DYNAMITE)) {
+            player.getOnFieldCards().addOnFieldCard((BlueCard) card);
+        } else {
+            playCards.add(card);
+            playCards.sort(new SortByPriority());
+        }
+
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

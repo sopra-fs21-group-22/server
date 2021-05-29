@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs21.constant.Card;
 import ch.uzh.ifi.hase.soprafs21.constant.Rank;
 import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
+import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Appaloosa;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Carabine;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Dynamite;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.brownCards.Bang;
@@ -40,6 +41,7 @@ public class HandTest {
         players.add(oldPlayer);
         oldPlayer.setOnFieldCards(new OnFieldCards());
         oldPlayer.setHand(new Hand());
+        oldPlayer.getHand().setPlayer(oldPlayer);
         oldPlayer.setTable(table);
 
         for (int i = 0; i < 7; i++) {
@@ -47,6 +49,7 @@ public class HandTest {
             newPlayer.setId(Long.valueOf(i));
             newPlayer.setOnFieldCards(new OnFieldCards());
             newPlayer.setHand(new Hand());
+            newPlayer.getHand().setPlayer(newPlayer);
             newPlayer.setTable(table);
             players.add(newPlayer);
             newPlayer.setRightNeighbor(oldPlayer);
@@ -67,11 +70,11 @@ public class HandTest {
         player.getHand().addCardInOrder(bang);
         assertEquals(player.getHand().get(0).getCard(), bang.getCard());
 
-        PlayCard dynamite = new Dynamite(Rank.ACE, Suit.SPADES);
-        player.getHand().addCardInOrder(dynamite);
+        PlayCard appaloosa = new Appaloosa(Rank.ACE, Suit.SPADES);
+        player.getHand().addCardInOrder(appaloosa);
 
-        assertEquals(player.getHand().get(0).getCard(), dynamite.getCard());
-        assertEquals(player.getHand().get(1).getCard(), bang.getCard());
+        assertEquals(player.getHand().get(1).getCard(), appaloosa.getCard());
+        assertEquals(player.getHand().get(0).getCard(), bang.getCard());
     }
 
     @Test
@@ -81,11 +84,24 @@ public class HandTest {
         player.getHand().addCard(bang);
         assertEquals(player.getHand().get(0).getCard(), bang.getCard());
 
+        PlayCard appaloosa = new Appaloosa(Rank.ACE, Suit.SPADES);
+        player.getHand().addCard(appaloosa);
+
+        assertEquals(player.getHand().get(0).getCard(), bang.getCard());
+        assertEquals(player.getHand().get(1).getCard(), appaloosa.getCard());
+    }
+
+    @Test
+    public void test_addCard_dynamiteDirectlyPlayed() {
+        Player player = players.get(0);
+        PlayCard bang = new Bang(Rank.SEVEN, Suit.SPADES);
+        player.getHand().addCard(bang);
+        assertEquals(player.getHand().get(0).getCard(), bang.getCard());
+
         PlayCard dynamite = new Dynamite(Rank.ACE, Suit.SPADES);
         player.getHand().addCard(dynamite);
-
-        assertEquals(player.getHand().get(0).getCard(), dynamite.getCard());
-        assertEquals(player.getHand().get(1).getCard(), bang.getCard());
+        assertEquals(player.getHand().get(0).getCard(), bang.getCard());
+        assertEquals(Card.DYNAMITE, player.getOnFieldCards().getOnFieldCards().get(0).getCard());
     }
 
     @Test
@@ -94,14 +110,14 @@ public class HandTest {
         List<PlayCard> cards = new ArrayList<>();
         cards.add(new Bang(Rank.TEN, Suit.SPADES));
         cards.add(new Carabine(Rank.SEVEN, Suit.CLUBS));
-        cards.add(new Dynamite(Rank.ACE, Suit.HEARTS));
+        cards.add(new Appaloosa(Rank.ACE, Suit.HEARTS));
         cards.add(new Bang(Rank.KING, Suit.SPADES));
         player.getHand().addCards(cards);
 
-        assertEquals(player.getHand().get(0).getCard(), Card.DYNAMITE);
-        assertEquals(player.getHand().get(1).getCard(), Card.BANG);
-        assertEquals(player.getHand().get(2).getCard(), Card.BANG);
-        assertEquals(player.getHand().get(3).getCard(), Card.CARABINE);
+        assertEquals(Card.BANG, player.getHand().get(0).getCard());
+        assertEquals(Card.BANG, player.getHand().get(1).getCard());
+        assertEquals(Card.APPALOOSA, player.getHand().get(2).getCard());
+        assertEquals(Card.CARABINE, player.getHand().get(3).getCard());
     }
 
     @Test

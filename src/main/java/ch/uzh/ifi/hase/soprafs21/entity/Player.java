@@ -1,9 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,16 +15,12 @@ import javax.persistence.OneToOne;
 
 import ch.uzh.ifi.hase.soprafs21.constant.GameMoveAction;
 import ch.uzh.ifi.hase.soprafs21.constant.GameRole;
-import ch.uzh.ifi.hase.soprafs21.constant.Suit;
 import ch.uzh.ifi.hase.soprafs21.constant.GameStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.CharacterCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.PlayCard;
 import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.BlueCard;
-import ch.uzh.ifi.hase.soprafs21.entity.cards.blueCards.Jail;
 import ch.uzh.ifi.hase.soprafs21.entity.gameMoves.GameMove;
-import ch.uzh.ifi.hase.soprafs21.exceptions.GameLogicException;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.game.PayLoadDTO;
-import ch.uzh.ifi.hase.soprafs21.service.DeckService;
 
 /**
  * The Player class represents a player The id is the same as the user who
@@ -67,7 +61,7 @@ public class Player {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private Hand hand;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -263,7 +257,7 @@ public class Player {
             return;
         }
         if (sheriffAlive) {
-            if(table.getPlayers().size() > 4) {
+            if (table.getPlayers().size() > 4) {
                 winnerMessage = "Order has been restored!\nThe sheriff and deputies won the game!";
             } else {
                 winnerMessage = "Order has been restored!\nThe sheriff won the game!";

@@ -93,7 +93,7 @@ public class PlayerTableService {
         }
 
         Player player = new Player();
-        Hand hand = handService.createHand();
+        Hand hand = handService.createHand(player);
         player.setHand(hand);
         player.setTable(playerTable);
         // player.setCharacterCard(characterCardService.pickCharacter(player,
@@ -272,9 +272,15 @@ public class PlayerTableService {
 
         // go through all onFieldCards to check if they have a functionality at the
         // beginning of a turn
+        int numCards = onFieldCards.getLength();
+
         for (int i = 0; i < onFieldCards.getLength(); i++) {
             BlueCard currCard = onFieldCards.get(i);
             currCard.onTurnStart(nextPlayer);
+            if (onFieldCards.getLength() != numCards) {
+                i -= (numCards - onFieldCards.getLength());
+                numCards = onFieldCards.getLength();
+            }
         }
         if (!nextPlayer.getId().equals(table.getPlayerOnTurn().getId())) {
             startTurn(table.getPlayerOnTurn(), table);

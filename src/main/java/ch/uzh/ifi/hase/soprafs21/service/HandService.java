@@ -31,15 +31,13 @@ public class HandService {
     @Autowired
     PlayerRepository playerRepository;
 
-    public Hand createHand() {
+    public Hand createHand(Player player) {
         Hand hand = new Hand();
         List<PlayCard> playCards = new ArrayList<PlayCard>();
 
         hand.setPlayCards(playCards);
+        hand.setPlayer(player);
         handRepository.save(hand);
-        handRepository.flush();
-        ;
-
         return hand;
     }
 
