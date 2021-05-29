@@ -100,4 +100,4 @@ Have a look here: https://www.baeldung.com/spring-boot-testing
 ## License
 
 Licensed under GNU General Public License v3.0
-- See [License]
+- See [License](LICENSE)
