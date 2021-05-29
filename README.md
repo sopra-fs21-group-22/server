@@ -13,6 +13,15 @@ The aim of this project is to implement the server-side of a digital version of 
 
 ## High-level components
 
+[Player Table Entity](src/main/java/ch/uzh/ifi/hase/soprafs21/entity/PlayerTable.java)
+- Most information during a game is in this class or referenced in this class
+
+[Player Table Service](src/main/java/ch/uzh/ifi/hase/soprafs21/service/PlayerTableService.java)
+- A large portion of actions during a game are performed by this class' methods
+
+[Controllers](src/main/java/ch/uzh/ifi/hase/soprafs21/controller/gameStateControllers)
+- These files receive incoming communication from the client-side and are therefore paramount to the project.
+
 ## Launch and Deployment
 
 Download your IDE of choice: (e.g., [Eclipse](http://www.eclipse.org/downloads/), [IntelliJ](https://www.jetbrains.com/idea/download/)), [Visual Studio Code](https://code.visualstudio.com/) and make sure Java 15 is installed on your system (for Windows-users, please make sure your JAVA_HOME environment variable is set to the correct version of Java).
