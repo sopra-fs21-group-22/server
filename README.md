@@ -2,7 +2,14 @@
 
 ## Introduction
 
+The aim of this project is to implement the server-side of a digital version of the popular card game BANG!, to be playable in a browser.
+
 ## Technologies
+
+- Java
+- GitHub (Actions)
+- Heroku
+- REST API
 
 ## High-level components
 
@@ -82,6 +89,12 @@ Have a look here: https://www.baeldung.com/spring-boot-testing
 
 ## Roadmap
 
+- Adding other users as friends
+- Creating private lobbies
+- Implement Expansions from the physical game
+
 ## Authors and acknowledgment
+
+>E. Heggli, M. Mylaeus, R. Bommeli, R. Bättig, Y. Meister
 
 ## License
