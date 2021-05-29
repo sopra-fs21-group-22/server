@@ -98,3 +98,6 @@ Have a look here: https://www.baeldung.com/spring-boot-testing
 >E. Heggli, M. Mylaeus, R. Bommeli, R. Bättig, Y. Meister
 
 ## License
+
+Licensed under GNU General Public License v3.0
+- See [License]
