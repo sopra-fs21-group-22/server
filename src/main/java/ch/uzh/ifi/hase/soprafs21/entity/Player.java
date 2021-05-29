@@ -258,7 +258,7 @@ public class Player {
         }
         if (sheriffAlive) {
             if (table.getPlayers().size() > 4) {
-                winnerMessage = "Order has been restored!\nThe SHERIFF and DEPUTYs won the game!";
+                winnerMessage = "Order has been restored!\nThe SHERIFF and DEPUTY(s) won the game!";
             } else {
                 winnerMessage = "Order has been restored!\nThe SHERIFF won the game!";
             }
