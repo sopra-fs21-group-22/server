@@ -263,11 +263,7 @@ public class Player {
             return;
         }
         if (sheriffAlive) {
-            if(deputyAlive) {
-                winnerMessage = "Order has been restored!\nThe sheriff and deputies won the game!";
-            } else {
-                winnerMessage = "Order has been restored!\nThe sheriff won the game!";
-            }
+            winnerMessage = "Order has been restored!\nThe sheriff and deputies won the game!";
         } else if (outlawAlive || deputyAlive) {
             winnerMessage = "The Wild West will remain wild!\nThe outlaws won the game!";
         } else if (renegadeAlive) {
