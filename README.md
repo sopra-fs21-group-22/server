@@ -88,14 +88,6 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-### API Endpoint Testing
-
--   We highly recommend to use [Postman](https://www.getpostman.com) in order to test your API Endpoints.
-
-### Testing
-
-Have a look here: https://www.baeldung.com/spring-boot-testing
-
 ## Roadmap
 
 - Adding other users as friends
