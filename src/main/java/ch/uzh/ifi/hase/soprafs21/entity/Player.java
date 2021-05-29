@@ -258,14 +258,14 @@ public class Player {
         }
         if (sheriffAlive) {
             if (table.getPlayers().size() > 4) {
-                winnerMessage = "Order has been restored!\nThe sheriff and deputies won the game!";
+                winnerMessage = "Order has been restored!\nThe SHERIFF and DEPUTYs won the game!";
             } else {
-                winnerMessage = "Order has been restored!\nThe sheriff won the game!";
+                winnerMessage = "Order has been restored!\nThe SHERIFF won the game!";
             }
         } else if (outlawAlive || deputyAlive) {
-            winnerMessage = "The Wild West will remain wild!\nThe outlaws won the game!";
+            winnerMessage = "The Wild West will remain wild!\nThe OUTLAWs won the game!";
         } else if (renegadeAlive) {
-            winnerMessage = "Last player standing!\nThe renegade won the game!";
+            winnerMessage = "Last player standing!\nThe RENEGADE won the game!";
         }
 
         GameMove gameMove = new GameMove(null, null, null, GameMoveAction.WIN, winnerMessage);
