@@ -257,10 +257,12 @@ public class Player {
             return;
         }
         if (sheriffAlive) {
-            if (table.getPlayers().size() > 4) {
-                winnerMessage = "Order has been restored!\nThe SHERIFF and DEPUTY(s) won the game!";
-            } else {
+            if (table.getPlayers().size() == 4) {
                 winnerMessage = "Order has been restored!\nThe SHERIFF won the game!";
+            } else if (table.getPlayers().size() < 7) {
+                winnerMessage = "Order has been restored!\nThe SHERIFF and DEPUTY won the game!";
+            } else if (table.getPlayers().size() == 7){
+                winnerMessage = "Order has been restored!\nThe SHERIFF and DEPUTYs won the game!";
             }
         } else if (outlawAlive || deputyAlive) {
             winnerMessage = "The Wild West will remain wild!\nThe OUTLAWs won the game!";
