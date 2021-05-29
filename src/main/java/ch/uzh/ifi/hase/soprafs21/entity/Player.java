@@ -263,11 +263,11 @@ public class Player {
             return;
         }
         if (sheriffAlive) {
-            winnerMessage = "The sheriff and his deputies won the game!";
+            winnerMessage = "The law has persisted!\nThe sheriff and deputies won the game!";
         } else if (outlawAlive || deputyAlive) {
-            winnerMessage = "The outlaws won the game!";
+            winnerMessage = "The Wild West will remain wild!\nThe outlaws won the game!";
         } else if (renegadeAlive) {
-            winnerMessage = "The renegade won the game!";
+            winnerMessage = "Last player standing!\nThe renegade won the game!";
         }
 
         GameMove gameMove = new GameMove(null, null, null, GameMoveAction.WIN, winnerMessage);
