@@ -124,7 +124,7 @@ public class OngoingController {
     @ResponseStatus(HttpStatus.OK)
     public void writeInChat(@RequestHeader("Authorization") String auth, @PathVariable Long game_id,
             @PathVariable Long player_id, @RequestBody Message message) {
-        playerTableService.checkGameState(game_id, GameStatus.ONGOING);
+        
         PlayerTable table = playerTableService.getPlayerTableById(game_id);
         Player usingPlayer = playerRepository.getOne(player_id);
         userService.throwIfNotIdAndTokenMatch(usingPlayer.getUser().getId(), auth);
